@@ -250,12 +250,6 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (NSUInteger)count
 {
-  // We may return an out-of-date result for the count, but we fire an
-  // asynchronous update which will ensure we return the latest version
-  // as-and-when it is available.
-  // TODO How do we ensure we're up-to-date and that there aren't any outstanding
-  // updates? Perhaps we could count the update requests and zero it every time
-  // we attempt ot make an actual update? Or is this over-engineering?
   [self updateEntries];
   return self.entries.count;
 }

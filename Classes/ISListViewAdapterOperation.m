@@ -27,12 +27,25 @@
 
 - (NSString *)description
 {
-  NSMutableString *description = [NSMutableString stringWithCapacity:3];
   if (self.type == ISListViewAdapterOperationTypeInsert) {
-    [description appendFormat:@"insert"];
+    return [NSString stringWithFormat:
+            @"insert at %d",
+            self.currentIndex.item];
+  } else if (self.type == ISListViewAdapterOperationTypeUpdate) {
+    return [NSString stringWithFormat:
+            @"update at %d",
+            self.currentIndex.item];
+  } else if (self.type == ISListViewAdapterOperationTypeMove) {
+    return [NSString stringWithFormat:
+            @"move from %d to %d",
+            self.previousIndex.item,
+            self.currentIndex.item];
+  } else if (self.type == ISListViewAdapterOperationTypeDelete) {
+    return [NSString stringWithFormat:
+            @"delete from %d",
+            self.previousIndex.item];
   }
-  // TODO Flesh out the operations.
-  return description;
+  return @"";
 }
 
 @end
