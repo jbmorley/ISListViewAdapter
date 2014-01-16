@@ -29,21 +29,21 @@
 {
   if (self.type == ISListViewAdapterOperationTypeInsert) {
     return [NSString stringWithFormat:
-            @"insert at %d",
-            self.currentIndex.item];
+            @"insert at %ld",
+            (long)self.currentIndex.item];
   } else if (self.type == ISListViewAdapterOperationTypeUpdate) {
     return [NSString stringWithFormat:
-            @"update at %d",
-            self.currentIndex.item];
+            @"update at %ld",
+            (long)self.currentIndex.item];
   } else if (self.type == ISListViewAdapterOperationTypeMove) {
     return [NSString stringWithFormat:
-            @"move from %d to %d",
-            self.previousIndex.item,
-            self.currentIndex.item];
+            @"move from %ld to %ld",
+            (long)self.previousIndex.item,
+            (long)self.currentIndex.item];
   } else if (self.type == ISListViewAdapterOperationTypeDelete) {
     return [NSString stringWithFormat:
-            @"delete from %d",
-            self.previousIndex.item];
+            @"delete from %ld",
+            (long)self.previousIndex.item];
   }
   return @"";
 }
