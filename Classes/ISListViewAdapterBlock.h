@@ -23,3 +23,4 @@
 #import <Foundation/Foundation.h>
 
 typedef void (^ISListViewAdapterBlock)(id item);
+typedef void(^ISListViewAdapterCountBlock)(NSUInteger count);

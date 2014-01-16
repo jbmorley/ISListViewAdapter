@@ -32,7 +32,10 @@
 - (void)initialize:(ISListViewAdapter *)adapter;
 
 - (void)adapter:(ISListViewAdapter *)adapter
-entriesForOffset:(NSUInteger)offset
+  numberOfItems:(ISListViewAdapterCountBlock)completionBlock;
+
+- (void)adapter:(ISListViewAdapter *)adapter
+ itemsForOffset:(NSUInteger)offset
           limit:(NSInteger)limit
 complectionBlock:(ISListViewAdapterBlock)completionBlock;
 

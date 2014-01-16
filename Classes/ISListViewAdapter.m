@@ -106,7 +106,7 @@ NSInteger ISDBViewIndexUndefined = -1;
   
   // Fetch the updated entries.
   [self.dataSource adapter:self
-          entriesForOffset:0
+          itemsForOffset:0
                      limit:-1
    complectionBlock:^(NSArray *updatedEntries) {
 
