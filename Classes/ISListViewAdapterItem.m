@@ -73,8 +73,12 @@
 
 - (void)fetch:(ISListViewAdapterBlock)completionBlock
 {
-  [self.view itemForIdentifier:self.identifier
-                     completion:completionBlock];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.view itemForIdentifier:self.identifier
+                      completion:^(id item) {
+                        completionBlock(item);
+                      }];
+  });
 }
 
 
