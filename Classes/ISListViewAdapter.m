@@ -57,8 +57,8 @@ NSInteger ISDBViewIndexUndefined = -1;
     self.notifier = [ISNotifier new];
     self.entries = @[];
     
-    if ([self.dataSource respondsToSelector:@selector(initialize:)]) {
-      [self.dataSource initialize:self];
+    if ([self.dataSource respondsToSelector:@selector(initializeAdapter:)]) {
+      [self.dataSource initializeAdapter:self];
     }
     
     // Create a worker queue on which to perform the
@@ -105,10 +105,8 @@ NSInteger ISDBViewIndexUndefined = -1;
   NSMutableArray *entries = [self.entries mutableCopy];
   
   // Fetch the updated entries.
-  [self.dataSource adapter:self
-          itemsForOffset:0
-                     limit:-1
-   complectionBlock:^(NSArray *updatedEntries) {
+  [self.dataSource itemsForAdapter:self
+   completionBlock:^(NSArray *updatedEntries) {
 
      // Cross-post the comparison onto a separate serial dispatch queue.
      // This ensures all updates are ordered.

@@ -29,18 +29,15 @@
 
 @protocol ISListViewAdapterDataSource <NSObject>
 
-- (void)initialize:(ISListViewAdapter *)adapter;
-
-- (void)adapter:(ISListViewAdapter *)adapter
-  numberOfItems:(ISListViewAdapterCountBlock)completionBlock;
-
-- (void)adapter:(ISListViewAdapter *)adapter
- itemsForOffset:(NSUInteger)offset
-          limit:(NSInteger)limit
-complectionBlock:(ISListViewAdapterBlock)completionBlock;
+- (void)itemsForAdapter:(ISListViewAdapter *)adapter
+        completionBlock:(ISListViewAdapterBlock)completionBlock;
 
 - (void)adapter:(ISListViewAdapter *)adapter
 itemForIdentifier:(id)identifier
 completionBlock:(ISListViewAdapterBlock)completionBlock;
+
+@optional
+
+- (void)initializeAdapter:(ISListViewAdapter *)adapter;
 
 @end
