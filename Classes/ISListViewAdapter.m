@@ -116,9 +116,9 @@ NSInteger ISDBViewIndexUndefined = -1;
        });
        
        if (self.debug) {
-         NSLog(@"before %d, after: %d",
-               entries.count,
-               updatedEntries.count);
+         NSLog(@"before %lu, after:%lud",
+               (unsigned long)entries.count,
+               (unsigned long)updatedEntries.count);
        }
        
        // Perform the comparison on a different thread to ensure we do
@@ -250,12 +250,11 @@ NSInteger ISDBViewIndexUndefined = -1;
        dispatch_sync(dispatch_get_main_queue(), ^{
          
          if (self.debug) {
-           NSLog(
-             @"additions: %d, removals: %d, updates: %d, moves: %d",
-             additionCount,
-             removalCount,
-             updateCount,
-             moveCount);
+           NSLog(@"additions: %ld, removals:%ld, updates:%ld, moves: %ld",
+                 (long)additionCount,
+                 (long)removalCount,
+                 (long)updateCount,
+                 (long)moveCount);
          }
 
          
