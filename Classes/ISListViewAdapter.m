@@ -314,7 +314,7 @@ NSInteger ISDBViewIndexUndefined = -1;
 #pragma mark - Observers
 
 
-- (void)addObserver:(id<ISListViewAdapterObserver>)observer
+- (void)addAdapterObserver:(id<ISListViewAdapterObserver>)observer
 {
   [self.notifier addObserver:observer];
 }
