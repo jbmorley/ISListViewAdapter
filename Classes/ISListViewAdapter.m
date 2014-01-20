@@ -100,17 +100,26 @@ NSInteger ISDBViewIndexUndefined = -1;
     }
   }
   
-  // Copy our existing view of the entries to ensure it doesn't
-  // change while we are procesisng the change sets.
-  NSMutableArray *entries = [self.entries mutableCopy];
-  
   // Fetch the updated entries.
   [self.dataSource itemsForAdapter:self
    completionBlock:^(NSArray *updatedEntries) {
-
+     
      // Cross-post the comparison onto a separate serial dispatch queue.
      // This ensures all updates are ordered.
      dispatch_async(self.comparisonQueue, ^{
+       
+       // Copy our existing view of the entries to ensure it doesn't
+       // change while we are procesisng the change sets.
+       __block NSMutableArray *entries;
+       dispatch_sync(dispatch_get_main_queue(), ^{
+         entries = [self.entries mutableCopy];
+       });
+       
+       if (self.debug) {
+         NSLog(@"before %d, after: %d",
+               entries.count,
+               updatedEntries.count);
+       }
        
        // Perform the comparison on a different thread to ensure we do
        // not block the UI thread.  Since we are always dispatching updates
@@ -125,6 +134,11 @@ NSInteger ISDBViewIndexUndefined = -1;
        NSMutableArray *updates = [NSMutableArray arrayWithCapacity:3];
        NSInteger countBefore = entries.count;
        NSInteger countAfter = updatedEntries.count;
+       
+       NSInteger additionCount = 0;
+       NSInteger removalCount = 0;
+       NSInteger updateCount = 0;
+       NSInteger moveCount = 0;
               
        // Removes and moves.
        for (NSInteger i = entries.count-1; i >= 0; i--) {
@@ -149,6 +163,7 @@ NSInteger ISDBViewIndexUndefined = -1;
            [actions addObject:operation];
            
            // Track the removal.
+           removalCount++;
            countBefore--;
            
          } else if (i != newIndex) {
@@ -167,6 +182,9 @@ NSInteger ISDBViewIndexUndefined = -1;
            [NSIndexPath indexPathForItem:newIndex
                                inSection:0];
            [actions addObject:operation];
+           
+           // Track the move.
+           moveCount++;
            
          }
        }
@@ -196,6 +214,7 @@ NSInteger ISDBViewIndexUndefined = -1;
 
            // Track the addition.
            countBefore++;
+           additionCount++;
            
          } else {
            
@@ -218,6 +237,9 @@ NSInteger ISDBViewIndexUndefined = -1;
              operation.currentIndex;
              [updates addObject:operation];
              
+             // Track the update.
+             updateCount++;
+             
            }
          }
        }
@@ -225,18 +247,32 @@ NSInteger ISDBViewIndexUndefined = -1;
        assert(countBefore == countAfter);
        
        // Update the state and notify our observers.
-       dispatch_async(dispatch_get_main_queue(), ^{
+       dispatch_sync(dispatch_get_main_queue(), ^{
+         
+         if (self.debug) {
+           NSLog(
+             @"additions: %d, removals: %d, updates: %d, moves: %d",
+             additionCount,
+             removalCount,
+             updateCount,
+             moveCount);
+         }
+
          
          // Notify the observers of the additions, moves and removals.
          self.entries = updatedEntries;
-         [self.notifier notify:@selector(performBatchUpdates:)
-                    withObject:actions];
+         if (actions.count > 0) {
+           [self.notifier notify:@selector(performBatchUpdates:)
+                      withObject:actions];
+         }
          
          // Notify the observers of updates in a separate block to avoid
          // performing multiple operations to individual items (it seems
          // to break UITableView).
-         [self.notifier notify:@selector(performBatchUpdates:)
-                    withObject:updates];
+         if (updates.count > 0) {
+           [self.notifier notify:@selector(performBatchUpdates:)
+                      withObject:updates];
+         }
          
        });
        
