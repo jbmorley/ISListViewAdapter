@@ -102,11 +102,39 @@ NSInteger ISDBViewIndexUndefined = -1;
   
   // Fetch the updated entries.
   [self.dataSource itemsForAdapter:self
-   completionBlock:^(NSArray *updatedEntries) {
+   completionBlock:^(NSArray *completionEntries) {
      
      // Cross-post the comparison onto a separate serial dispatch queue.
      // This ensures all updates are ordered.
      dispatch_async(self.comparisonQueue, ^{
+       
+       NSArray *updatedEntries = completionEntries;
+       
+       // If the data source implements the appropriate delegate methods then we assume that
+       // it has not provided us with an array of ISListViewAdapterItemDescription objects
+       // and instead generate our own.
+       // It may be more performant to skip the generation of a new array and call these
+       // selectors directly, but this allows for the new API support in the short-term.
+       if ([self.dataSource respondsToSelector:@selector(adapter:identifierForItem:)]) {
+         BOOL hasSummary =
+         [self.dataSource respondsToSelector:@selector(adapter:summaryForItem:)];
+         NSMutableArray *descriptions =
+         [NSMutableArray arrayWithCapacity:completionEntries.count];
+         for (id item in updatedEntries) {
+           NSString *identifier = [self.dataSource adapter:self
+                                         identifierForItem:item];
+           NSString *summary = nil;
+           if (hasSummary) {
+             summary = [self.dataSource adapter:self
+                                 summaryForItem:item];
+           }
+           ISListViewAdapterItemDescription *description =
+           [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier
+                                                               summary:summary];
+           [descriptions addObject:description];
+         };
+         updatedEntries = descriptions;
+       }
        
        // Copy our existing view of the entries to ensure it doesn't
        // change while we are procesisng the change sets.
@@ -304,8 +332,9 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (ISListViewAdapterItem *)itemForIndex:(NSInteger)index
 {
-  ISListViewAdapterItem *entry = [ISListViewAdapterItem entryWithAdapter:self
-                                        index:index];
+  ISListViewAdapterItem *entry =
+  [ISListViewAdapterItem entryWithAdapter:self
+                                    index:index];
   return entry;
 }
 

@@ -31,7 +31,6 @@
 
 - (void)itemsForAdapter:(ISListViewAdapter *)adapter
         completionBlock:(ISListViewAdapterBlock)completionBlock;
-
 - (void)adapter:(ISListViewAdapter *)adapter
 itemForIdentifier:(id)identifier
 completionBlock:(ISListViewAdapterBlock)completionBlock;
@@ -39,5 +38,10 @@ completionBlock:(ISListViewAdapterBlock)completionBlock;
 @optional
 
 - (void)initializeAdapter:(ISListViewAdapter *)adapter;
+
+- (id)adapter:(ISListViewAdapter *)adapter
+identifierForItem:(id)item;
+- (id)adapter:(ISListViewAdapter *)adapter
+summaryForItem:(id)item;
 
 @end
