@@ -21,6 +21,7 @@
 //
 
 #import "ISListViewAdapter+Private.h"
+#import "ISListViewAdapterItemDescription.h"
 
 @implementation ISListViewAdapter (Private)
 

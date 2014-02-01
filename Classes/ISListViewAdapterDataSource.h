@@ -21,7 +21,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ISListViewAdapterItemDescription.h"
 #import "ISListViewAdapterBlock.h"
 
 @class ISListViewAdapter;
@@ -31,6 +30,10 @@
 
 - (void)itemsForAdapter:(ISListViewAdapter *)adapter
         completionBlock:(ISListViewAdapterBlock)completionBlock;
+- (id)adapter:(ISListViewAdapter *)adapter
+identifierForItem:(id)item;
+- (id)adapter:(ISListViewAdapter *)adapter
+summaryForItem:(id)item;
 - (void)adapter:(ISListViewAdapter *)adapter
 itemForIdentifier:(id)identifier
 completionBlock:(ISListViewAdapterBlock)completionBlock;
@@ -38,10 +41,5 @@ completionBlock:(ISListViewAdapterBlock)completionBlock;
 @optional
 
 - (void)initializeAdapter:(ISListViewAdapter *)adapter;
-
-- (id)adapter:(ISListViewAdapter *)adapter
-identifierForItem:(id)item;
-- (id)adapter:(ISListViewAdapter *)adapter
-summaryForItem:(id)item;
 
 @end

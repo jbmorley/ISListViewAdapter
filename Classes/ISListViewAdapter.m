@@ -24,6 +24,7 @@
 #import "ISNotifier.h"
 #import "ISListViewAdapterItem.h"
 #import "ISListViewAdapterBlock.h"
+#import "ISListViewAdapterItemDescription.h"
 
 typedef enum {
   ISDBViewStateInvalid,
