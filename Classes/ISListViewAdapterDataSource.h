@@ -32,14 +32,16 @@
         completionBlock:(ISListViewAdapterBlock)completionBlock;
 - (id)adapter:(ISListViewAdapter *)adapter
 identifierForItem:(id)item;
-- (id)adapter:(ISListViewAdapter *)adapter
-summaryForItem:(id)item;
 - (void)adapter:(ISListViewAdapter *)adapter
 itemForIdentifier:(id)identifier
 completionBlock:(ISListViewAdapterBlock)completionBlock;
 
 @optional
 
+- (id)adapter:(ISListViewAdapter *)adapter
+summaryForItem:(id)item;
+- (NSDictionary *)adapter:(ISListViewAdapter *)adapter
+          userInfoForItem:(id)item;
 - (void)initializeAdapter:(ISListViewAdapter *)adapter;
 
 @end

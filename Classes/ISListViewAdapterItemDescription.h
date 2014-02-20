@@ -24,8 +24,9 @@
 
 @interface ISListViewAdapterItemDescription : NSObject
 
-@property (strong, nonatomic, readonly) id identifier;
-@property (strong, nonatomic, readonly) id summary;
+@property (nonatomic, strong, readonly) id identifier;
+@property (nonatomic, strong, readonly) id summary;
+@property (nonatomic, strong) NSDictionary *userInfo;
 
 + (id)descriptionWithIdentifier:(id)identifier
                   summary:(id)summary;

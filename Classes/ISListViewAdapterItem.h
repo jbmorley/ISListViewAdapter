@@ -28,6 +28,9 @@
 
 @interface ISListViewAdapterItem : NSObject
 
+// TODO This should be read-only.
+@property (nonatomic, strong) NSDictionary *userInfo;
+
 + (id)entryWithAdapter:(ISListViewAdapter *)adapter
                  index:(NSUInteger)index;
 + (id)entryWithAdapter:(ISListViewAdapter *)adapter

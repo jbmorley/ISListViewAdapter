@@ -156,6 +156,12 @@ NSInteger ISDBViewIndexUndefined = -1;
         ISListViewAdapterItemDescription *description =
         [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier
                                                             summary:summary];
+        
+        if ([self.dataSource respondsToSelector:@selector(adapter:userInfoForItem:)]) {
+          description.userInfo = [self.dataSource adapter:self
+                                          userInfoForItem:item];
+        }
+        
         [descriptions addObject:description];
       };
       updatedEntries = descriptions;
@@ -340,9 +346,12 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (ISListViewAdapterItem *)itemForIndex:(NSInteger)index
 {
+  ISListViewAdapterItemDescription *description =
+  self.entries[index];
   ISListViewAdapterItem *entry =
   [ISListViewAdapterItem entryWithAdapter:self
                                     index:index];
+  entry.userInfo = description.userInfo;
   return entry;
 }
 

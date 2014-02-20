@@ -25,9 +25,11 @@
 
 @interface ISListViewAdapterItem ()
 
-@property (strong, nonatomic) ISListViewAdapter *view;
+// TODO Should this be strong?
+@property (nonatomic, strong) ISListViewAdapter *view;
 @property (nonatomic) NSUInteger index;
-@property (strong, nonatomic) id identifier;
+// TODO This should probably be exposed read-only.
+@property (nonatomic, strong) id identifier;
 
 @end
 
@@ -73,6 +75,7 @@
 
 - (void)fetch:(ISListViewAdapterBlock)completionBlock
 {
+  // TODO Why is this dispatching to the main queue?
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.view itemForIdentifier:self.identifier
                       completion:^(id item) {
