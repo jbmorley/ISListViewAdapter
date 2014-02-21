@@ -55,6 +55,7 @@
     [self.adapter addAdapterObserver:self];
     _initialized = NO;
     _currentVersion = 0;
+    [self reloadData];
   }
   return self;
 }
@@ -79,6 +80,7 @@
     [self.adapter addAdapterObserver:self];
     _initialized = NO;
     _currentVersion = 0;
+    [self reloadData];
   }
   return self;
 }
