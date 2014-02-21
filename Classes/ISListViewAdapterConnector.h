@@ -26,10 +26,16 @@
 
 @interface ISListViewAdapterConnector : NSObject <ISListViewAdapterObserver>
 
-+ (id)connectorWithCollectionView:(UICollectionView *)collectionView;
-- (id)initWithCollectionView:(UICollectionView *)collectionView;
++ (id)connectorWithAdapter:(ISListViewAdapter *)adapter
+            collectionView:(UICollectionView *)collectionView;
+- (id)initWithAdapter:(ISListViewAdapter *)adapter
+       collectionView:(UICollectionView *)collectionView;
 
-+ (id)connectorWithTableView:(UITableView *)tableView;
-- (id)initWithTableView:(UITableView *)tableView;
++ (id)connectorWithAdapter:(ISListViewAdapter *)adapter
+                 tableView:(UITableView *)tableView;
+- (id)initWithAdapter:(ISListViewAdapter *)adapter
+            tableView:(UITableView *)tableView;
+
+@property (nonatomic, readonly) NSUInteger count;
 
 @end

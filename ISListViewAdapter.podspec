@@ -10,6 +10,8 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Classes/*.{h,m}'
 
+  s.private_header_files = "Classes/*Private.h"
+
   s.requires_arc = true
 
   s.platform = :ios, "6.0", :osx, "10.8"

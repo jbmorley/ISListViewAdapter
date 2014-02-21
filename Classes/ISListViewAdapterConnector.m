@@ -22,46 +22,67 @@
 
 #import "ISListViewAdapterConnector.h"
 #import "ISListViewAdapterOperation.h"
+#import "ISListViewAdapter.h"
 
-@interface ISListViewAdapterConnector ()
+@interface ISListViewAdapterConnector () {
+  NSUInteger _currentVersion;
+}
 
 @property (nonatomic, weak) UICollectionView *collectionView;
 @property (nonatomic, weak) UITableView *tableView;
+@property (nonatomic, weak) ISListViewAdapter *adapter;
 @property (nonatomic) UITableViewRowAnimation animation;
 
 @end
 
 @implementation ISListViewAdapterConnector
 
-+ (id)connectorWithCollectionView:(UICollectionView *)collectionView
++ (id)connectorWithAdapter:(ISListViewAdapter *)adapter
+            collectionView:(UICollectionView *)collectionView
 {
-  return [[self alloc] initWithCollectionView:collectionView];
+  return [[self alloc] initWithAdapter:adapter
+                        collectionView:collectionView];
 }
 
-- (id)initWithCollectionView:(UICollectionView *)collectionView
+- (id)initWithAdapter:(ISListViewAdapter *)adapter
+       collectionView:(UICollectionView *)collectionView
 {
   self = [super init];
   if (self) {
+    self.adapter = adapter;
     self.collectionView = collectionView;
+    [self.adapter addAdapterObserver:self];
   }
   return self;
 }
 
 
-+ (id)connectorWithTableView:(UITableView *)tableView
++ (id)connectorWithAdapter:(ISListViewAdapter *)adapter
+                 tableView:(UITableView *)tableView
 {
-  return [[self alloc] initWithTableView:tableView];
+  return [[self alloc] initWithAdapter:adapter
+                             tableView:tableView];
 }
 
 
-- (id)initWithTableView:(UITableView *)tableView
+- (id)initWithAdapter:(ISListViewAdapter *)adapter
+           tableView:(UITableView *)tableView
 {
   self = [super init];
   if (self) {
+    self.adapter = adapter;
     self.tableView = tableView;
     self.animation = UITableViewRowAnimationAutomatic;
+    [self.adapter addAdapterObserver:self];
   }
   return self;
+}
+
+
+- (NSUInteger)count
+{
+  _currentVersion = self.adapter.version;
+  return self.adapter.count;
 }
 
 
@@ -69,7 +90,13 @@
 
 
 - (void)performBatchUpdates:(NSArray *)updates
+                fromVersion:(NSNumber *)version
 {
+  // Ignore updates we've already seen.
+  if ([version integerValue] <= _currentVersion) {
+    return;
+  }
+  
   if (self.collectionView) {
     
     [self.collectionView performBatchUpdates:^{

@@ -33,7 +33,9 @@ typedef enum {
 } ISDBViewState;
 
 
-@interface ISListViewAdapter ()
+@interface ISListViewAdapter () {
+  NSUInteger _version;
+}
 
 @property (nonatomic) ISDBViewState state;
 @property (strong, nonatomic) id<ISListViewAdapterDataSource> dataSource;
@@ -57,6 +59,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     self.state = ISDBViewStateInvalid;
     self.notifier = [ISNotifier new];
     self.entries = @[];
+    _version = 0;
     
     if ([self.dataSource respondsToSelector:@selector(initializeAdapter:)]) {
       [self.dataSource initializeAdapter:self];
@@ -300,20 +303,26 @@ NSInteger ISDBViewIndexUndefined = -1;
               (long)moveCount);
       }
       
+      // Increment the version seen.
+      NSUInteger previousVersion = _version;
+      _version = _version + 1;
+      
       
       // Notify the observers of the additions, moves and removals.
       self.entries = updatedEntries;
       if (actions.count > 0) {
-        [self.notifier notify:@selector(performBatchUpdates:)
-                   withObject:actions];
+        [self.notifier notify:@selector(performBatchUpdates:fromVersion:)
+                   withObject:actions
+                   withObject:@(previousVersion)];
       }
       
       // Notify the observers of updates in a separate block to avoid
       // performing multiple operations to individual items (it seems
       // to break UITableView).
       if (updates.count > 0) {
-        [self.notifier notify:@selector(performBatchUpdates:)
-                   withObject:updates];
+        [self.notifier notify:@selector(performBatchUpdates:fromVersion:)
+                   withObject:updates
+                   withObject:@(previousVersion)];
       }
       
     });
@@ -327,6 +336,12 @@ NSInteger ISDBViewIndexUndefined = -1;
 {
   [self updateEntries];
   return self.entries.count;
+}
+
+
+- (NSUInteger)version
+{
+  return _version;
 }
 
 

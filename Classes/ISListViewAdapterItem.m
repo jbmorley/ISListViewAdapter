@@ -21,14 +21,12 @@
 //
 
 #import "ISListViewAdapterItem.h"
-#import "ISListViewAdapter+Private.h"
+#import "ISListViewAdapterPrivate.h"
 
 @interface ISListViewAdapterItem ()
 
-// TODO Should this be strong?
-@property (nonatomic, strong) ISListViewAdapter *view;
+@property (nonatomic, weak) ISListViewAdapter *view;
 @property (nonatomic) NSUInteger index;
-// TODO This should probably be exposed read-only.
 @property (nonatomic, strong) id identifier;
 
 @end

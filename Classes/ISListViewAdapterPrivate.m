@@ -20,7 +20,7 @@
 // SOFTWARE.
 //
 
-#import "ISListViewAdapter+Private.h"
+#import "ISListViewAdapterPrivate.h"
 #import "ISListViewAdapterItemDescription.h"
 
 @implementation ISListViewAdapter (Private)
