@@ -51,6 +51,12 @@ NSInteger ISDBViewIndexUndefined = -1;
 @implementation ISListViewAdapter
 
 
++ (id)adapterWithDataSource:(id<ISListViewAdapterDataSource>)dataSource
+{
+  return [[self alloc] initWithDataSource:dataSource];
+}
+
+
 - (id)initWithDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   self = [super init];
