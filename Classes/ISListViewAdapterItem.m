@@ -74,6 +74,8 @@
 - (void)fetch:(ISListViewAdapterBlock)completionBlock
 {
   // TODO Why is this dispatching to the main queue?
+  // I think it might be attempting to break some re-entrancy
+  // problem...
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.view itemForIdentifier:self.identifier
                       completion:^(id item) {
