@@ -317,7 +317,8 @@ NSInteger ISDBViewIndexUndefined = -1;
       // Notify the observers of the additions, moves and removals.
       self.entries = updatedEntries;
       if (actions.count > 0) {
-        [self.notifier notify:@selector(performBatchUpdates:fromVersion:)
+        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
+                   withObject:self
                    withObject:actions
                    withObject:@(previousVersion)];
       }
@@ -326,7 +327,8 @@ NSInteger ISDBViewIndexUndefined = -1;
       // performing multiple operations to individual items (it seems
       // to break UITableView).
       if (updates.count > 0) {
-        [self.notifier notify:@selector(performBatchUpdates:fromVersion:)
+        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
+                   withObject:self
                    withObject:updates
                    withObject:@(previousVersion)];
       }

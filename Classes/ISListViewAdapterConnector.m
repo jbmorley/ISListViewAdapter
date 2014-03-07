@@ -109,8 +109,9 @@
 #pragma mark - ISListViewAdapterObserver
 
 
-- (void)performBatchUpdates:(NSArray *)updates
-                fromVersion:(NSNumber *)version
+- (void)adapter:(ISListViewAdapter *)adapter
+performBatchUpdates:(NSArray *)updates
+    fromVersion:(NSNumber *)version
 {;
   // If a UICollectionView or UITableView are notified of batch
   // updates _before_ they have been shown, then they will ask
