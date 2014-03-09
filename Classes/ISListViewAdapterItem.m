@@ -73,15 +73,26 @@
 
 - (void)fetch:(ISListViewAdapterBlock)completionBlock
 {
-  // TODO Why is this dispatching to the main queue?
-  // I think it might be attempting to break some re-entrancy
-  // problem...
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.view itemForIdentifier:self.identifier
                       completion:^(id item) {
                         completionBlock(item);
                       }];
   });
+}
+
+
+- (id)fetchBlocking
+{
+  __block id result = nil;
+  dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+  [self.view itemForIdentifier:self.identifier
+                    completion:^(id item) {
+                      result = item;
+                      dispatch_semaphore_signal(sema);
+                    }];
+  dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+  return result;
 }
 
 

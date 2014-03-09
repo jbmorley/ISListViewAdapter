@@ -40,5 +40,6 @@
                 index:(NSUInteger)index
            identifier:(id)identifier;
 - (void)fetch:(ISListViewAdapterBlock)completionBlock;
+- (id)fetchBlocking;
 
 @end
