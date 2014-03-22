@@ -115,18 +115,44 @@ static NSString *const kSectionItems = @"items";
 }
 
 
+- (void)_runOnMainThread:(void (^)(void))block
+{
+  if ([NSThread isMainThread]) {
+    block();
+  } else {
+    dispatch_sync(dispatch_get_main_queue(), block);
+  }
+}
+
+
 - (ISListViewAdapterItemDescription *)_descriptionForItem:(id)item
 {
-  NSString *identifier = [self.dataSource adapter:self
-                                identifierForItem:item];
-  NSString *summary = nil;
-  if (self.dataSourceSupportsSummaries) {
-    summary = [self.dataSource adapter:self
-                        summaryForItem:item];
-  }
-  ISListViewAdapterItemDescription *description =
-  [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier summary:summary];
+  __block ISListViewAdapterItemDescription *description = nil;
+  [self _runOnMainThread:^{
+    NSString *identifier =
+    [self.dataSource adapter:self
+           identifierForItem:item];
+    NSString *summary = nil;
+    if (self.dataSourceSupportsSummaries) {
+      summary = [self.dataSource adapter:self
+                          summaryForItem:item];
+    }
+    description = [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier summary:summary];
+  }];
   return description;
+}
+
+
+- (NSArray *)_descriptionsForItems:(NSArray *)items
+{
+  NSMutableArray *descriptions =
+  [NSMutableArray arrayWithCapacity:items.count];
+  for (id item in items) {
+    ISListViewAdapterItemDescription *description =
+    [self _descriptionForItem:item];
+    [descriptions addObject:description];
+  };
+  return descriptions;
 }
 
 
@@ -182,17 +208,8 @@ static NSString *const kSectionItems = @"items";
     // and instead generate our own.
     // It may be more performant to skip the generation of a new array and call these
     // selectors directly, but this allows for the new API support in the short-term.
-    NSArray *updatedEntries = completionEntries;
-    if ([self.dataSource respondsToSelector:@selector(adapter:identifierForItem:)]) {
-      NSMutableArray *descriptions =
-      [NSMutableArray arrayWithCapacity:completionEntries.count];
-      for (id item in updatedEntries) {
-        ISListViewAdapterItemDescription *description =
-        [self _descriptionForItem:item];
-        [descriptions addObject:description];
-      };
-      updatedEntries = descriptions;
-    }
+    
+    NSArray *updatedEntries = [self _descriptionsForItems:completionEntries];
     
     if (self.debug) {
       NSLog(@"before %lu, after:%lud",
