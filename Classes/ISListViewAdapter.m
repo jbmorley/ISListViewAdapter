@@ -127,19 +127,17 @@ static NSString *const kSectionItems = @"items";
 
 - (ISListViewAdapterItemDescription *)_descriptionForItem:(id)item
 {
-  __block ISListViewAdapterItemDescription *description = nil;
+  __block ISListViewAdapterItemDescription *description =
+  [ISListViewAdapterItemDescription new];
   [self _runOnMainThread:^{
-    NSString *identifier =
+    description.identifier =
     [self.dataSource adapter:self
            identifierForItem:item];
-    NSString *summary = nil;
-    if (self.dataSourceSupportsSummaries) {
-      summary = [self.dataSource adapter:self
-                          summaryForItem:item];
+   if (self.dataSourceSupportsSummaries) {
+      description.summary =
+     [self.dataSource adapter:self
+               summaryForItem:item];
     }
-    description = [ISListViewAdapterItemDescription new];
-    description.identifier = identifier;
-    description.summary = summary;
   }];
   return description;
 }
