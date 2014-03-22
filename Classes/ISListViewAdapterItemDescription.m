@@ -48,4 +48,13 @@
 }
 
 
+- (NSString *)description
+{
+  return [NSString stringWithFormat:
+          @"%@ - %@",
+          self.identifier,
+          self.summary];
+}
+
+
 @end

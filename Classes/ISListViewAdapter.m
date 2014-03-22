@@ -161,6 +161,45 @@ static NSString *const kSectionItems = @"items";
 }
 
 
+- (NSArray *)_sectionsForItems:(NSArray *)items
+{
+  // Conver the items to descriptions.
+  NSArray *descriptions =
+  [self _descriptionsForItems:items];
+  
+  // Build the section structure.
+  NSMutableDictionary *sectionLookup =
+  [NSMutableDictionary dictionaryWithCapacity:3];
+  NSMutableArray *sections =
+  [NSMutableArray arrayWithCapacity:3];
+  if (self.dataSourceSupportsSections) {
+    
+    for (ISListViewAdapterItemDescription *description in
+         descriptions) {
+      
+      // Find the section, creating one if required.
+      NSDictionary *section =
+      sectionLookup[description.section];
+      if (section == nil) {
+        section = @{kSectionTitle:description.section,
+                    kSectionItems:[NSMutableArray arrayWithCapacity:3]};
+        sectionLookup[description.section] = section;
+        [sections addObject:section];
+      }
+      
+      // Add the item to the section.
+      [section[kSectionItems] addObject:description];
+      
+    }
+    
+  } else {
+    [sections addObject:@{kSectionItems:descriptions}];
+  }
+
+  return sections;
+}
+
+
 - (void)updateEntries
 {
   
@@ -197,17 +236,6 @@ static NSString *const kSectionItems = @"items";
        }];
     });
     dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
-    
-    // New.
-    // Build the section structure.
-//    NSMutableDictionary *sectionLookup = [NSMutableDictionary dictionaryWithCapacity:3];
-//    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:3];
-//    
-//    if (self.dataSource respondsToSelector:@selector(adapter:sectionForItem:)) {
-//      
-//    } else {
-//    }
-    
 
     // If the data source implements the appropriate delegate methods then we assume that
     // it has not provided us with an array of ISListViewAdapterItemDescription objects
@@ -216,6 +244,9 @@ static NSString *const kSectionItems = @"items";
     // selectors directly, but this allows for the new API support in the short-term.
     
     NSArray *updatedEntries = [self _descriptionsForItems:completionEntries];
+    
+    NSArray *sections = [self _sectionsForItems:completionEntries];
+    NSLog(@"Sections: %@", sections);
     
     if (self.debug) {
       NSLog(@"before %lu, after:%lud",

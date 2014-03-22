@@ -134,10 +134,12 @@ performBatchUpdates:(NSArray *)updates
   // The other mis-matches which may occur are handled by the
   // adapter versioning which will ensure we correctly ignore
   // non-incremental updates (see below).
-  if (!_initialized) {
+  
+  // TODO Re-enable this logic.
+//  if (!_initialized) {
     [self reloadData];
     return;
-  }
+//  }
   
   // Handle non-incremental version updates.
   NSUInteger updateFromVersion = [version integerValue];
