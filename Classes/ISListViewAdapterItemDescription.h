@@ -26,7 +26,6 @@
 
 @property (nonatomic, strong, readonly) id identifier;
 @property (nonatomic, strong, readonly) id summary;
-@property (nonatomic, strong) NSDictionary *userInfo;
 
 + (id)descriptionWithIdentifier:(id)identifier
                   summary:(id)summary;

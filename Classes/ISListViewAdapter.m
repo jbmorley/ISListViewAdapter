@@ -166,11 +166,6 @@ NSInteger ISDBViewIndexUndefined = -1;
         [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier
                                                             summary:summary];
         
-        if ([self.dataSource respondsToSelector:@selector(adapter:userInfoForItem:)]) {
-          description.userInfo = [self.dataSource adapter:self
-                                          userInfoForItem:item];
-        }
-        
         [descriptions addObject:description];
       };
       updatedEntries = descriptions;
@@ -355,15 +350,8 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (ISListViewAdapterItem *)itemForIdentifier:(id)identifier
 {
-  // Create a description to allow us to find the entry.
-  ISListViewAdapterItemDescription *description
-  = [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier
-                                            summary:nil];
-  NSUInteger index = [self.entries indexOfObject:description];
-  ISListViewAdapterItem *entry = [ISListViewAdapterItem entryWithAdapter:self
-                                        index:index
-                                   identifier:identifier];
-  return entry;
+  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:identifier];
+  return item;
 }
 
 
@@ -371,11 +359,15 @@ NSInteger ISDBViewIndexUndefined = -1;
 {
   ISListViewAdapterItemDescription *description =
   self.entries[index];
-  ISListViewAdapterItem *entry =
-  [ISListViewAdapterItem entryWithAdapter:self
-                                    index:index];
-  entry.userInfo = description.userInfo;
-  return entry;
+  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:description.identifier];
+  return item;
+}
+
+
+- (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath
+{
+  // TODO Why are we not always using identifiers?
+  return nil;
 }
 
 
