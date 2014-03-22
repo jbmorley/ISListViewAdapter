@@ -355,19 +355,12 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (ISListViewAdapterItem *)itemForIndex:(NSInteger)index
-{
-  ISListViewAdapterItemDescription *description =
-  self.entries[index];
-  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:description.identifier];
-  return item;
-}
-
-
 - (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath
 {
-  // TODO Why are we not always using identifiers?
-  return nil;
+  ISListViewAdapterItemDescription *description =
+  self.entries[indexPath.item];
+  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:description.identifier];
+  return item;
 }
 
 
