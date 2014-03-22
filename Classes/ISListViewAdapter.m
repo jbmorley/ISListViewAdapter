@@ -25,6 +25,7 @@
 #import "ISListViewAdapterItem.h"
 #import "ISListViewAdapterBlock.h"
 #import "ISListViewAdapterItemDescription.h"
+#import "ISListViewAdapterSection.h"
 
 typedef enum {
   ISDBViewStateInvalid,
@@ -50,8 +51,6 @@ typedef enum {
 @end
 
 NSInteger ISDBViewIndexUndefined = -1;
-static NSString *const kSectionTitle = @"title";
-static NSString *const kSectionItems = @"items";
 
 @implementation ISListViewAdapter
 
@@ -179,22 +178,23 @@ static NSString *const kSectionItems = @"items";
          descriptions) {
       
       // Find the section, creating one if required.
-      NSDictionary *section =
+      ISListViewAdapterSection *section =
       sectionLookup[description.section];
       if (section == nil) {
-        section = @{kSectionTitle:description.section,
-                    kSectionItems:[NSMutableArray arrayWithCapacity:3]};
+        section = [ISListViewAdapterSection new];
         sectionLookup[description.section] = section;
         [sections addObject:section];
       }
       
       // Add the item to the section.
-      [section[kSectionItems] addObject:description];
+      [section.items addObject:description];
       
     }
     
   } else {
-    [sections addObject:@{kSectionItems:descriptions}];
+    ISListViewAdapterSection *section = [ISListViewAdapterSection new];
+    section.items = [descriptions mutableCopy];
+    [sections addObject:section];
   }
 
   return sections;
@@ -218,8 +218,7 @@ static NSString *const kSectionItems = @"items";
   
   // Removes and moves.
   for (NSInteger i = before.count-1; i >= 0; i--) {
-    ISListViewAdapterItemDescription *entry =
-    [before objectAtIndex:i];
+    id entry = [before objectAtIndex:i];
     
     // Determine the type of the operation.
     NSUInteger newIndex =
@@ -267,8 +266,7 @@ static NSString *const kSectionItems = @"items";
   
   // Additions and updates.
   for (NSUInteger i = 0; i < after.count; i++) {
-    ISListViewAdapterItemDescription *entry =
-    [after objectAtIndex:i];
+    id entry = [after objectAtIndex:i];
     
     // Determine the index of the operation.
     NSUInteger oldIndex =
@@ -295,27 +293,30 @@ static NSString *const kSectionItems = @"items";
     } else {
       
       // Check for updates.
-      ISListViewAdapterItemDescription *oldEntry =
-      [before objectAtIndex:oldIndex];
-      if (![oldEntry isSummaryEqual:entry]) {
-        
-        // Create an operation.
-        ISListViewAdapterOperation *operation =
-        [ISListViewAdapterOperation new];
-        
-        // Update.
-        operation.type =
-        ISListViewAdapterOperationTypeUpdate;
-        operation.currentIndex =
-        [NSIndexPath indexPathForItem:i
-                            inSection:0];
-        operation.previousIndex =
-        operation.currentIndex;
-        [updates addObject:operation];
-        
-        // Track the update.
-        updateCount++;
-        
+      // We only do this if the objects we're comparing implement
+      // the isSummaryEqual: selector.
+      id oldEntry = [before objectAtIndex:oldIndex];
+      if ([oldEntry respondsToSelector:@selector(isSummaryEqual:)]) {
+        if (![oldEntry isSummaryEqual:entry]) {
+          
+          // Create an operation.
+          ISListViewAdapterOperation *operation =
+          [ISListViewAdapterOperation new];
+          
+          // Update.
+          operation.type =
+          ISListViewAdapterOperationTypeUpdate;
+          operation.currentIndex =
+          [NSIndexPath indexPathForItem:i
+                              inSection:0];
+          operation.previousIndex =
+          operation.currentIndex;
+          [updates addObject:operation];
+          
+          // Track the update.
+          updateCount++;
+          
+        }
       }
     }
   }
@@ -447,7 +448,8 @@ static NSString *const kSectionItems = @"items";
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section
 {
   [self updateEntries];
-  return [self.sections[section][kSectionItems] count];
+  ISListViewAdapterSection *s = self.sections[section];
+  return s.items.count;
 }
 
 
@@ -466,8 +468,10 @@ static NSString *const kSectionItems = @"items";
 
 - (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath
 {
+  ISListViewAdapterSection *s =
+  self.sections[indexPath.section];
   ISListViewAdapterItemDescription *description =
-  self.sections[indexPath.section][kSectionItems][indexPath.item];
+  s.items[indexPath.item];
   ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:description.identifier];
   return item;
 }
