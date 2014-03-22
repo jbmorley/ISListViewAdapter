@@ -43,10 +43,14 @@ typedef enum {
 @property (strong, nonatomic) NSMutableDictionary *entriesByIdentifier;
 @property (strong, nonatomic) ISNotifier *notifier;
 @property (nonatomic) dispatch_queue_t comparisonQueue;
+@property (nonatomic, assign) BOOL dataSourceSupportsSummaries;
+@property (nonatomic, assign) BOOL dataSourceSupportsSections;
 
 @end
 
 NSInteger ISDBViewIndexUndefined = -1;
+static NSString *const kSectionTitle = @"title";
+static NSString *const kSectionItems = @"items";
 
 @implementation ISListViewAdapter
 
@@ -80,6 +84,10 @@ NSInteger ISDBViewIndexUndefined = -1;
     self.comparisonQueue
     = dispatch_queue_create([queueIdentifier UTF8String], DISPATCH_QUEUE_SERIAL);
     
+    // Check what the data source supports.
+    self.dataSourceSupportsSummaries = [self.dataSource respondsToSelector:@selector(adapter:summaryForItem:)];
+    self.dataSourceSupportsSections = [self.dataSource respondsToSelector:@selector(adapter:sectionForItem:)];
+    
     [self updateEntries];
   }
   return self;
@@ -104,6 +112,21 @@ NSInteger ISDBViewIndexUndefined = -1;
       [self updateEntries];
     }
   }
+}
+
+
+- (ISListViewAdapterItemDescription *)_descriptionForItem:(id)item
+{
+  NSString *identifier = [self.dataSource adapter:self
+                                identifierForItem:item];
+  NSString *summary = nil;
+  if (self.dataSourceSupportsSummaries) {
+    summary = [self.dataSource adapter:self
+                        summaryForItem:item];
+  }
+  ISListViewAdapterItemDescription *description =
+  [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier summary:summary];
+  return description;
 }
 
 
@@ -142,6 +165,17 @@ NSInteger ISDBViewIndexUndefined = -1;
        }];
     });
     dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    
+    // New.
+    // Build the section structure.
+//    NSMutableDictionary *sectionLookup = [NSMutableDictionary dictionaryWithCapacity:3];
+//    NSMutableArray *sections = [NSMutableArray arrayWithCapacity:3];
+//    
+//    if (self.dataSource respondsToSelector:@selector(adapter:sectionForItem:)) {
+//      
+//    } else {
+//    }
+    
 
     // If the data source implements the appropriate delegate methods then we assume that
     // it has not provided us with an array of ISListViewAdapterItemDescription objects
@@ -150,22 +184,11 @@ NSInteger ISDBViewIndexUndefined = -1;
     // selectors directly, but this allows for the new API support in the short-term.
     NSArray *updatedEntries = completionEntries;
     if ([self.dataSource respondsToSelector:@selector(adapter:identifierForItem:)]) {
-      BOOL hasSummary =
-      [self.dataSource respondsToSelector:@selector(adapter:summaryForItem:)];
       NSMutableArray *descriptions =
       [NSMutableArray arrayWithCapacity:completionEntries.count];
       for (id item in updatedEntries) {
-        NSString *identifier = [self.dataSource adapter:self
-                                      identifierForItem:item];
-        NSString *summary = nil;
-        if (hasSummary) {
-          summary = [self.dataSource adapter:self
-                              summaryForItem:item];
-        }
         ISListViewAdapterItemDescription *description =
-        [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier
-                                                            summary:summary];
-        
+        [self _descriptionForItem:item];
         [descriptions addObject:description];
       };
       updatedEntries = descriptions;

@@ -28,18 +28,14 @@
 
 @protocol ISListViewAdapterDataSource <NSObject>
 
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter
-        completionBlock:(ISListViewAdapterBlock)completionBlock;
-- (id)adapter:(ISListViewAdapter *)adapter
-identifierForItem:(id)item;
-- (void)adapter:(ISListViewAdapter *)adapter
-itemForIdentifier:(id)identifier
-completionBlock:(ISListViewAdapterBlock)completionBlock;
+- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock;
+- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item;
+- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock;
 
 @optional
 
-- (id)adapter:(ISListViewAdapter *)adapter
-summaryForItem:(id)item;
+- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item;
+- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item;
 - (void)initializeAdapter:(ISListViewAdapter *)adapter;
 
 @end
