@@ -36,6 +36,7 @@
 - (id)initWithAdapter:(ISListViewAdapter *)adapter
             tableView:(UITableView *)tableView;
 
-@property (nonatomic, readonly) NSUInteger count;
+- (NSUInteger)numberOfSections;
+- (NSUInteger)numberOfItemsInSection:(NSUInteger)section;
 
 @end

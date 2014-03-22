@@ -26,6 +26,7 @@
 
 @property (nonatomic, strong) id identifier;
 @property (nonatomic, strong) id summary;
+@property (nonatomic, strong) NSString *section;
 
 - (BOOL)isSummaryEqual:(ISListViewAdapterItemDescription *)object;
 

@@ -133,10 +133,15 @@ static NSString *const kSectionItems = @"items";
     description.identifier =
     [self.dataSource adapter:self
            identifierForItem:item];
-   if (self.dataSourceSupportsSummaries) {
+    if (self.dataSourceSupportsSummaries) {
       description.summary =
-     [self.dataSource adapter:self
-               summaryForItem:item];
+      [self.dataSource adapter:self
+                summaryForItem:item];
+    }
+    if (self.dataSourceSupportsSections) {
+      description.section =
+      [self.dataSource adapter:self
+                sectionForItem:item];
     }
   }];
   return description;
@@ -171,6 +176,7 @@ static NSString *const kSectionItems = @"items";
   dispatch_async(self.comparisonQueue, ^{
     
     // Only run if we believe the state is invalid.
+    // TODO This is not good enough.
     @synchronized (self) {
       if (self.state == ISDBViewStateValid) {
         return;
@@ -375,7 +381,13 @@ static NSString *const kSectionItems = @"items";
 }
 
 
-- (NSUInteger)count
+- (NSUInteger)numberOfSections
+{
+  return self.entries.count == 0 ? 0 : 1;
+}
+
+
+- (NSUInteger)numberOfItemsInSection:(NSUInteger)section
 {
   [self updateEntries];
   return self.entries.count;

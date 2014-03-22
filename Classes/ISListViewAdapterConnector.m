@@ -86,13 +86,19 @@
 }
 
 
-- (NSUInteger)count
+- (NSUInteger)numberOfSections
+{
+  return [self.adapter numberOfSections];
+}
+
+
+- (NSUInteger)numberOfItemsInSection:(NSUInteger)section
 {
   if (!_initialized) {
     _initialized = YES;
   }
   _currentVersion = self.adapter.version;
-  return self.adapter.count;
+  return [self.adapter numberOfItemsInSection:section];
 }
 
 
