@@ -30,26 +30,6 @@
 @implementation ISListViewAdapterItemDescription
 
 
-+ (id)descriptionWithIdentifier:(id)identifier
-                  summary:(id)summary
-{
-  return [[self alloc] initWithIdentifier:identifier
-                                  summary:summary];
-}
-
-
-- (id)initWithIdentifier:(id)identifier
-                 summary:(id)summary
-{
-  self = [super init];
-  if (self) {
-    _identifier = identifier;
-    _summary = summary;
-  }
-  return self;
-}
-
-
 - (BOOL)isEqual:(id)object
 {
   if (self == object) {

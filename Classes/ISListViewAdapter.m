@@ -137,7 +137,9 @@ static NSString *const kSectionItems = @"items";
       summary = [self.dataSource adapter:self
                           summaryForItem:item];
     }
-    description = [ISListViewAdapterItemDescription descriptionWithIdentifier:identifier summary:summary];
+    description = [ISListViewAdapterItemDescription new];
+    description.identifier = identifier;
+    description.summary = summary;
   }];
   return description;
 }
