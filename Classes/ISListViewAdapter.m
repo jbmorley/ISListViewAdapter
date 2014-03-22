@@ -201,6 +201,131 @@ static NSString *const kSectionItems = @"items";
 }
 
 
+- (NSArray *)_changesBetweenArray:(NSArray *)before
+                         andArray:(NSArray *)after
+{
+  NSMutableArray *actions =
+  [NSMutableArray arrayWithCapacity:3];
+  NSMutableArray *updates =
+  [NSMutableArray arrayWithCapacity:3];
+  NSInteger countBefore = before.count;
+  NSInteger countAfter = after.count;
+  
+  NSInteger additionCount = 0;
+  NSInteger removalCount = 0;
+  NSInteger updateCount = 0;
+  NSInteger moveCount = 0;
+  
+  // Removes and moves.
+  for (NSInteger i = before.count-1; i >= 0; i--) {
+    ISListViewAdapterItemDescription *entry =
+    [before objectAtIndex:i];
+    
+    // Determine the type of the operation.
+    NSUInteger newIndex =
+    [after indexOfObject:entry];
+    if (newIndex == NSNotFound) {
+      
+      // Create an operation.
+      ISListViewAdapterOperation *operation =
+      [ISListViewAdapterOperation new];
+      
+      // Remove.
+      operation.type =
+      ISListViewAdapterOperationTypeDelete;
+      operation.previousIndex =
+      [NSIndexPath indexPathForItem:i
+                          inSection:0];
+      [actions addObject:operation];
+      
+      // Track the removal.
+      removalCount++;
+      countBefore--;
+      
+    } else if (i != newIndex) {
+      
+      // Create an operation.
+      ISListViewAdapterOperation *operation =
+      [ISListViewAdapterOperation new];
+      
+      // Move.
+      operation.type =
+      ISListViewAdapterOperationTypeMove;
+      operation.previousIndex =
+      [NSIndexPath indexPathForItem:i
+                          inSection:0];
+      operation.currentIndex =
+      [NSIndexPath indexPathForItem:newIndex
+                          inSection:0];
+      [actions addObject:operation];
+      
+      // Track the move.
+      moveCount++;
+      
+    }
+  }
+  
+  // Additions and updates.
+  for (NSUInteger i = 0; i < after.count; i++) {
+    ISListViewAdapterItemDescription *entry =
+    [after objectAtIndex:i];
+    
+    // Determine the index of the operation.
+    NSUInteger oldIndex =
+    [before indexOfObject:entry];
+    
+    if (oldIndex == NSNotFound) {
+      
+      // Create an operation.
+      ISListViewAdapterOperation *operation =
+      [ISListViewAdapterOperation new];
+      
+      // Add.
+      operation.type =
+      ISListViewAdapterOperationTypeInsert;
+      operation.currentIndex =
+      [NSIndexPath indexPathForItem:i
+                          inSection:0];
+      [actions addObject:operation];
+      
+      // Track the addition.
+      countBefore++;
+      additionCount++;
+      
+    } else {
+      
+      // Check for updates.
+      ISListViewAdapterItemDescription *oldEntry =
+      [before objectAtIndex:oldIndex];
+      if (![oldEntry isSummaryEqual:entry]) {
+        
+        // Create an operation.
+        ISListViewAdapterOperation *operation =
+        [ISListViewAdapterOperation new];
+        
+        // Update.
+        operation.type =
+        ISListViewAdapterOperationTypeUpdate;
+        operation.currentIndex =
+        [NSIndexPath indexPathForItem:i
+                            inSection:0];
+        operation.previousIndex =
+        operation.currentIndex;
+        [updates addObject:operation];
+        
+        // Track the update.
+        updateCount++;
+        
+      }
+    }
+  }
+  
+  assert(countBefore == countAfter);
+  
+  return updates;
+}
+
+
 - (void)updateEntries
 {
   
@@ -225,10 +350,12 @@ static NSString *const kSectionItems = @"items";
     
     // Fetch the current state.
     __block NSMutableArray *entries;
+    __block NSMutableArray *sections;
     __block NSMutableArray *completionEntries;
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     dispatch_sync(dispatch_get_main_queue(), ^{
-      entries = [self.entries mutableCopy];
+      entries = [self.entries copy];
+      sections = [self.sections copy];
       [self.dataSource itemsForAdapter:self
        completionBlock:^(NSArray *entries) {
          completionEntries = [entries mutableCopy];
@@ -255,123 +382,9 @@ static NSString *const kSectionItems = @"items";
             (unsigned long)updatedEntries.count);
     }
     
-//    NSMutableArray *actions =
-//    [NSMutableArray arrayWithCapacity:3];
-//    NSMutableArray *updates =
-//    [NSMutableArray arrayWithCapacity:3];
-//    NSInteger countBefore = entries.count;
-//    NSInteger countAfter = updatedEntries.count;
-//    
-//    NSInteger additionCount = 0;
-//    NSInteger removalCount = 0;
-//    NSInteger updateCount = 0;
-//    NSInteger moveCount = 0;
-//    
-//    // Removes and moves.
-//    for (NSInteger i = entries.count-1; i >= 0; i--) {
-//      ISListViewAdapterItemDescription *entry =
-//      [entries objectAtIndex:i];
-//      
-//      // Determine the type of the operation.
-//      NSUInteger newIndex =
-//      [updatedEntries indexOfObject:entry];
-//      if (newIndex == NSNotFound) {
-//        
-//        // Create an operation.
-//        ISListViewAdapterOperation *operation =
-//        [ISListViewAdapterOperation new];
-//        
-//        // Remove.
-//        operation.type =
-//        ISListViewAdapterOperationTypeDelete;
-//        operation.previousIndex =
-//        [NSIndexPath indexPathForItem:i
-//                            inSection:0];
-//        [actions addObject:operation];
-//        
-//        // Track the removal.
-//        removalCount++;
-//        countBefore--;
-//        
-//      } else if (i != newIndex) {
-//        
-//        // Create an operation.
-//        ISListViewAdapterOperation *operation =
-//        [ISListViewAdapterOperation new];
-//        
-//        // Move.
-//        operation.type =
-//        ISListViewAdapterOperationTypeMove;
-//        operation.previousIndex =
-//        [NSIndexPath indexPathForItem:i
-//                            inSection:0];
-//        operation.currentIndex =
-//        [NSIndexPath indexPathForItem:newIndex
-//                            inSection:0];
-//        [actions addObject:operation];
-//        
-//        // Track the move.
-//        moveCount++;
-//        
-//      }
-//    }
-//    
-//    // Additions and updates.
-//    for (NSUInteger i = 0; i < updatedEntries.count; i++) {
-//      ISListViewAdapterItemDescription *entry =
-//      [updatedEntries objectAtIndex:i];
-//      
-//      // Determine the index of the operation.
-//      NSUInteger oldIndex =
-//      [entries indexOfObject:entry];
-//      
-//      if (oldIndex == NSNotFound) {
-//        
-//        // Create an operation.
-//        ISListViewAdapterOperation *operation =
-//        [ISListViewAdapterOperation new];
-//        
-//        // Add.
-//        operation.type =
-//        ISListViewAdapterOperationTypeInsert;
-//        operation.currentIndex =
-//        [NSIndexPath indexPathForItem:i
-//                            inSection:0];
-//        [actions addObject:operation];
-//        
-//        // Track the addition.
-//        countBefore++;
-//        additionCount++;
-//        
-//      } else {
-//        
-//        // Check for updates.
-//        ISListViewAdapterItemDescription *oldEntry =
-//        [entries objectAtIndex:oldIndex];
-//        if (![oldEntry isSummaryEqual:entry]) {
-//          
-//          // Create an operation.
-//          ISListViewAdapterOperation *operation =
-//          [ISListViewAdapterOperation new];
-//          
-//          // Update.
-//          operation.type =
-//          ISListViewAdapterOperationTypeUpdate;
-//          operation.currentIndex =
-//          [NSIndexPath indexPathForItem:i
-//                              inSection:0];
-//          operation.previousIndex =
-//          operation.currentIndex;
-//          [updates addObject:operation];
-//          
-//          // Track the update.
-//          updateCount++;
-//          
-//        }
-//      }
-//    }
-//    
-//    assert(countBefore == countAfter);
+    
+    NSArray *updates = [self _changesBetweenArray:entries
+                                         andArray:updatedEntries];
     
     // Update the state and notify our observers.
     dispatch_sync(dispatch_get_main_queue(), ^{

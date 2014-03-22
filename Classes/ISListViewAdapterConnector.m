@@ -118,7 +118,10 @@
 - (void)adapter:(ISListViewAdapter *)adapter
 performBatchUpdates:(NSArray *)updates
     fromVersion:(NSNumber *)version
-{;
+{
+  [self reloadData];
+  return;
+  
   // If a UICollectionView or UITableView are notified of batch
   // updates _before_ they have been shown, then they will ask
   // for the count twice during the update and expect different
@@ -134,12 +137,10 @@ performBatchUpdates:(NSArray *)updates
   // The other mis-matches which may occur are handled by the
   // adapter versioning which will ensure we correctly ignore
   // non-incremental updates (see below).
-  
-  // TODO Re-enable this logic.
-//  if (!_initialized) {
+  if (!_initialized) {
     [self reloadData];
     return;
-//  }
+  }
   
   // Handle non-incremental version updates.
   NSUInteger updateFromVersion = [version integerValue];
