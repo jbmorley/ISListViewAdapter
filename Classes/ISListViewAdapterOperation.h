@@ -26,7 +26,7 @@
 @interface ISListViewAdapterOperation : NSObject
 
 @property (nonatomic) ISListViewAdapterOperationType type;
-@property (nonatomic, strong) NSIndexPath *currentIndex;
-@property (nonatomic, strong) NSIndexPath *previousIndex;
+@property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic, strong) NSIndexPath *toIndexPath;
 
 @end

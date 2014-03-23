@@ -52,13 +52,12 @@ static NSString *const kSectionItems = @"items";
   // 'Shuffle' the items.
   NSMutableArray *items = [NSMutableArray arrayWithCapacity:3];
   for (NSDictionary *section in sections) {
-    [items addObject:
-     @{kSectionTitle: section[kSectionTitle],
-       kSectionItems:
-         [self _randomSelection:section[kSectionItems]
-                         toggle:self.togglesItems
-                           move:self.movesItems]}];
+    NSArray *sectionItems = [self _randomSelection:section[kSectionItems] toggle:self.togglesItems move:self.movesItems];
+    NSDictionary *newSection = @{kSectionTitle: section[kSectionTitle], kSectionItems: sectionItems};
+    [items addObject:newSection];
   }
+  
+  assert(items.count == sections.count);
   
   self.current = items;
 }
@@ -91,19 +90,19 @@ static NSString *const kSectionItems = @"items";
         [result addObject:item];
       }
     }
+    
+    // Enusre we always have at least one.
+    if (result.count == 0) {
+      int index = arc4random() % order.count;
+      [result addObject:order[index]];
+    }
+    
   } else {
-    [result addObjectsFromArray:order];
+    result = order;
   }
   
   return result;
 
-}
-
-
-- (NSString *)_randomSection
-{
-  NSUInteger index = arc4random() % self.sections.count;
-  return self.sections[index];
 }
 
 

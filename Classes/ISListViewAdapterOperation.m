@@ -27,23 +27,48 @@
 
 - (NSString *)description
 {
-  if (self.type == ISListViewAdapterOperationTypeInsert) {
+  if (self.type ==
+      ISListViewAdapterOperationTypeInsertItem) {
     return [NSString stringWithFormat:
-            @"insert at %ld",
-            (long)self.currentIndex.item];
-  } else if (self.type == ISListViewAdapterOperationTypeUpdate) {
+            @"insert at (%ld, %ld)",
+            (long)self.indexPath.section,
+            (long)self.indexPath.item];
+  } else if (self.type ==
+             ISListViewAdapterOperationTypeUpdateItem) {
     return [NSString stringWithFormat:
-            @"update at %ld",
-            (long)self.currentIndex.item];
-  } else if (self.type == ISListViewAdapterOperationTypeMove) {
+            @"update at (%ld, %ld)",
+            (long)self.indexPath.section,
+            (long)self.indexPath.item];
+  } else if (self.type ==
+             ISListViewAdapterOperationTypeMoveItem) {
     return [NSString stringWithFormat:
-            @"move from %ld to %ld",
-            (long)self.previousIndex.item,
-            (long)self.currentIndex.item];
-  } else if (self.type == ISListViewAdapterOperationTypeDelete) {
+            @"move from (%ld, %ld) to (%ld, %ld)",
+            (long)self.indexPath.section,
+            (long)self.indexPath.item,
+            (long)self.toIndexPath.section,
+            (long)self.toIndexPath.item];
+  } else if (self.type ==
+             ISListViewAdapterOperationTypeDeleteItem) {
     return [NSString stringWithFormat:
-            @"delete from %ld",
-            (long)self.previousIndex.item];
+            @"delete from (%ld, %ld)",
+            (long)self.indexPath.section,
+            (long)self.indexPath.item];
+  } else if (self.type ==
+             ISListViewAdapterOperationTypeInsertSection) {
+    return [NSString stringWithFormat:
+            @"insert section at %ld",
+            (long)self.indexPath.section];
+  } else if (self.type ==
+             ISListViewAdapterOperationTypeDeleteSection) {
+    return [NSString stringWithFormat:
+            @"delete section at %ld",
+            (long)self.indexPath.section];
+  } else if (self.type ==
+             ISListViewAdapterOperationTypeMoveSection) {
+    return [NSString stringWithFormat:
+            @"move section from %ld to %ld",
+            (long)self.indexPath.section,
+            (long)self.toIndexPath.section];
   }
   return @"";
 }

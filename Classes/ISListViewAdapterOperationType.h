@@ -23,8 +23,15 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-  ISListViewAdapterOperationTypeInsert,
-  ISListViewAdapterOperationTypeDelete,
-  ISListViewAdapterOperationTypeUpdate,
-  ISListViewAdapterOperationTypeMove
+  
+  ISListViewAdapterOperationTypeInsertSection,
+  ISListViewAdapterOperationTypeDeleteSection,
+  ISListViewAdapterOperationTypeMoveSection,
+  
+  ISListViewAdapterOperationTypeInsertItem,
+  ISListViewAdapterOperationTypeDeleteItem,
+  ISListViewAdapterOperationTypeUpdateItem,
+  ISListViewAdapterOperationTypeMoveItem,
+  
 } ISListViewAdapterOperationType;
+

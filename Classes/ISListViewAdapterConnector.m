@@ -119,64 +119,9 @@
 performBatchUpdates:(ISListViewAdapterChanges *)updates
     fromVersion:(NSNumber *)version
 {
-//  [self reloadData];
-//  return;
-  
-  // If a UICollectionView or UITableView are notified of batch
-  // updates _before_ they have been shown, then they will ask
-  // for the count twice during the update and expect different
-  // values each time.
-  // We identify this scenario by tracking the _initialized
-  // parameter. This is set when we are first queried for our
-  // count (meaning that it is only safe to query for the count
-  // when asked by the UITableView or UICollectionView).
-  // While we could do something clever like attempt to guess
-  // the expected count, it is safer to just force a complete
-  // reload of the data, espeicially since it won't cause any
-  // missed animations.
-  // The other mis-matches which may occur are handled by the
-  // adapter versioning which will ensure we correctly ignore
-  // non-incremental updates (see below).
-  if (!_initialized) {
-    [self reloadData];
-    return;
-  }
-  
-//  // Handle non-incremental version updates.
-//  NSUInteger updateFromVersion = [version integerValue];
-//  if (updateFromVersion > _currentVersion) {
-//    // We are out of date: force a complete update.
-//    [self reloadData];
-//    return;
-//  } else if (updateFromVersion < _currentVersion) {
-//    // Simply ignore the update and wait to catch up.
-//    return;
-//  }
-  
   if (self.collectionView) {
     
-    [self reloadData];
-    
-//    [self.collectionView performBatchUpdates:^{
-//      for (ISListViewAdapterOperation *operation in updates) {
-//        if (operation.type ==
-//            ISListViewAdapterOperationTypeInsert) {
-//          [self.collectionView insertItemsAtIndexPaths:@[operation.currentIndex]];
-//        } else if (operation.type ==
-//                   ISListViewAdapterOperationTypeMove) {
-//          [self.collectionView moveItemAtIndexPath:operation.previousIndex
-//                                       toIndexPath:operation.currentIndex];
-//        } else if (operation.type ==
-//                   ISListViewAdapterOperationTypeDelete) {
-//          [self.collectionView deleteItemsAtIndexPaths:@[operation.previousIndex]];
-//        } else if (operation.type ==
-//                   ISListViewAdapterOperationTypeUpdate) {
-//          [self.collectionView reloadItemsAtIndexPaths:@[operation.currentIndex]];
-//        } else {
-//          NSLog(@"Unsupported operation: %@", operation);
-//        }
-//      }
-//    } completion:NULL];
+    [updates applyToCollectionView:self.collectionView];
     
   } else if (self.tableView) {
     

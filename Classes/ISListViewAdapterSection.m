@@ -31,4 +31,12 @@
   return NO;
 }
 
+- (NSString *)description
+{
+  return [NSString stringWithFormat:
+          @"%@ [%@]",
+          self.title,
+          [self.items componentsJoinedByString:@", "]];
+}
+
 @end
