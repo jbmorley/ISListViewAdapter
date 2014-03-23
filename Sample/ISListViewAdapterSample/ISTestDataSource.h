@@ -9,9 +9,12 @@
 #import <Foundation/Foundation.h>
 #import <ISListViewAdapter/ISListViewAdapter.h>
 
-@interface ISSectionsDataSource : NSObject
+@interface ISTestDataSource : NSObject
 <ISListViewAdapterDataSource>
 
+@property (nonatomic, assign) BOOL togglesSections;
 @property (nonatomic, assign) BOOL movesSections;
+@property (nonatomic, assign) BOOL togglesItems;
+@property (nonatomic, assign) BOOL movesItems;
 
 @end

@@ -49,6 +49,8 @@ extern NSInteger ISDBViewIndexUndefined;
 + (id)adapterWithDataSource:(id<ISListViewAdapterDataSource>)dataSource;
 - (id)initWithDataSource:(id<ISListViewAdapterDataSource>)dataSource;
 
+- (void)transitionToDataSource:(id<ISListViewAdapterDataSource>)dataSource;
+
 - (NSUInteger)numberOfSections;
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section;
 

@@ -180,18 +180,7 @@ performBatchUpdates:(ISListViewAdapterChanges *)updates
     
   } else if (self.tableView) {
     
-    [self.tableView beginUpdates];
-    [self.tableView deleteSections:updates.sectionDeletions
-                  withRowAnimation:UITableViewRowAnimationFade];
-    [self.tableView insertSections:updates.sectionInsertions
-                  withRowAnimation:UITableViewRowAnimationFade];
-    for (ISListViewAdapterSectionMove *move in
-         updates.sectionMoves) {
-      [self.tableView moveSection:move.section
-                        toSection:move.newSection];
-    }
-    
-    [self.tableView endUpdates];
+    [updates applyToTableView:self.tableView];
     
   }
 }

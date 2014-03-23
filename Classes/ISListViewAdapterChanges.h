@@ -26,4 +26,6 @@
 - (void)moveSection:(NSInteger)section
           toSection:(NSInteger)newSection;
 
+- (void)applyToTableView:(UITableView *)tableView;
+
 @end

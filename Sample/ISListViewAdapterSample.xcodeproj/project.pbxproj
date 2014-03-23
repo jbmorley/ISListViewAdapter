@@ -23,7 +23,7 @@
 		D849160618DE3F5D0091182E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D849160418DE3F5D0091182E /* InfoPlist.strings */; };
 		D849160818DE3F5D0091182E /* ISListViewAdapterSampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D849160718DE3F5D0091182E /* ISListViewAdapterSampleTests.m */; };
 		D871CD9718DE414300E43617 /* ISRandomDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D871CD9618DE414300E43617 /* ISRandomDataSource.m */; };
-		D871CD9A18DEB44300E43617 /* ISSectionsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D871CD9918DEB44300E43617 /* ISSectionsDataSource.m */; };
+		D871CD9A18DEB44300E43617 /* ISTestDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D871CD9918DEB44300E43617 /* ISTestDataSource.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +58,8 @@
 		D849160718DE3F5D0091182E /* ISListViewAdapterSampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ISListViewAdapterSampleTests.m; sourceTree = "<group>"; };
 		D871CD9518DE414300E43617 /* ISRandomDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISRandomDataSource.h; sourceTree = "<group>"; };
 		D871CD9618DE414300E43617 /* ISRandomDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISRandomDataSource.m; sourceTree = "<group>"; };
-		D871CD9818DEB44300E43617 /* ISSectionsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSectionsDataSource.h; sourceTree = "<group>"; };
-		D871CD9918DEB44300E43617 /* ISSectionsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSectionsDataSource.m; sourceTree = "<group>"; };
+		D871CD9818DEB44300E43617 /* ISTestDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISTestDataSource.h; sourceTree = "<group>"; };
+		D871CD9918DEB44300E43617 /* ISTestDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISTestDataSource.m; sourceTree = "<group>"; };
 		E192579EF3A0439C800D7AE7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		F732EA582FF549648D09877D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -131,8 +131,8 @@
 				D84915F218DE3F5D0091182E /* ISViewController.m */,
 				D871CD9518DE414300E43617 /* ISRandomDataSource.h */,
 				D871CD9618DE414300E43617 /* ISRandomDataSource.m */,
-				D871CD9818DEB44300E43617 /* ISSectionsDataSource.h */,
-				D871CD9918DEB44300E43617 /* ISSectionsDataSource.m */,
+				D871CD9818DEB44300E43617 /* ISTestDataSource.h */,
+				D871CD9918DEB44300E43617 /* ISTestDataSource.m */,
 				D84915F418DE3F5D0091182E /* Images.xcassets */,
 				D84915E318DE3F5D0091182E /* Supporting Files */,
 			);
@@ -303,7 +303,7 @@
 			files = (
 				D84915ED18DE3F5D0091182E /* ISAppDelegate.m in Sources */,
 				D84915E918DE3F5D0091182E /* main.m in Sources */,
-				D871CD9A18DEB44300E43617 /* ISSectionsDataSource.m in Sources */,
+				D871CD9A18DEB44300E43617 /* ISTestDataSource.m in Sources */,
 				D84915F318DE3F5D0091182E /* ISViewController.m in Sources */,
 				D871CD9718DE414300E43617 /* ISRandomDataSource.m in Sources */,
 			);

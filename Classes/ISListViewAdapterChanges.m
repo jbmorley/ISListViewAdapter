@@ -48,4 +48,20 @@
   [self.sectionMoves addObject:move];
 }
 
+
+- (void)applyToTableView:(UITableView *)tableView
+{
+  [tableView beginUpdates];
+  [tableView deleteSections:self.sectionDeletions
+                withRowAnimation:UITableViewRowAnimationFade];
+  [tableView insertSections:self.sectionInsertions
+                withRowAnimation:UITableViewRowAnimationFade];
+  for (ISListViewAdapterSectionMove *move in
+       self.sectionMoves) {
+    [tableView moveSection:move.section
+                 toSection:move.newSection];
+  }
+  [tableView endUpdates];
+}
+
 @end

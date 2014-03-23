@@ -6,13 +6,12 @@
 //  Copyright (c) 2014 InSeven Limited. All rights reserved.
 //
 
-#import "ISSectionsDataSource.h"
+#import "ISTestDataSource.h"
 
-@interface ISSectionsDataSource ()
+@interface ISTestDataSource ()
 
 @property (nonatomic, strong) NSArray *sections;
-@property (nonatomic, strong) NSMutableArray *current;
-@property (nonatomic, weak) ISListViewAdapter *adapter;
+@property (nonatomic, strong) NSArray *current;
 
 @end
 
@@ -22,7 +21,7 @@
 static NSString *const kSectionTitle = @"title";
 static NSString *const kSectionItems = @"items";
 
-@implementation ISSectionsDataSource
+@implementation ISTestDataSource
 
 - (id)init
 {
@@ -42,38 +41,62 @@ static NSString *const kSectionItems = @"items";
 }
 
 
-- (void)_reload
+- (void)_generateState
 {
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    [self.adapter invalidate];
-    [self _reload];
-  });
+  // 'Shuffle' the sections.
+  NSArray *sections =
+  [self _randomSelection:self.sections
+                  toggle:self.togglesSections
+                    move:self.movesSections];
+  
+  // 'Shuffle' the items.
+  NSMutableArray *items = [NSMutableArray arrayWithCapacity:3];
+  for (NSDictionary *section in sections) {
+    [items addObject:
+     @{kSectionTitle: section[kSectionTitle],
+       kSectionItems:
+         [self _randomSelection:section[kSectionItems]
+                         toggle:self.togglesItems
+                           move:self.movesItems]}];
+  }
+  
+  self.current = items;
 }
 
 
-- (void)_generateState
+- (NSArray *)_randomSelection:(NSArray *)array
+                       toggle:(BOOL)toggle
+                         move:(BOOL)move
 {
-  NSMutableArray *sectionOrder =
+  NSMutableArray *order =
   [NSMutableArray arrayWithCapacity:3];
-  if (self.movesSections) {
-    NSMutableArray *candidates = [self.sections mutableCopy];
+  if (move) {
+    NSMutableArray *candidates = [array mutableCopy];
     while (candidates.count) {
       NSUInteger index = arc4random() % candidates.count;
       NSDictionary *section = [candidates objectAtIndex:index];
-      [sectionOrder addObject:section];
+      [order addObject:section];
       [candidates removeObjectAtIndex:index];
     }
   } else {
-    sectionOrder = [self.sections mutableCopy];
+    order = [array mutableCopy];
   }
- 
-  self.current = [NSMutableArray arrayWithCapacity:3];
-  for (NSDictionary *section in sectionOrder) {
-    int include = arc4random() % 2;
-    if (include) {
-      [self.current addObject:section];
+  
+  NSMutableArray *result =
+  [NSMutableArray arrayWithCapacity:3];
+  if (toggle) {
+    for (NSDictionary *item in order) {
+      int include = arc4random() % 2;
+      if (include) {
+        [result addObject:item];
+      }
     }
+  } else {
+    [result addObjectsFromArray:order];
   }
+  
+  return result;
+
 }
 
 
@@ -125,13 +148,6 @@ static NSString *const kSectionItems = @"items";
     }
   }
   return nil;
-}
-
-
-- (void)initializeAdapter:(ISListViewAdapter *)adapter
-{
-  self.adapter = adapter;
-  [self _reload];
 }
 
 @end
