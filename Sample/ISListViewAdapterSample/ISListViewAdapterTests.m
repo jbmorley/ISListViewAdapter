@@ -23,12 +23,12 @@ NSString *const kSourceDataSource = @"dataSource";
 
 @end
 
-#define ITERATIONS 25
+#define ITERATIONS 100
 
-//#define TEST_RANDOM
 #define TEST_SECTIONS
 #define TEST_ITEMS
 #define TEST_ALL
+#define TEST_RANDOM
 
 @implementation ISListViewAdapterTests
 
@@ -79,19 +79,6 @@ NSString *const kSourceDataSource = @"dataSource";
 {
   NSMutableArray *dataSources =
   [NSMutableArray arrayWithCapacity:3];
-  
-#ifdef TEST_RANDOM
-  
-  // Static sections.
-  [dataSources addObject:
-   @{kSourceTitle: @"Random",
-     kSourceDataSource: ^(){
-    ISRandomDataSource *dataSource =
-    [ISRandomDataSource new];
-    return dataSource;
-  }()}];
-
-#endif
   
 #ifdef TEST_SECTIONS
   
@@ -274,6 +261,32 @@ NSString *const kSourceDataSource = @"dataSource";
     dataSource.movesSections = YES;
     dataSource.togglesItems = YES;
     dataSource.movesItems = YES;
+    return dataSource;
+  }()}];
+  
+  // Section moves, Item insertions, deletions and moves.
+  [dataSources addObject:
+   @{kSourceTitle: @"Sections (i/d/m), Items (i/d/m)",
+     kSourceDataSource: ^(){
+    ISTestDataSource *dataSource =
+    [ISTestDataSource new];
+    dataSource.togglesSections = YES;
+    dataSource.movesSections = YES;
+    dataSource.togglesItems = YES;
+    dataSource.movesItems = YES;
+    return dataSource;
+  }()}];
+  
+#endif
+  
+#ifdef TEST_RANDOM
+  
+  // Static sections.
+  [dataSources addObject:
+   @{kSourceTitle: @"Random",
+     kSourceDataSource: ^(){
+    ISRandomDataSource *dataSource =
+    [ISRandomDataSource new];
     return dataSource;
   }()}];
   
