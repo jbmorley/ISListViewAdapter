@@ -201,6 +201,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     
   } else {
     ISListViewAdapterSection *section = [ISListViewAdapterSection new];
+    section.title = @"";
     section.items = [descriptions mutableCopy];
     [sections addObject:section];
   }

@@ -25,7 +25,6 @@
 #import "ISListViewAdapter.h"
 
 @interface ISListViewAdapterConnector () {
-  NSInteger _currentVersion;
   BOOL _initialized;
 }
 
@@ -54,7 +53,6 @@
     self.collectionView = collectionView;
     [self.adapter addAdapterObserver:self];
     _initialized = NO;
-    _currentVersion = 0;
     [self reloadData];
   }
   return self;
@@ -79,7 +77,6 @@
     self.animation = UITableViewRowAnimationAutomatic;
     [self.adapter addAdapterObserver:self];
     _initialized = NO;
-    _currentVersion = 0;
     [self reloadData];
   }
   return self;
@@ -94,10 +91,6 @@
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section
 {
-  if (!_initialized) {
-    _initialized = YES;
-  }
-  _currentVersion = self.adapter.version;
   return [self.adapter numberOfItemsInSection:section];
 }
 
@@ -112,6 +105,12 @@
 }
 
 
+- (void)ready
+{
+  _initialized = YES;
+}
+
+
 #pragma mark - ISListViewAdapterObserver
 
 
@@ -119,15 +118,15 @@
 performBatchUpdates:(ISListViewAdapterChanges *)updates
     fromVersion:(NSNumber *)version
 {
-  if (self.collectionView) {
-    
-    [updates applyToCollectionView:self.collectionView];
-    
-  } else if (self.tableView) {
-    
-    [updates applyToTableView:self.tableView
-             withRowAnimation:UITableViewRowAnimationFade];
-    
+  if (_initialized) {
+    if (self.collectionView) {
+      [updates applyToCollectionView:self.collectionView];
+    } else if (self.tableView) {
+      [updates applyToTableView:self.tableView
+               withRowAnimation:UITableViewRowAnimationFade];
+    }
+  } else {
+    [self reloadData];
   }
 }
 

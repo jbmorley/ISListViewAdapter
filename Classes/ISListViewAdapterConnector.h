@@ -39,4 +39,6 @@
 - (NSUInteger)numberOfSections;
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section;
 
+- (void)ready;
+
 @end
