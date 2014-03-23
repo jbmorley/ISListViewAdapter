@@ -53,21 +53,25 @@ static NSString *const kSectionItems = @"items";
 
 - (void)_generateState
 {
-  self.current = [NSMutableArray arrayWithCapacity:3];
+  NSMutableArray *sectionOrder =
+  [NSMutableArray arrayWithCapacity:3];
   if (self.movesSections) {
     NSMutableArray *candidates = [self.sections mutableCopy];
     while (candidates.count) {
       NSUInteger index = arc4random() % candidates.count;
       NSDictionary *section = [candidates objectAtIndex:index];
-      [self.current addObject:section];
+      [sectionOrder addObject:section];
       [candidates removeObjectAtIndex:index];
     }
   } else {
-    for (NSDictionary *section in self.sections) {
-      int include = arc4random() % 2;
-      if (include) {
-        [self.current addObject:section];
-      }
+    sectionOrder = [self.sections mutableCopy];
+  }
+ 
+  self.current = [NSMutableArray arrayWithCapacity:3];
+  for (NSDictionary *section in sectionOrder) {
+    int include = arc4random() % 2;
+    if (include) {
+      [self.current addObject:section];
     }
   }
 }
