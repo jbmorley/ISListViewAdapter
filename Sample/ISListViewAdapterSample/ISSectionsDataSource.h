@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <ISListViewAdapter/ISListViewAdapter.h>
 
-@interface ISSectionsInsertsAndDeletesDataSource : NSObject
+@interface ISSectionsDataSource : NSObject
 <ISListViewAdapterDataSource>
+
+@property (nonatomic, assign) BOOL movesSections;
 
 @end

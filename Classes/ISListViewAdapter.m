@@ -216,12 +216,12 @@ NSInteger ISDBViewIndexUndefined = -1;
     if (newIndex == NSNotFound) {
       
       // Delete.
-      [changes.sectionDeletions addIndex:i];
+      [changes deleteSection:i];
       
     } else if (i != newIndex) {
-      
+
       // Move.
-      // TODO.
+      [changes moveSection:i toSection:newIndex];
       
     }
   }
@@ -237,7 +237,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     if (oldIndex == NSNotFound) {
       
       // Insert.
-      [changes.sectionInsertions addIndex:i];
+      [changes insertSection:i];
       
     } else {
       

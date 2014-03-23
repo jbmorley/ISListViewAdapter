@@ -9,7 +9,7 @@
 #import <ISListViewAdapter/ISListViewAdapter.h>
 #import "ISViewController.h"
 #import "ISRandomDataSource.h"
-#import "ISSectionsInsertsAndDeletesDataSource.h"
+#import "ISSectionsDataSource.h"
 
 @interface ISViewController ()
 
@@ -29,8 +29,13 @@ static NSString *const kCellIdentifier = @"Cell";
   
   [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kCellIdentifier];
   
-  self.dataSource = [ISRandomDataSource new];
-  self.dataSource = [ISSectionsInsertsAndDeletesDataSource new];
+//  self.dataSource = [ISRandomDataSource new];
+  
+  ISSectionsDataSource *sectionsDataSource =
+  [ISSectionsDataSource new];
+  sectionsDataSource.movesSections = YES;
+  self.dataSource = sectionsDataSource;
+  
   self.adapter = [ISListViewAdapter adapterWithDataSource:self.dataSource];
   self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter tableView:self.tableView];
 }

@@ -185,6 +185,12 @@ performBatchUpdates:(ISListViewAdapterChanges *)updates
                   withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView insertSections:updates.sectionInsertions
                   withRowAnimation:UITableViewRowAnimationFade];
+    for (ISListViewAdapterSectionMove *move in
+         updates.sectionMoves) {
+      [self.tableView moveSection:move.section
+                        toSection:move.newSection];
+    }
+    
     [self.tableView endUpdates];
     
   }

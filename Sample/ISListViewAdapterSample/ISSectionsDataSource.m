@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 InSeven Limited. All rights reserved.
 //
 
-#import "ISSectionsInsertsAndDeletesDataSource.h"
+#import "ISSectionsDataSource.h"
 
-@interface ISSectionsInsertsAndDeletesDataSource ()
+@interface ISSectionsDataSource ()
 
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSMutableArray *current;
@@ -22,7 +22,7 @@
 static NSString *const kSectionTitle = @"title";
 static NSString *const kSectionItems = @"items";
 
-@implementation ISSectionsInsertsAndDeletesDataSource
+@implementation ISSectionsDataSource
 
 - (id)init
 {
@@ -54,10 +54,20 @@ static NSString *const kSectionItems = @"items";
 - (void)_generateState
 {
   self.current = [NSMutableArray arrayWithCapacity:3];
-  for (NSDictionary *section in self.sections) {
-    int include = arc4random() % 2;
-    if (include) {
+  if (self.movesSections) {
+    NSMutableArray *candidates = [self.sections mutableCopy];
+    while (candidates.count) {
+      NSUInteger index = arc4random() % candidates.count;
+      NSDictionary *section = [candidates objectAtIndex:index];
       [self.current addObject:section];
+      [candidates removeObjectAtIndex:index];
+    }
+  } else {
+    for (NSDictionary *section in self.sections) {
+      int include = arc4random() % 2;
+      if (include) {
+        [self.current addObject:section];
+      }
     }
   }
 }
