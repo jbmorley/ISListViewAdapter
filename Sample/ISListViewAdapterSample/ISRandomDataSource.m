@@ -12,7 +12,6 @@
 
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSMutableArray *candidates;
-@property (nonatomic, weak) ISListViewAdapter *adapter;
 
 @end
 
@@ -28,15 +27,6 @@
     self.sections = @[@"ONE", @"TWO", @"THREE", @"FOUR"];
   }
   return self;
-}
-
-
-- (void)_reload
-{
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-    [self.adapter invalidate];
-    [self _reload];
-  });
 }
 
 
@@ -94,13 +84,6 @@
 - (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item
 {
   return [self _randomSection];
-}
-
-
-- (void)initializeAdapter:(ISListViewAdapter *)adapter
-{
-  self.adapter = adapter;
-  [self _reload];
 }
 
 

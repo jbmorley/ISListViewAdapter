@@ -9,6 +9,7 @@
 #import <ISUtilities/ISUtilities.h>
 #import "ISListViewAdapterTests.h"
 #import "ISTestDataSource.h"
+#import "ISRandomDataSource.h"
 
 NSString *const kSourceTitle = @"title";
 NSString *const kSourceDataSource = @"dataSource";
@@ -24,8 +25,9 @@ NSString *const kSourceDataSource = @"dataSource";
 
 #define ITERATIONS 25
 
-#define TEST_SECTIONS
-#define TEST_ITEMS
+//#define TEST_RANDOM
+//#define TEST_SECTIONS
+//#define TEST_ITEMS
 #define TEST_ALL
 
 @implementation ISListViewAdapterTests
@@ -77,6 +79,19 @@ NSString *const kSourceDataSource = @"dataSource";
 {
   NSMutableArray *dataSources =
   [NSMutableArray arrayWithCapacity:3];
+  
+#ifdef TEST_RANDOM
+  
+  // Static sections.
+  [dataSources addObject:
+   @{kSourceTitle: @"Random",
+     kSourceDataSource: ^(){
+    ISRandomDataSource *dataSource =
+    [ISRandomDataSource new];
+    return dataSource;
+  }()}];
+
+#endif
   
 #ifdef TEST_SECTIONS
   
@@ -199,12 +214,64 @@ NSString *const kSourceDataSource = @"dataSource";
   
   // Section moves, Item insertions, deletions and moves.
   [dataSources addObject:
+   @{kSourceTitle: @"Sections (i/d), Items (m)",
+     kSourceDataSource: ^(){
+    ISTestDataSource *dataSource =
+    [ISTestDataSource new];
+    dataSource.togglesSections = YES;
+    dataSource.movesSections = NO;
+    dataSource.togglesItems = NO;
+    dataSource.movesItems = YES;
+    return dataSource;
+  }()}];
+  
+  // Section moves, Item insertions, deletions and moves.
+  [dataSources addObject:
    @{kSourceTitle: @"Sections (i/d), Items (i/d/m)",
      kSourceDataSource: ^(){
     ISTestDataSource *dataSource =
     [ISTestDataSource new];
     dataSource.togglesSections = YES;
     dataSource.movesSections = NO;
+    dataSource.togglesItems = YES;
+    dataSource.movesItems = YES;
+    return dataSource;
+  }()}];
+  
+  // Section moves, Item insertions and deletions.
+  [dataSources addObject:
+   @{kSourceTitle: @"Sections (m), Items (i/d)",
+     kSourceDataSource: ^(){
+    ISTestDataSource *dataSource =
+    [ISTestDataSource new];
+    dataSource.togglesSections = NO;
+    dataSource.movesSections = YES;
+    dataSource.togglesItems = YES;
+    dataSource.movesItems = NO;
+    return dataSource;
+  }()}];
+  
+  // Section moves, Item insertions, deletions and moves.
+  [dataSources addObject:
+   @{kSourceTitle: @"Sections (m), Items (m)",
+     kSourceDataSource: ^(){
+    ISTestDataSource *dataSource =
+    [ISTestDataSource new];
+    dataSource.togglesSections = NO;
+    dataSource.movesSections = YES;
+    dataSource.togglesItems = NO;
+    dataSource.movesItems = YES;
+    return dataSource;
+  }()}];
+  
+  // Section moves, Item insertions, deletions and moves.
+  [dataSources addObject:
+   @{kSourceTitle: @"Sections (m), Items (i/d/m)",
+     kSourceDataSource: ^(){
+    ISTestDataSource *dataSource =
+    [ISTestDataSource new];
+    dataSource.togglesSections = NO;
+    dataSource.movesSections = YES;
     dataSource.togglesItems = YES;
     dataSource.movesItems = YES;
     return dataSource;

@@ -256,7 +256,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     }
   }
   
-  // Determine which sections need to be moved.
+  // Process section moves.
   for (NSInteger i = 0; i < beforeUpToDate.count; i++) {
     ISListViewAdapterSection *sectionBefore = beforeUpToDate[i];
     NSInteger sectionIdxBefore = i;
@@ -291,8 +291,8 @@ NSInteger ISDBViewIndexUndefined = -1;
       [NSMutableIndexSet indexSet];
       
       // Process item removes.
-      for (NSInteger i = 0; i < beforeItems.count; i++) {
-        ISListViewAdapterItemDescription *itemBefore = beforeItems[i];
+      for (NSInteger i = 0; i < beforeItemsUpToDate.count; i++) {
+        ISListViewAdapterItemDescription *itemBefore = beforeItemsUpToDate[i];
         NSInteger itemIdxBefore = i;
         NSInteger itemIdxAfter =
         [afterItems indexOfObject:itemBefore];
@@ -324,21 +324,22 @@ NSInteger ISDBViewIndexUndefined = -1;
       }
       
       // Process item moves.
-      for (NSInteger i = 0; i < beforeItems.count; i++) {
-        ISListViewAdapterItemDescription *itemBefore = beforeItems[i];
+      for (NSInteger i = 0; i < beforeItemsUpToDate.count; i++) {
+        ISListViewAdapterItemDescription *itemBefore = beforeItemsUpToDate[i];
         NSInteger itemIdxBefore = i;
         NSInteger itemIdxAfter =
         [afterItems indexOfObject:itemBefore];
         
-        // If the section doesn't exist in the new world, remove it.
-        if (itemIdxAfter != NSNotFound &&
-            itemIdxAfter != itemIdxBefore) {
-          [changes moveItem:itemIdxBefore
+        if (itemIdxBefore != itemIdxAfter) {
+          NSInteger index = [beforeItems indexOfObject:itemBefore];
+          NSInteger toIndex = itemIdxAfter;
+          [changes moveItem:index
                   inSection:sectionIdxBefore
-                     toItem:itemIdxAfter
+                     toItem:toIndex
                   inSection:sectionIdxAfter];
         }
       }
+
 
     }
     
