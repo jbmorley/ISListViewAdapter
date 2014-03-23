@@ -180,7 +180,8 @@ performBatchUpdates:(ISListViewAdapterChanges *)updates
     
   } else if (self.tableView) {
     
-    [updates applyToTableView:self.tableView];
+    [updates applyToTableView:self.tableView
+             withRowAnimation:UITableViewRowAnimationFade];
     
   }
 }

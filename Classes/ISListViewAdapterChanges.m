@@ -21,6 +21,8 @@
     self.sectionDeletions = [NSMutableIndexSet indexSet];
     self.sectionInsertions = [NSMutableIndexSet indexSet];
     self.sectionMoves = [NSMutableArray arrayWithCapacity:3];
+    self.itemDeletions = [NSMutableArray arrayWithCapacity:3];
+    self.itemInsertions = [NSMutableArray arrayWithCapacity:3];
   }
   return self;
 }
@@ -49,18 +51,46 @@
 }
 
 
+- (void)deleteItem:(NSInteger)item
+         inSection:(NSInteger)section
+{
+  NSIndexPath *indexPath =
+  [NSIndexPath indexPathForItem:item inSection:section];
+  [self.itemDeletions addObject:indexPath];
+}
+
+
+- (void)insertItem:(NSInteger)item
+         inSection:(NSInteger)section
+{
+  NSIndexPath *indexPath =
+  [NSIndexPath indexPathForItem:item inSection:section];
+  [self.itemInsertions addObject:indexPath];
+}
+
+
 - (void)applyToTableView:(UITableView *)tableView
+        withRowAnimation:(UITableViewRowAnimation)animation
 {
   [tableView beginUpdates];
+  
+  // Items.
+  [tableView deleteRowsAtIndexPaths:self.itemDeletions
+                   withRowAnimation:animation];
+  [tableView insertRowsAtIndexPaths:self.itemInsertions
+                   withRowAnimation:animation];
+  
+  // Sections.
   [tableView deleteSections:self.sectionDeletions
-                withRowAnimation:UITableViewRowAnimationFade];
+                withRowAnimation:animation];
   [tableView insertSections:self.sectionInsertions
-                withRowAnimation:UITableViewRowAnimationFade];
+                withRowAnimation:animation];
   for (ISListViewAdapterSectionMove *move in
        self.sectionMoves) {
     [tableView moveSection:move.section
                  toSection:move.newSection];
   }
+  
   [tableView endUpdates];
 }
 

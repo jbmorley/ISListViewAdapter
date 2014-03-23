@@ -21,11 +21,15 @@
 @property (nonatomic, strong) NSMutableIndexSet *sectionInsertions;
 @property (nonatomic, strong) NSMutableArray *sectionMoves;
 
+@property (nonatomic, strong) NSMutableArray *itemDeletions;
+@property (nonatomic, strong) NSMutableArray *itemInsertions;
+
 - (void)deleteSection:(NSInteger)section;
 - (void)insertSection:(NSInteger)section;
 - (void)moveSection:(NSInteger)section
           toSection:(NSInteger)newSection;
 
-- (void)applyToTableView:(UITableView *)tableView;
+- (void)applyToTableView:(UITableView *)tableView
+        withRowAnimation:(UITableViewRowAnimation)animation;
 
 @end
