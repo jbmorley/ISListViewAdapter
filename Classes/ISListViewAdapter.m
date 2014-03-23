@@ -318,10 +318,8 @@ NSInteger ISDBViewIndexUndefined = -1;
         if (itemIdxBefore == NSNotFound) {
 //          [changes insertItem:itemIdxAfter
 //                    inSection:sectionIdxAfter];
-//          [changes insertItem:itemIdxAfter
-//                    inSection:sectionIdxBefore];
           [changes insertItem:itemIdxAfter
-                    inSection:sectionIdxAfter];
+                    inSection:sectionIdxBefore];
           [beforeItemsUpToDate insertObject:itemAfter
                                     atIndex:itemIdxAfter];
 //          [beforeItemsUpToDate insertObject:itemAfter
@@ -339,10 +337,14 @@ NSInteger ISDBViewIndexUndefined = -1;
         // If the section doesn't exist in the new world, remove it.
         if (itemIdxAfter != NSNotFound &&
             itemIdxAfter != itemIdxBefore) {
+//          [changes moveItem:itemIdxBefore
+//                  inSection:sectionIdxBefore
+//                     toItem:itemIdxAfter
+//                  inSection:sectionIdxAfter];
           [changes moveItem:itemIdxBefore
                   inSection:sectionIdxBefore
                      toItem:itemIdxAfter
-                  inSection:sectionIdxAfter];
+                  inSection:sectionIdxBefore];
 //          [changes moveItem:itemIdxBefore
 //                  inSection:sectionIdxBefore
 //                     toItem:itemIdxAfter

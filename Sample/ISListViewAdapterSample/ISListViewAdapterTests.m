@@ -87,7 +87,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
   // Section insertions and deletions.
   [dataSources addObject:
-   @{kSourceTitle: @"Sections (i, d)",
+   @{kSourceTitle: @"Sections (i/d)",
      kSourceDataSource: ^(){
     ISTestDataSource *dataSource =
     [ISTestDataSource new];
@@ -109,7 +109,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
   // Section insertions, deletions and moves.
   [dataSources addObject:
-   @{kSourceTitle: @"Sections (i, d, m)",
+   @{kSourceTitle: @"Sections (i/d/m)",
      kSourceDataSource: ^(){
     ISTestDataSource *dataSource =
     [ISTestDataSource new];
@@ -133,7 +133,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
   // Item insertions and deletions.
   [dataSources addObject:
-   @{kSourceTitle: @"Items (i, d)",
+   @{kSourceTitle: @"Items (i/d)",
      kSourceDataSource: ^(){
     ISTestDataSource *dataSource =
     [ISTestDataSource new];
@@ -159,7 +159,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
   // Item insertions, deletions and moves.
   [dataSources addObject:
-   @{kSourceTitle: @"Items (i, d, m)",
+   @{kSourceTitle: @"Items (i/d/m)",
      kSourceDataSource: ^(){
     ISTestDataSource *dataSource =
     [ISTestDataSource new];
