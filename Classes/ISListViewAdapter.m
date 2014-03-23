@@ -240,8 +240,64 @@ NSInteger ISDBViewIndexUndefined = -1;
     
   }
   
-  // Process section insertions.
+  // Process section moves (ignoring insertions)
   [beforeUpToDate removeObjectsAtIndexes:sectionRemovals];
+  NSInteger l = 0;
+  NSInteger r = 0;
+  while (l < after.count) {
+    NSLog(@"Checking Sections: %d", l);
+    
+    // Terminate when we have got to the end of beforeUpToDate.
+    // The remaining items must be new.
+    if (r >= beforeUpToDate.count) {
+      break;
+    }
+    
+    ISListViewAdapterSection *sectionBefore = beforeUpToDate[r];
+    ISListViewAdapterSection *sectionAfter = after[l];
+
+    if ([sectionBefore isEqual:sectionAfter]) {
+      
+      l++; r++;
+      continue;
+      
+    } else if (![sectionBefore isEqual:sectionAfter]) {
+      
+      // Look for an item to move into place.
+      NSInteger move = [beforeUpToDate indexOfObject:sectionAfter];
+
+      // If we've found an object to move then do so.
+      // Note that we still use the _old_ initial indexes
+      // when moving items.
+      if (move != NSNotFound) {
+        NSInteger originalIndex = [before indexOfObject:sectionAfter];
+        [changes moveSection:originalIndex
+                   toSection:l];
+        
+        ISListViewAdapterSection *section =
+        [beforeUpToDate objectAtIndex:move];
+        [beforeUpToDate removeObjectAtIndex:move];
+        [beforeUpToDate insertObject:section
+                             atIndex:r];
+        
+        l++; r++;
+        continue;
+
+      } else {
+        
+        // If the item is new, we step l knowing it will be
+        // inserted for us later.
+        l++;
+        continue;
+        
+      }
+      
+    }
+    
+  }
+  
+  
+  // Process section insertions.
   for (NSInteger i = 0; i < after.count; i++) {
     ISListViewAdapterSection *sectionAfter = after[i];
     NSInteger sectionIdxAfter = i;
@@ -256,21 +312,6 @@ NSInteger ISDBViewIndexUndefined = -1;
     }
   }
   
-  // Process section moves.
-  for (NSInteger i = 0; i < beforeUpToDate.count; i++) {
-    ISListViewAdapterSection *sectionBefore = beforeUpToDate[i];
-    NSInteger sectionIdxBefore = i;
-    NSInteger sectionIdxAfter =
-    [after indexOfObject:sectionBefore];
-
-    if (sectionIdxBefore != sectionIdxAfter) {
-      NSInteger index = [before indexOfObject:sectionBefore];
-      NSInteger toIndex = sectionIdxAfter;
-      [changes moveSection:index
-                 toSection:toIndex];
-    }
-  }
-    
   // Iterate over the items in the sections.
   for (ISListViewAdapterSection *sectionAfter in after) {
     NSInteger sectionIdxBefore = [before indexOfObject:sectionAfter];
@@ -306,8 +347,68 @@ NSInteger ISDBViewIndexUndefined = -1;
         
       }
       
-      // Process item insertions.
+      // Process item moves (ignoring insertions)
       [beforeItemsUpToDate removeObjectsAtIndexes:itemRemovals];
+      NSInteger l = 0;
+      NSInteger r = 0;
+      while (l < afterItems.count) {
+        NSLog(@"Checking Items: %d", l);
+        
+        // Terminate when we have got to the end of beforeUpToDate.
+        // The remaining items must be new.
+        if (r >= beforeItemsUpToDate.count) {
+          break;
+        }
+        
+        ISListViewAdapterItemDescription *itemBefore = beforeItemsUpToDate[r];
+        ISListViewAdapterItemDescription *itemAfter = afterItems[l];
+        
+        if ([itemBefore isEqual:itemAfter]) {
+          
+          l++; r++;
+          continue;
+          
+        } else if (![itemBefore isEqual:itemAfter]) {
+          
+          // Look for an item to move into place.
+          NSInteger move = [beforeItemsUpToDate indexOfObject:itemAfter];
+          
+          // If we've found an object to move then do so.
+          // Note that we still use the _old_ initial indexes
+          // when moving items.
+          if (move != NSNotFound) {
+            NSInteger originalIndex = [beforeItems indexOfObject:itemAfter];
+            [changes moveItem:originalIndex
+                    inSection:sectionIdxBefore
+                       toItem:l
+                    inSection:sectionIdxAfter];
+            
+            ISListViewAdapterItemDescription *item =
+            [beforeItemsUpToDate objectAtIndex:move];
+            [beforeItemsUpToDate removeObjectAtIndex:move];
+            [beforeItemsUpToDate insertObject:item
+                                      atIndex:r];
+            
+            // It's safe to increment the left and right counts
+            // as we've placed everything in order.
+            l++; r++;
+            continue;
+            
+          } else {
+            
+            // If the item is new, we step l knowing it will be
+            // inserted for us later.
+            l++;
+            continue;
+            
+          }
+          
+        }
+        
+      }
+      
+      
+      // Process item insertions.
       for (NSInteger i = 0; i < afterItems.count; i++) {
         ISListViewAdapterItemDescription *itemAfter = afterItems[i];
         NSInteger itemIdxAfter = i;
@@ -323,23 +424,38 @@ NSInteger ISDBViewIndexUndefined = -1;
         }
       }
       
-      // Process item moves.
-      for (NSInteger i = 0; i < beforeItemsUpToDate.count; i++) {
-        ISListViewAdapterItemDescription *itemBefore = beforeItemsUpToDate[i];
-        NSInteger itemIdxBefore = i;
-        NSInteger itemIdxAfter =
-        [afterItems indexOfObject:itemBefore];
-        
-        if (itemIdxBefore != itemIdxAfter) {
-          NSInteger index = [beforeItems indexOfObject:itemBefore];
-          NSInteger toIndex = itemIdxAfter;
-          [changes moveItem:index
-                  inSection:sectionIdxBefore
-                     toItem:toIndex
-                  inSection:sectionIdxAfter];
-        }
-      }
-
+      
+//      for (NSInteger i = 0; i < afterItems.count; i++) {
+//        ISListViewAdapterItemDescription *itemAfter = afterItems[i];
+//        NSInteger itemIdxAfter = i;
+//        NSInteger itemIdxBefore =
+//        [beforeItemsUpToDate indexOfObject:itemAfter];
+//        NSInteger index = [beforeItems indexOfObject:itemAfter];
+//        
+//        assert(itemIdxBefore != NSNotFound);
+//        
+//        if (itemIdxBefore != itemIdxAfter) {
+//          if (index == NSNotFound) {
+//            NSLog(@"Error: Unable to find item '%@'", itemAfter);
+//            NSLog(@"Before: %@", beforeItemsUpToDate);
+//            NSLog(@"After: %@", afterItems);
+//            assert(false);
+//          }
+//
+//          NSInteger toIndex = itemIdxAfter;
+//          [changes moveItem:index
+//                  inSection:sectionIdxBefore
+//                     toItem:toIndex
+//                  inSection:sectionIdxAfter];
+//          
+//          // Update our model.
+//          ISListViewAdapterItemDescription *item =
+//          [beforeItemsUpToDate objectAtIndex:itemIdxBefore];
+//          [beforeItemsUpToDate removeObjectAtIndex:itemIdxBefore];
+//          [beforeItemsUpToDate insertObject:item
+//                               atIndex:toIndex];
+//        }
+//      }
 
     }
     
@@ -420,23 +536,6 @@ NSInteger ISDBViewIndexUndefined = -1;
       // Notify the observers of the additions, removals, moves.
       // TODO Guard against no changes.
       [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:) withObject:self withObject:changes withObject:@(previousVersion)];
-      
-//      // TODO Consider whether this is sensible.
-//      // Notify the observers of updates in a separate block to
-//      // avoid performing multiple operations to individual
-//      // items (it seems to break UITableView).
-//      if (sectionUpdates.count > 0) {
-//        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
-//                   withObject:self
-//                   withObject:sectionUpdates
-//                   withObject:@(previousVersion)];
-//      }
-      
-//      // TODO Dummy udpate. Remove.
-//      [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
-//                 withObject:self
-//                 withObject:@[]
-//                 withObject:@(previousVersion)];
       
     });
 

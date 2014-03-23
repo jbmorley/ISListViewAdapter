@@ -26,8 +26,8 @@ NSString *const kSourceDataSource = @"dataSource";
 #define ITERATIONS 25
 
 //#define TEST_RANDOM
-//#define TEST_SECTIONS
-//#define TEST_ITEMS
+#define TEST_SECTIONS
+#define TEST_ITEMS
 #define TEST_ALL
 
 @implementation ISListViewAdapterTests
