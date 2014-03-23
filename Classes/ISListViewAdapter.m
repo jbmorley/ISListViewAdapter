@@ -256,21 +256,21 @@ NSInteger ISDBViewIndexUndefined = -1;
     }
   }
   
-  // Process section moves.
-  for (NSInteger i = 0; i < before.count; i++) {
-    ISListViewAdapterSection *sectionBefore = before[i];
+  // Determine which sections need to be moved.
+  for (NSInteger i = 0; i < beforeUpToDate.count; i++) {
+    ISListViewAdapterSection *sectionBefore = beforeUpToDate[i];
     NSInteger sectionIdxBefore = i;
     NSInteger sectionIdxAfter =
     [after indexOfObject:sectionBefore];
-    
-    // If the section doesn't exist in the new world, remove it.
-    if (sectionIdxAfter != NSNotFound &&
-        sectionIdxAfter != sectionIdxBefore) {
-      [changes moveSection:sectionIdxBefore
-                 toSection:sectionIdxAfter];
+
+    if (sectionIdxBefore != sectionIdxAfter) {
+      NSInteger index = [before indexOfObject:sectionBefore];
+      NSInteger toIndex = sectionIdxAfter;
+      [changes moveSection:index
+                 toSection:toIndex];
     }
   }
-  
+    
   // Iterate over the items in the sections.
   for (ISListViewAdapterSection *sectionAfter in after) {
     NSInteger sectionIdxBefore = [before indexOfObject:sectionAfter];
@@ -316,14 +316,10 @@ NSInteger ISDBViewIndexUndefined = -1;
         
         // If the section doesn't exist in the old world, add it.
         if (itemIdxBefore == NSNotFound) {
-//          [changes insertItem:itemIdxAfter
-//                    inSection:sectionIdxAfter];
           [changes insertItem:itemIdxAfter
-                    inSection:sectionIdxBefore];
+                    inSection:sectionIdxAfter];
           [beforeItemsUpToDate insertObject:itemAfter
                                     atIndex:itemIdxAfter];
-//          [beforeItemsUpToDate insertObject:itemAfter
-//                                    atIndex:itemIdxBefore];
         }
       }
       
@@ -337,116 +333,16 @@ NSInteger ISDBViewIndexUndefined = -1;
         // If the section doesn't exist in the new world, remove it.
         if (itemIdxAfter != NSNotFound &&
             itemIdxAfter != itemIdxBefore) {
-//          [changes moveItem:itemIdxBefore
-//                  inSection:sectionIdxBefore
-//                     toItem:itemIdxAfter
-//                  inSection:sectionIdxAfter];
           [changes moveItem:itemIdxBefore
                   inSection:sectionIdxBefore
                      toItem:itemIdxAfter
-                  inSection:sectionIdxBefore];
-//          [changes moveItem:itemIdxBefore
-//                  inSection:sectionIdxBefore
-//                     toItem:itemIdxAfter
-//                  inSection:sectionIdxBefore];
+                  inSection:sectionIdxAfter];
         }
       }
 
     }
     
   }
-  
-  
-  
-//  
-//  
-//  
-//  // Removes and moves.
-//  for (NSInteger i = before.count-1; i >= 0; i--) {
-//    ISListViewAdapterSection *section = before[i];
-//    NSUInteger newSectionIndex = [after indexOfObject:section];
-//    
-//    // If the section is present before and after the update
-//    // then we need to determine the changes to its items.
-//    if (newSectionIndex != NSNotFound) {
-//      NSArray *itemsBefore = section.items;
-//      NSArray *itemsAfter = [[after objectAtIndex:newSectionIndex] items];
-//      
-//      // Item removes and moves.
-//      for (NSInteger j = itemsBefore.count-1; j >= 0; j--) {
-//        ISListViewAdapterItemDescription *item = itemsBefore[j];
-//        
-//        // Determine the type of operation.
-//        NSUInteger newItemIndex =
-//        [itemsAfter indexOfObject:item];
-//        if (newItemIndex == NSNotFound) { // Item delete.
-//          [changes deleteItem:j
-//                    inSection:i];
-//        } else if (j != newItemIndex) { // Item move.
-//          [changes moveItem:j
-//                  inSection:i
-//                     toItem:newItemIndex
-//                  inSection:i];
-//        }
-//        
-//      }
-//      
-//    }
-//    
-//    // Determine the type of the operation.
-//    if (newSectionIndex == NSNotFound) { // Delete.
-//      [changes deleteSection:i];
-//    } else if (i != newSectionIndex) { // Move.
-////      [changes moveSection:i toSection:newSectionIndex];
-//    }
-//    
-//    if (newSectionIndex != NSNotFound) {
-//      NSArray *itemsBefore = section.items;
-//      NSArray *itemsAfter = [[after objectAtIndex:newSectionIndex] items];
-//      
-//      // Item insertions.
-//      for (NSUInteger j = 0; j < itemsAfter.count; j++) {
-//        ISListViewAdapterItemDescription *item = itemsAfter[j];
-//        
-//        // Determine the type of operation.
-//        NSUInteger oldItemIndex =
-//        [itemsBefore indexOfObject:item];
-//        if (oldItemIndex == NSNotFound) { // Insert.
-//          [changes insertItem:j
-//                    inSection:i];
-//        } else {
-//          
-//          //          // Check for updates.
-//          //          // We only do this if the objects we're comparing implement
-//          //          // the isSummaryEqual: selector.
-//          //          id oldEntry = [before objectAtIndex:oldIndex];
-//          //          if ([oldEntry respondsToSelector:@selector(isSummaryEqual:)]) {
-//          //            if (![oldEntry isSummaryEqual:section]) {
-//          //
-//          //              // Update.
-//          //              // TODO (index i)
-//          //
-//          //            }
-//        }
-//        
-//      }
-//      
-//    }
-//    
-//    
-//  }
-//  
-//  // Additions and updates.
-//  for (NSUInteger i = 0; i < after.count; i++) {
-//    ISListViewAdapterSection *section = after[i];
-//    
-//    // Determine the type of operation.
-//    NSUInteger oldIndex = [before indexOfObject:section];
-//    if (oldIndex == NSNotFound) { // Insert.
-//      [changes insertSection:i];
-//    }
-//    
-//  }
   
   return changes;
 }

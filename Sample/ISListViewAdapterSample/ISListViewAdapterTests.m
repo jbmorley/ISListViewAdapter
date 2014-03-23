@@ -24,6 +24,10 @@ NSString *const kSourceDataSource = @"dataSource";
 
 #define ITERATIONS 25
 
+#define TEST_SECTIONS
+#define TEST_ITEMS
+#define TEST_ALL
+
 @implementation ISListViewAdapterTests
 
 
@@ -74,6 +78,8 @@ NSString *const kSourceDataSource = @"dataSource";
   NSMutableArray *dataSources =
   [NSMutableArray arrayWithCapacity:3];
   
+#ifdef TEST_SECTIONS
+  
   // Static sections.
   [dataSources addObject:
    @{kSourceTitle: @"Sections",
@@ -117,6 +123,10 @@ NSString *const kSourceDataSource = @"dataSource";
     dataSource.movesSections = YES;
     return dataSource;
   }()}];
+  
+#endif
+  
+#ifdef TEST_ITEMS
 
   // Static items.
   [dataSources addObject:
@@ -170,6 +180,10 @@ NSString *const kSourceDataSource = @"dataSource";
     return dataSource;
   }()}];
   
+#endif
+  
+#ifdef TEST_ALL
+  
   // Section moves, Item insertions and deletions.
   [dataSources addObject:
    @{kSourceTitle: @"Sections (i/d), Items (i/d)",
@@ -195,6 +209,8 @@ NSString *const kSourceDataSource = @"dataSource";
     dataSource.movesItems = YES;
     return dataSource;
   }()}];
+  
+#endif
   
   return dataSources;
 
