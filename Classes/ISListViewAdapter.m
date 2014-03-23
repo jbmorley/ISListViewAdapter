@@ -20,8 +20,8 @@
 // SOFTWARE.
 // 
 
+#import <ISUtilities/ISUtilities.h>
 #import "ISListViewAdapter.h"
-#import "ISNotifier.h"
 #import "ISListViewAdapterItem.h"
 #import "ISListViewAdapterBlock.h"
 #import "ISListViewAdapterItemDescription.h"
@@ -41,7 +41,6 @@ typedef enum {
 @property (nonatomic) ISDBViewState state;
 @property (strong, nonatomic) id<ISListViewAdapterDataSource> dataSource;
 @property (nonatomic, strong) NSArray *sections;
-@property (strong, nonatomic) NSArray *entries;
 @property (strong, nonatomic) NSMutableDictionary *entriesByIdentifier;
 @property (strong, nonatomic) ISNotifier *notifier;
 @property (nonatomic) dispatch_queue_t comparisonQueue;
@@ -68,7 +67,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     self.dataSource = dataSource;
     self.state = ISDBViewStateInvalid;
     self.notifier = [ISNotifier new];
-    self.entries = @[];
+    self.sections = @[];
     _version = 0;
     
     if ([self.dataSource respondsToSelector:@selector(initializeAdapter:)]) {
@@ -182,6 +181,7 @@ NSInteger ISDBViewIndexUndefined = -1;
       sectionLookup[description.section];
       if (section == nil) {
         section = [ISListViewAdapterSection new];
+        section.title = description.section;
         sectionLookup[description.section] = section;
         [sections addObject:section];
       }
@@ -201,20 +201,10 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (NSArray *)_changesBetweenArray:(NSArray *)before
-                         andArray:(NSArray *)after
+- (ISListViewAdapterChanges *)_changesBetweenArray:(NSArray *)before andArray:(NSArray *)after
 {
-  NSMutableArray *actions =
-  [NSMutableArray arrayWithCapacity:3];
-  NSMutableArray *updates =
-  [NSMutableArray arrayWithCapacity:3];
-  NSInteger countBefore = before.count;
-  NSInteger countAfter = after.count;
-  
-  NSInteger additionCount = 0;
-  NSInteger removalCount = 0;
-  NSInteger updateCount = 0;
-  NSInteger moveCount = 0;
+  ISListViewAdapterChanges *changes =
+  [ISListViewAdapterChanges new];
   
   // Removes and moves.
   for (NSInteger i = before.count-1; i >= 0; i--) {
@@ -225,41 +215,13 @@ NSInteger ISDBViewIndexUndefined = -1;
     [after indexOfObject:entry];
     if (newIndex == NSNotFound) {
       
-      // Create an operation.
-      ISListViewAdapterOperation *operation =
-      [ISListViewAdapterOperation new];
-      
-      // Remove.
-      operation.type =
-      ISListViewAdapterOperationTypeDelete;
-      operation.previousIndex =
-      [NSIndexPath indexPathForItem:i
-                          inSection:0];
-      [actions addObject:operation];
-      
-      // Track the removal.
-      removalCount++;
-      countBefore--;
+      // Delete.
+      [changes.sectionDeletions addIndex:i];
       
     } else if (i != newIndex) {
       
-      // Create an operation.
-      ISListViewAdapterOperation *operation =
-      [ISListViewAdapterOperation new];
-      
       // Move.
-      operation.type =
-      ISListViewAdapterOperationTypeMove;
-      operation.previousIndex =
-      [NSIndexPath indexPathForItem:i
-                          inSection:0];
-      operation.currentIndex =
-      [NSIndexPath indexPathForItem:newIndex
-                          inSection:0];
-      [actions addObject:operation];
-      
-      // Track the move.
-      moveCount++;
+      // TODO.
       
     }
   }
@@ -274,21 +236,8 @@ NSInteger ISDBViewIndexUndefined = -1;
     
     if (oldIndex == NSNotFound) {
       
-      // Create an operation.
-      ISListViewAdapterOperation *operation =
-      [ISListViewAdapterOperation new];
-      
-      // Add.
-      operation.type =
-      ISListViewAdapterOperationTypeInsert;
-      operation.currentIndex =
-      [NSIndexPath indexPathForItem:i
-                          inSection:0];
-      [actions addObject:operation];
-      
-      // Track the addition.
-      countBefore++;
-      additionCount++;
+      // Insert.
+      [changes.sectionInsertions addIndex:i];
       
     } else {
       
@@ -299,31 +248,15 @@ NSInteger ISDBViewIndexUndefined = -1;
       if ([oldEntry respondsToSelector:@selector(isSummaryEqual:)]) {
         if (![oldEntry isSummaryEqual:entry]) {
           
-          // Create an operation.
-          ISListViewAdapterOperation *operation =
-          [ISListViewAdapterOperation new];
-          
           // Update.
-          operation.type =
-          ISListViewAdapterOperationTypeUpdate;
-          operation.currentIndex =
-          [NSIndexPath indexPathForItem:i
-                              inSection:0];
-          operation.previousIndex =
-          operation.currentIndex;
-          [updates addObject:operation];
-          
-          // Track the update.
-          updateCount++;
+          // TODO (index i)
           
         }
       }
     }
   }
   
-  assert(countBefore == countAfter);
-  
-  return updates;
+  return changes;
 }
 
 
@@ -350,12 +283,10 @@ NSInteger ISDBViewIndexUndefined = -1;
     }
     
     // Fetch the current state.
-    __block NSMutableArray *entries;
     __block NSMutableArray *sections;
     __block NSMutableArray *completionEntries;
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     dispatch_sync(dispatch_get_main_queue(), ^{
-      entries = [self.entries copy];
       sections = [self.sections copy];
       [self.dataSource itemsForAdapter:self
        completionBlock:^(NSArray *entries) {
@@ -366,37 +297,16 @@ NSInteger ISDBViewIndexUndefined = -1;
     });
     dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
 
-    // If the data source implements the appropriate delegate methods then we assume that
-    // it has not provided us with an array of ISListViewAdapterItemDescription objects
-    // and instead generate our own.
-    // It may be more performant to skip the generation of a new array and call these
-    // selectors directly, but this allows for the new API support in the short-term.
-    
-    NSArray *updatedEntries =
-    [self _descriptionsForItems:completionEntries];
+    // Generate descriptions for the items.
     NSArray *updatedSections =
     [self _sectionsForItems:completionEntries];
     
-    if (self.debug) {
-      NSLog(@"before %lu, after:%lud",
-            (unsigned long)entries.count,
-            (unsigned long)updatedEntries.count);
-    }
-    
-    
-    NSArray *updates = [self _changesBetweenArray:entries
-                                         andArray:updatedEntries];
+    // Determine the changes to the sections.
+    ISListViewAdapterChanges *changes = [self _changesBetweenArray:sections andArray:updatedSections];
+    NSLog(@"Updates: %@", changes);
     
     // Update the state and notify our observers.
     dispatch_sync(dispatch_get_main_queue(), ^{
-      
-//      if (self.debug) {
-//        NSLog(@"additions: %ld, removals:%ld, updates:%ld, moves: %ld",
-//              (long)additionCount,
-//              (long)removalCount,
-//              (long)updateCount,
-//              (long)moveCount);
-//      }
       
       // Increment the version seen.
       NSUInteger previousVersion = _version;
@@ -404,33 +314,30 @@ NSInteger ISDBViewIndexUndefined = -1;
       
       // Update the internal state.
       self.sections = updatedSections;
-      self.entries = updatedEntries;
       
-      
-//      // Notify the observers of the additions, moves and removals.
-//      self.entries = updatedEntries;
-//      if (actions.count > 0) {
-//        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
-//                   withObject:self
-//                   withObject:actions
-//                   withObject:@(previousVersion)];
-//      }
-//      
-//      // Notify the observers of updates in a separate block to avoid
-//      // performing multiple operations to individual items (it seems
-//      // to break UITableView).
-//      if (updates.count > 0) {
-//        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
-//                   withObject:self
-//                   withObject:updates
-//                   withObject:@(previousVersion)];
-//      }
-      
-      // TODO Dummy udpate. Remove.
+      // Notify the observers of the additions, removals, moves.
+      // TODO Guard against no changes.
       [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
                  withObject:self
-                 withObject:@[]
+                 withObject:changes
                  withObject:@(previousVersion)];
+      
+//      // TODO Consider whether this is sensible.
+//      // Notify the observers of updates in a separate block to
+//      // avoid performing multiple operations to individual
+//      // items (it seems to break UITableView).
+//      if (sectionUpdates.count > 0) {
+//        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
+//                   withObject:self
+//                   withObject:sectionUpdates
+//                   withObject:@(previousVersion)];
+//      }
+      
+//      // TODO Dummy udpate. Remove.
+//      [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
+//                 withObject:self
+//                 withObject:@[]
+//                 withObject:@(previousVersion)];
       
     });
 
@@ -474,6 +381,13 @@ NSInteger ISDBViewIndexUndefined = -1;
   s.items[indexPath.item];
   ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:description.identifier];
   return item;
+}
+
+
+- (NSString *)titleForSection:(NSInteger)section
+{
+  ISListViewAdapterSection *s = self.sections[section];
+  return s.title;
 }
 
 

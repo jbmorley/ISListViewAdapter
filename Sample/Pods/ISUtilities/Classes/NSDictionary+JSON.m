@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 InSeven Limited.
+// Copyright (c) 2013-2014 InSeven Limited.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,16 +20,32 @@
 // SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import "ISListViewAdapterChanges.h"
+#import "NSDictionary+JSON.h"
 
-@class ISListViewAdapter;
+@implementation NSDictionary (JSON)
 
-@protocol ISListViewAdapterObserver <NSObject>
++ (NSDictionary *)dictionaryWithJSON:(NSString *)JSON
+{
+  NSData *data = [JSON dataUsingEncoding:NSUTF8StringEncoding];
+  NSDictionary *dictionary =
+  [NSJSONSerialization JSONObjectWithData:data
+                                  options:0
+                                    error:nil];
+  return dictionary;
+}
 
-- (void)adapter:(ISListViewAdapter *)adapter
-performBatchUpdates:(ISListViewAdapterChanges *)updates
-    fromVersion:(NSNumber *)version;
+
+- (NSString *)JSON
+{
+  NSData* data =
+  [NSJSONSerialization dataWithJSONObject:self
+                                  options:0
+                                    error:nil];
+  NSString* string =
+  [[NSString alloc] initWithBytes:[data bytes]
+                           length:[data length]
+                         encoding:NSUTF8StringEncoding];
+  return string;
+}
 
 @end
-

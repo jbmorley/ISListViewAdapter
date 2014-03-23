@@ -1,0 +1,1 @@
+../../../../Classes/ISListViewAdapterItem.h

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 InSeven Limited.
+// Copyright (c) 2013-2014 InSeven Limited.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,26 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ISListViewAdapterChanges.h"
 
-@class ISListViewAdapter;
+typedef enum {
+  ISImageScaleAspectFit,
+  ISImageScaleAspectFill,
+} ISImageScale;
 
-@protocol ISListViewAdapterObserver <NSObject>
+typedef void (^UIImageUtilitiesCompletionBlock)(NSUInteger identifier, UIImage *image);
 
-- (void)adapter:(ISListViewAdapter *)adapter
-performBatchUpdates:(ISListViewAdapterChanges *)updates
-    fromVersion:(NSNumber *)version;
+@interface UIImage (Utilities)
+
++ (NSUInteger)loadImage:(NSString *)path
+             completion:(UIImageUtilitiesCompletionBlock)completionBlock;
++ (NSUInteger)loadImage:(NSString *)path
+              greyscale:(BOOL)greyscale
+             completion:(UIImageUtilitiesCompletionBlock)completionBlock;
++ (UIImage *)image:(UIImage *)image
+         withScale:(CGFloat)scale;
++ (UIImage *)imageWithDeviceScale:(UIImage *)image;
++ (UIImage *)convertImageToGrayScale:(UIImage *)image;
+- (UIImage *)imageWithSize:(CGSize)size
+               scalingMode:(ISImageScale)scalingMode;
 
 @end
-

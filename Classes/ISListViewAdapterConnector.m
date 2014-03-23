@@ -116,11 +116,11 @@
 
 
 - (void)adapter:(ISListViewAdapter *)adapter
-performBatchUpdates:(NSArray *)updates
+performBatchUpdates:(ISListViewAdapterChanges *)updates
     fromVersion:(NSNumber *)version
 {
-  [self reloadData];
-  return;
+//  [self reloadData];
+//  return;
   
   // If a UICollectionView or UITableView are notified of batch
   // updates _before_ they have been shown, then they will ask
@@ -142,66 +142,49 @@ performBatchUpdates:(NSArray *)updates
     return;
   }
   
-  // Handle non-incremental version updates.
-  NSUInteger updateFromVersion = [version integerValue];
-  if (updateFromVersion > _currentVersion) {
-    // We are out of date: force a complete update.
-    [self reloadData];
-    return;
-  } else if (updateFromVersion < _currentVersion) {
-    // Simply ignore the update and wait to catch up.
-    return;
-  }
+//  // Handle non-incremental version updates.
+//  NSUInteger updateFromVersion = [version integerValue];
+//  if (updateFromVersion > _currentVersion) {
+//    // We are out of date: force a complete update.
+//    [self reloadData];
+//    return;
+//  } else if (updateFromVersion < _currentVersion) {
+//    // Simply ignore the update and wait to catch up.
+//    return;
+//  }
   
   if (self.collectionView) {
     
-    [self.collectionView performBatchUpdates:^{
-      for (ISListViewAdapterOperation *operation in updates) {
-        if (operation.type ==
-            ISListViewAdapterOperationTypeInsert) {
-          [self.collectionView insertItemsAtIndexPaths:@[operation.currentIndex]];
-        } else if (operation.type ==
-                   ISListViewAdapterOperationTypeMove) {
-          [self.collectionView moveItemAtIndexPath:operation.previousIndex
-                                       toIndexPath:operation.currentIndex];
-        } else if (operation.type ==
-                   ISListViewAdapterOperationTypeDelete) {
-          [self.collectionView deleteItemsAtIndexPaths:@[operation.previousIndex]];
-        } else if (operation.type ==
-                   ISListViewAdapterOperationTypeUpdate) {
-          [self.collectionView reloadItemsAtIndexPaths:@[operation.currentIndex]];
-        } else {
-          NSLog(@"Unsupported operation: %@", operation);
-        }
-      }
-    } completion:NULL];
+    [self reloadData];
+    
+//    [self.collectionView performBatchUpdates:^{
+//      for (ISListViewAdapterOperation *operation in updates) {
+//        if (operation.type ==
+//            ISListViewAdapterOperationTypeInsert) {
+//          [self.collectionView insertItemsAtIndexPaths:@[operation.currentIndex]];
+//        } else if (operation.type ==
+//                   ISListViewAdapterOperationTypeMove) {
+//          [self.collectionView moveItemAtIndexPath:operation.previousIndex
+//                                       toIndexPath:operation.currentIndex];
+//        } else if (operation.type ==
+//                   ISListViewAdapterOperationTypeDelete) {
+//          [self.collectionView deleteItemsAtIndexPaths:@[operation.previousIndex]];
+//        } else if (operation.type ==
+//                   ISListViewAdapterOperationTypeUpdate) {
+//          [self.collectionView reloadItemsAtIndexPaths:@[operation.currentIndex]];
+//        } else {
+//          NSLog(@"Unsupported operation: %@", operation);
+//        }
+//      }
+//    } completion:NULL];
     
   } else if (self.tableView) {
     
     [self.tableView beginUpdates];
-    
-    for (ISListViewAdapterOperation *operation in updates) {
-      if (operation.type ==
-          ISListViewAdapterOperationTypeInsert) {
-        [self.tableView insertRowsAtIndexPaths:@[operation.currentIndex]
-                              withRowAnimation:self.animation];
-      } else if (operation.type ==
-                 ISListViewAdapterOperationTypeMove) {
-        [self.tableView moveRowAtIndexPath:operation.previousIndex
-                               toIndexPath:operation.currentIndex];
-      } else if (operation.type ==
-                 ISListViewAdapterOperationTypeDelete) {
-        [self.tableView deleteRowsAtIndexPaths:@[operation.previousIndex]
-                              withRowAnimation:self.animation];
-      } else if (operation.type ==
-                 ISListViewAdapterOperationTypeUpdate) {
-        [self.tableView reloadRowsAtIndexPaths:@[operation.currentIndex]
-                              withRowAnimation:self.animation];
-      } else {
-        NSLog(@"Unsupported operation: %@", operation);
-      }
-    }
-    
+    [self.tableView deleteSections:updates.sectionDeletions
+                  withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView insertSections:updates.sectionInsertions
+                  withRowAnimation:UITableViewRowAnimationFade];
     [self.tableView endUpdates];
     
   }

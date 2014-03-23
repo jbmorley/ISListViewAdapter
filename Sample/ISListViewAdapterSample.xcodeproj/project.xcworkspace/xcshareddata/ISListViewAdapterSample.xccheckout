@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2C1490D5-79EB-4400-A29A-4C373C966EB5</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ISListViewAdapterSample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1AF69161-5329-4D0E-A41B-26863E140A56</key>
+		<string>ssh://github.com/jbmorley/ISListViewAdapter.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Sample/ISListViewAdapterSample/ISListViewAdapterSample.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1AF69161-5329-4D0E-A41B-26863E140A56</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/jbmorley/ISListViewAdapter.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1AF69161-5329-4D0E-A41B-26863E140A56</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1AF69161-5329-4D0E-A41B-26863E140A56</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ISListViewAdapter</string>
+		</dict>
+	</array>
+</dict>
+</plist>

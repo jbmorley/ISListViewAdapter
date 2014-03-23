@@ -1,0 +1,1 @@
+../../../../Classes/ISListViewAdapterPrivate.h
