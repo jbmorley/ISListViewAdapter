@@ -26,6 +26,8 @@
 
 @interface ISListViewAdapterConnector : NSObject <ISListViewAdapterObserver>
 
+@property (nonatomic, assign) BOOL incrementalUpdates;
+
 + (id)connectorWithAdapter:(ISListViewAdapter *)adapter
             collectionView:(UICollectionView *)collectionView;
 - (id)initWithAdapter:(ISListViewAdapter *)adapter

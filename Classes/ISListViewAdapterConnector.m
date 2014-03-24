@@ -118,12 +118,16 @@
 performBatchUpdates:(ISListViewAdapterChanges *)updates
     fromVersion:(NSNumber *)version
 {
-  if (_initialized) {
-    if (self.collectionView) {
-      [updates applyToCollectionView:self.collectionView];
-    } else if (self.tableView) {
-      [updates applyToTableView:self.tableView
-               withRowAnimation:UITableViewRowAnimationFade];
+  if (self.incrementalUpdates) {
+    if (_initialized) {
+      if (self.collectionView) {
+        [updates applyToCollectionView:self.collectionView];
+      } else if (self.tableView) {
+        [updates applyToTableView:self.tableView
+                 withRowAnimation:UITableViewRowAnimationFade];
+      }
+    } else {
+      [self reloadData];
     }
   } else {
     [self reloadData];
