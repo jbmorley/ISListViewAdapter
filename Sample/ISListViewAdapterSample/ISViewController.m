@@ -32,8 +32,16 @@ static NSString *const kCellIdentifier = @"Cell";
   self.tests.delegate = self;
   self.adapter = [self.tests testAdapter];
   self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter tableView:self.tableView];
+  self.connector.incrementalUpdates = YES;
   
   [self.tests start];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+  [super viewDidAppear:animated];
+  [self.connector ready];
 }
 
 

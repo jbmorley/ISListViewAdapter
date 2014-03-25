@@ -25,15 +25,20 @@ static NSString *const kHeaderIdentifier = @"Header";
 {
   [super viewDidLoad];
   
-//  [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:kCellIdentifier];
-//  [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderIdentifier];
-  
   self.tests = [ISListViewAdapterTests new];
   self.tests.delegate = self;
   self.adapter = [self.tests testAdapter];
   self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter collectionView:self.collectionView];
+  self.connector.incrementalUpdates = YES;
   
   [self.tests start];
+}
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+  [super viewDidAppear:animated];
+  [self.connector ready];
 }
 
 
