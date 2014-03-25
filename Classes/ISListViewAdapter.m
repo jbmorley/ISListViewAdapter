@@ -88,6 +88,17 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
+-(void)log:(NSString *)message, ...
+{
+  if (self.debug) {
+    va_list args;
+    va_start(args, message);
+    NSLogv(message, args);
+    va_end(args);
+  }
+}
+
+
 - (void)transitionToDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   self.pendingDataSource = dataSource;
@@ -215,10 +226,8 @@ NSInteger ISDBViewIndexUndefined = -1;
   ISListViewAdapterChanges *changes =
   [ISListViewAdapterChanges new];
   
-  NSLog(@"From:\n%@", before);
-  NSLog(@"To:\n%@", after);
-  
-  
+  [self log:@"From:\n%@", before];
+  [self log:@"To:\n%@", after];
   
   // Track removals internally to allow us to process moves
   // more effectively.
@@ -246,7 +255,7 @@ NSInteger ISDBViewIndexUndefined = -1;
   NSInteger l = 0;
   NSInteger r = 0;
   while (l < after.count) {
-    NSLog(@"Checking Sections: %d", l);
+    [self log:@"Checking Sections: %lu", l];
     
     // Terminate when we have got to the end of beforeUpToDate.
     // The remaining items must be new.
@@ -353,7 +362,7 @@ NSInteger ISDBViewIndexUndefined = -1;
       NSInteger l = 0;
       NSInteger r = 0;
       while (l < afterItems.count) {
-        NSLog(@"Checking Items: %d", l);
+        [self log:@"Checking Items: %lu", l];
         
         // Terminate when we have got to the end of beforeUpToDate.
         // The remaining items must be new.
