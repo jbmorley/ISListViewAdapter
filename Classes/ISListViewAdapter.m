@@ -211,10 +211,13 @@ NSInteger ISDBViewIndexUndefined = -1;
     }
     
   } else {
-    ISListViewAdapterSection *section = [ISListViewAdapterSection new];
-    section.title = @"";
-    section.items = [descriptions mutableCopy];
-    [sections addObject:section];
+    
+    if (descriptions.count > 0) {
+      ISListViewAdapterSection *section = [ISListViewAdapterSection new];
+      section.title = @"";
+      section.items = [descriptions mutableCopy];
+      [sections addObject:section];
+    }
   }
 
   return sections;
