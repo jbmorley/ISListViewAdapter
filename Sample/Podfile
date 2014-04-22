@@ -1,4 +1,4 @@
 platform :ios, '6.0'
 
+pod 'ISUtilities' 
 pod 'ISListViewAdapter', :path => '..'
-

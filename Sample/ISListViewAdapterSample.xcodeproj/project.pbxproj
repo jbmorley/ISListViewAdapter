@@ -10,6 +10,7 @@
 		511105202E6D40C6B49B0C9C /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F732EA582FF549648D09877D /* libPods.a */; };
 		D822F3C218DF2CCC00032900 /* ISCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D822F3C118DF2CCC00032900 /* ISCollectionViewController.m */; };
 		D822F3C518DF2CFD00032900 /* ISListViewAdapterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D822F3C418DF2CFD00032900 /* ISListViewAdapterTests.m */; };
+		D83CE41F1904E9EF002A9E5A /* ISSingleTestDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D83CE41E1904E9EF002A9E5A /* ISSingleTestDataSource.m */; };
 		D84915DD18DE3F5D0091182E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84915DC18DE3F5D0091182E /* Foundation.framework */; };
 		D84915DF18DE3F5D0091182E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84915DE18DE3F5D0091182E /* CoreGraphics.framework */; };
 		D84915E118DE3F5D0091182E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84915E018DE3F5D0091182E /* UIKit.framework */; };
@@ -43,6 +44,9 @@
 		D822F3C118DF2CCC00032900 /* ISCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISCollectionViewController.m; sourceTree = "<group>"; };
 		D822F3C318DF2CFD00032900 /* ISListViewAdapterTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISListViewAdapterTests.h; sourceTree = "<group>"; };
 		D822F3C418DF2CFD00032900 /* ISListViewAdapterTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISListViewAdapterTests.m; sourceTree = "<group>"; };
+		D83CE41D1904E9EF002A9E5A /* ISSingleTestDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISSingleTestDataSource.h; sourceTree = "<group>"; };
+		D83CE41E1904E9EF002A9E5A /* ISSingleTestDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISSingleTestDataSource.m; sourceTree = "<group>"; };
+		D83CE420190658EF002A9E5A /* ISCommonDataSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISCommonDataSource.h; sourceTree = "<group>"; };
 		D84915D918DE3F5D0091182E /* ISListViewAdapterSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ISListViewAdapterSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D84915DC18DE3F5D0091182E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D84915DE18DE3F5D0091182E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -139,10 +143,13 @@
 				D822F3C418DF2CFD00032900 /* ISListViewAdapterTests.m */,
 				D822F3C018DF2CCC00032900 /* ISCollectionViewController.h */,
 				D822F3C118DF2CCC00032900 /* ISCollectionViewController.m */,
+				D83CE420190658EF002A9E5A /* ISCommonDataSource.h */,
 				D871CD9518DE414300E43617 /* ISRandomDataSource.h */,
 				D871CD9618DE414300E43617 /* ISRandomDataSource.m */,
 				D871CD9818DEB44300E43617 /* ISTestDataSource.h */,
 				D871CD9918DEB44300E43617 /* ISTestDataSource.m */,
+				D83CE41D1904E9EF002A9E5A /* ISSingleTestDataSource.h */,
+				D83CE41E1904E9EF002A9E5A /* ISSingleTestDataSource.m */,
 				D84915F418DE3F5D0091182E /* Images.xcassets */,
 				D84915E318DE3F5D0091182E /* Supporting Files */,
 			);
@@ -315,6 +322,7 @@
 				D822F3C518DF2CFD00032900 /* ISListViewAdapterTests.m in Sources */,
 				D84915E918DE3F5D0091182E /* main.m in Sources */,
 				D871CD9A18DEB44300E43617 /* ISTestDataSource.m in Sources */,
+				D83CE41F1904E9EF002A9E5A /* ISSingleTestDataSource.m in Sources */,
 				D84915F318DE3F5D0091182E /* ISViewController.m in Sources */,
 				D822F3C218DF2CCC00032900 /* ISCollectionViewController.m in Sources */,
 				D871CD9718DE414300E43617 /* ISRandomDataSource.m in Sources */,

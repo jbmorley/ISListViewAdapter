@@ -102,6 +102,9 @@ NSInteger ISDBViewIndexUndefined = -1;
 - (void)transitionToDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   self.pendingDataSource = dataSource;
+  if ([self.pendingDataSource respondsToSelector:@selector(initializeAdapter:)]) {
+    [self.pendingDataSource initializeAdapter:self];
+  }
   [self invalidate];
 }
 

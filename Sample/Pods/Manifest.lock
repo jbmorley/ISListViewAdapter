@@ -5,6 +5,7 @@ PODS:
 
 DEPENDENCIES:
   - ISListViewAdapter (from `..`)
+  - ISUtilities
 
 EXTERNAL SOURCES:
   ISListViewAdapter:
@@ -14,4 +15,4 @@ SPEC CHECKSUMS:
   ISListViewAdapter: f2ed58a0a2b2b5663b0336c409688f7b1d60df8f
   ISUtilities: d63a71f4abb76cd71dadec41ad243e7421c27a2a
 
-COCOAPODS: 0.29.0
+COCOAPODS: 0.32.1

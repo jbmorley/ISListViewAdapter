@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0500"
+   LastUpgradeVersion = "0510"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5692F5DA2DC2429886498CF6"
+               BlueprintIdentifier = "6D43D72FD6B64B3FB69FD3A9"
                BuildableName = "libPods-ISListViewAdapter.a"
                BlueprintName = "Pods-ISListViewAdapter"
                ReferencedContainer = "container:Pods.xcodeproj">

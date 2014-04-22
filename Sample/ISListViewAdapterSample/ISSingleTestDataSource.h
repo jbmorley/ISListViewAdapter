@@ -20,10 +20,13 @@
 // SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "ISCommonDataSource.h"
 
-@interface ISAppDelegate : UIResponder <UIApplicationDelegate>
+@interface ISSingleTestDataSource : NSObject
+<ISCommonDataSource>
 
-@property (strong, nonatomic) UIWindow *window;
+- (id)initWithInitialState:(NSString *)initialState
+                finalState:(NSString *)finalState;
 
 @end

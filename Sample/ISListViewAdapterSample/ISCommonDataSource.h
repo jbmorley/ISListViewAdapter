@@ -20,10 +20,12 @@
 // SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import <ISListViewAdapter/ISListViewAdapter.h>
 
-@interface ISAppDelegate : UIResponder <UIApplicationDelegate>
+@protocol ISCommonDataSource <ISListViewAdapterDataSource>
 
-@property (strong, nonatomic) UIWindow *window;
+- (BOOL)next;
+- (NSUInteger)iteration;
 
 @end
