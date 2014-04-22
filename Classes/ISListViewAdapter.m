@@ -230,7 +230,7 @@ NSInteger ISDBViewIndexUndefined = -1;
 - (ISListViewAdapterChanges *)_changesBetweenArray:(NSArray *)before andArray:(NSArray *)after
 {
   ISListViewAdapterChanges *changes =
-  [ISListViewAdapterChanges new];
+  [[ISListViewAdapterChanges alloc] initWithLogger:self];
   
   [self log:@"From:\n%@", before];
   [self log:@"To:\n%@", after];
@@ -440,39 +440,6 @@ NSInteger ISDBViewIndexUndefined = -1;
         }
       }
       
-      
-//      for (NSInteger i = 0; i < afterItems.count; i++) {
-//        ISListViewAdapterItemDescription *itemAfter = afterItems[i];
-//        NSInteger itemIdxAfter = i;
-//        NSInteger itemIdxBefore =
-//        [beforeItemsUpToDate indexOfObject:itemAfter];
-//        NSInteger index = [beforeItems indexOfObject:itemAfter];
-//        
-//        assert(itemIdxBefore != NSNotFound);
-//        
-//        if (itemIdxBefore != itemIdxAfter) {
-//          if (index == NSNotFound) {
-//            NSLog(@"Error: Unable to find item '%@'", itemAfter);
-//            NSLog(@"Before: %@", beforeItemsUpToDate);
-//            NSLog(@"After: %@", afterItems);
-//            assert(false);
-//          }
-//
-//          NSInteger toIndex = itemIdxAfter;
-//          [changes moveItem:index
-//                  inSection:sectionIdxBefore
-//                     toItem:toIndex
-//                  inSection:sectionIdxAfter];
-//          
-//          // Update our model.
-//          ISListViewAdapterItemDescription *item =
-//          [beforeItemsUpToDate objectAtIndex:itemIdxBefore];
-//          [beforeItemsUpToDate removeObjectAtIndex:itemIdxBefore];
-//          [beforeItemsUpToDate insertObject:item
-//                               atIndex:toIndex];
-//        }
-//      }
-
     }
     
   }
@@ -483,6 +450,7 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (void)updateEntries
 {
+  [self log:@"updateEntries"];
   
   // Perform the update and comparison on a different thread
   // to ensure we do not block the UI thread.  Since we are

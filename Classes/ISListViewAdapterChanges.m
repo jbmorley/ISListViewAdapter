@@ -23,13 +23,20 @@
 #import "ISListViewAdapterChanges.h"
 #import "ISListViewAdapterOperation.m"
 
+@interface ISListViewAdapterChanges ()
+
+@property (nonatomic, weak) id<ISListViewAdapterLogger> logger;
+
+@end
+
 @implementation ISListViewAdapterChanges
 
-- (id)init
+- (id)initWithLogger:(id<ISListViewAdapterLogger>)logger
 {
   self = [super init];
   if (self) {
-    NSLog(@"New Change:");
+    self.logger = logger;
+    [self.logger log:@"Creating new ISListViewAdapterChanges"];
     self.changes = [NSMutableArray arrayWithCapacity:3];
   }
   return self;
@@ -47,7 +54,7 @@
   operation.type = ISListViewAdapterOperationTypeDeleteSection;
   operation.indexPath =
   [NSIndexPath indexPathForItem:0 inSection:section];
-  NSLog(@"%@", operation);
+  [self.logger log:@"%@", operation];
   [self.changes addObject:operation];
 }
 
@@ -58,7 +65,7 @@
   operation.type = ISListViewAdapterOperationTypeInsertSection;
   operation.indexPath =
   [NSIndexPath indexPathForItem:0 inSection:section];
-  NSLog(@"%@", operation);
+  [self.logger log:@"%@", operation];
   [self.changes addObject:operation];
 
 }
@@ -73,7 +80,7 @@
   [NSIndexPath indexPathForItem:0 inSection:section];
   operation.toIndexPath =
   [NSIndexPath indexPathForItem:0 inSection:toSection];
-  NSLog(@"%@", operation);
+  [self.logger log:@"%@", operation];
   [self.changes addObject:operation];
 }
 
@@ -85,7 +92,7 @@
   operation.type = ISListViewAdapterOperationTypeDeleteItem;
   operation.indexPath =
   [NSIndexPath indexPathForItem:item inSection:section];
-  NSLog(@"%@", operation);
+  [self.logger log:@"%@", operation];
   [self.changes addObject:operation];
 }
 
@@ -97,7 +104,7 @@
   operation.type = ISListViewAdapterOperationTypeInsertItem;
   operation.indexPath =
   [NSIndexPath indexPathForItem:item inSection:section];
-  NSLog(@"%@", operation);
+  [self.logger log:@"%@", operation];
   [self.changes addObject:operation];
 }
 
@@ -113,7 +120,7 @@
   [NSIndexPath indexPathForItem:item inSection:section];
   operation.toIndexPath =
   [NSIndexPath indexPathForItem:toItem inSection:toSection];
-  NSLog(@"%@", operation);
+  [self.logger log:@"%@", operation];
   [self.changes addObject:operation];
 }
 

@@ -27,6 +27,7 @@
 #import "ISListViewAdapterOperation.h"
 #import "ISListViewAdapterItem.h"
 #import "ISListViewAdapterConnector.h"
+#import "ISListViewAdapterLogger.h"
 
 @class ISListViewAdapterItem;
 
@@ -35,7 +36,9 @@ typedef void(^ISDBTask)();
 extern NSInteger ISDBViewIndexUndefined;
 
 
-@interface ISListViewAdapter : NSObject {
+@interface ISListViewAdapter : NSObject
+<ISListViewAdapterLogger>
+{
   
   NSMutableArray *_entries;
   dispatch_queue_t _dispatchQueue;

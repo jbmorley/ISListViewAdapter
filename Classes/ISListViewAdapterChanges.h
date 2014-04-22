@@ -21,10 +21,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ISListViewAdapterLogger.h"
+
+@class ISListViewAdapter;
 
 @interface ISListViewAdapterChanges : NSObject
 
 @property (nonatomic, strong) NSMutableArray *changes;
+
+- (id)initWithLogger:(id<ISListViewAdapterLogger>)logger;
 
 - (void)deleteSection:(NSInteger)section;
 - (void)insertSection:(NSInteger)section;
