@@ -22,31 +22,9 @@
 
 #import <Foundation/Foundation.h>
 
-//@interface ISListViewAdapterSectionMove : NSObject
-//
-//@property (nonatomic, assign) NSInteger section;
-//@property (nonatomic, assign) NSInteger toSection;
-//
-//@end
-//
-//@interface ISListViewAdapterItemMove : NSObject;
-//
-//@property (nonatomic, assign) NSIndexPath *indexPath;
-//@property (nonatomic, assign) NSIndexPath *toIndexPath;
-//
-//@end
-
 @interface ISListViewAdapterChanges : NSObject
 
 @property (nonatomic, strong) NSMutableArray *changes;
-
-//@property (nonatomic, strong) NSMutableIndexSet *sectionDeletions;
-//@property (nonatomic, strong) NSMutableIndexSet *sectionInsertions;
-//@property (nonatomic, strong) NSMutableArray *sectionMoves;
-//
-//@property (nonatomic, strong) NSMutableArray *itemDeletions;
-//@property (nonatomic, strong) NSMutableArray *itemInsertions;
-//@property (nonatomic, strong) NSMutableArray *itemMoves;
 
 - (void)deleteSection:(NSInteger)section;
 - (void)insertSection:(NSInteger)section;
