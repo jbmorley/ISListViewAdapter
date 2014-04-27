@@ -44,7 +44,7 @@ typedef enum {
 @property (nonatomic, strong) NSArray *sections;
 @property (strong, nonatomic) NSMutableDictionary *entriesByIdentifier;
 @property (strong, nonatomic) ISNotifier *notifier;
-@property (nonatomic) dispatch_queue_t comparisonQueue;
+@property (nonatomic, strong) dispatch_queue_t comparisonQueue;
 
 @end
 
