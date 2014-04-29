@@ -42,7 +42,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
 #define DEFAULT_ITERATIONS 100
 
-//#define TEST_SPECIAL_CASES
+#define TEST_SPECIAL_CASES
 #define TEST_SECTIONS
 #define TEST_ITEMS
 #define TEST_ALL
@@ -56,6 +56,7 @@ NSString *const kSourceDataSource = @"dataSource";
   if (self.adapter == nil) {
     self.sources = [self testDataSources];
     self.adapter = [[ISListViewAdapter alloc] initWithDataSource:self.sources[0][kSourceDataSource]];
+    self.adapter.debug = YES;
   }
   return self.adapter;
 }
