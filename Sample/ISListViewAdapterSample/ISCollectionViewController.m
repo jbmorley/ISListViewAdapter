@@ -90,11 +90,7 @@ static NSString *const kHeaderIdentifier = @"Header";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
   UICollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCellIdentifier forIndexPath:indexPath];
-  
-//  NSString *item = [[self.adapter itemForIndexPath:indexPath] fetchBlocking];
-//  cell.textLabel.text = item;
   cell.backgroundColor = [UIColor cyanColor];
-  
   return cell;
 }
 
