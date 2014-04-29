@@ -176,6 +176,7 @@
 
 - (void)applyToCollectionView:(UICollectionView *)collectionView
 {
+  [self.logger log:@"Changes: %@", self.changes];
   
   [collectionView performBatchUpdates:^{
 
