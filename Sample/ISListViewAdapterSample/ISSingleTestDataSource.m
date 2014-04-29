@@ -94,6 +94,9 @@ static NSString *const kSectionItems = @"items";
       [items addObject:item];
     }
   }
+  
+  NSLog(@"%@", current);
+  
   completionBlock(items);
 }
 
