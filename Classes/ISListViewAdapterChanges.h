@@ -49,4 +49,6 @@
         withRowAnimation:(UITableViewRowAnimation)animation;
 - (void)applyToCollectionView:(UICollectionView *)collectionView;
 
+- (BOOL)empty;
+
 @end

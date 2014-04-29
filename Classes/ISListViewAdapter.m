@@ -518,8 +518,9 @@ NSInteger ISDBViewIndexUndefined = -1;
       self.sections = updatedSections;
       
       // Notify the observers of the additions, removals, moves.
-      // TODO Guard against no changes.
-      [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:) withObject:self withObject:changes withObject:@(previousVersion)];
+      if (![changes empty]) {
+        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:) withObject:self withObject:changes withObject:@(previousVersion)];
+      }
       
     });
 

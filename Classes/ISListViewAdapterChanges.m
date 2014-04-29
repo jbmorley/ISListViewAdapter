@@ -225,4 +225,11 @@
 
 }
 
+
+- (BOOL)empty
+{
+  return (self.changes.count == 0);
+}
+
+
 @end
