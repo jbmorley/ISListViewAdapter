@@ -27,6 +27,7 @@
 @property (nonatomic, strong) ISListViewAdapterTests *tests;
 @property (nonatomic, strong) ISListViewAdapter *adapter;
 @property (nonatomic, strong) ISListViewAdapterConnector *connector;
+@property (nonatomic, strong) NSArray *items;
 
 @end
 
@@ -39,15 +40,70 @@ static NSString *const kHeaderIdentifier = @"Header";
 {
   [super viewDidLoad];
   
-  self.tests = [ISListViewAdapterTests new];
-  self.tests.delegate = self;
-  self.adapter = [self.tests testAdapter];
-  self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter collectionView:self.collectionView];
-  self.connector.incrementalUpdates = YES;
+  self.items = [self fromJSON:@"[{\"title\":\"Section Four\",\"items\":[\"O\"]},{\"title\":\"Section Three\",\"items\":[\"I\",\"M\"]},{\"title\":\"Section One\",\"items\":[\"A\",\"B\",\"D\",\"E\"]},{\"title\":\"Section Two\",\"items\":[\"H\"]}]"];
   
-  [self.tests start];
+  NSLog(@"1: %@", self.items);
+
+  if (self.items == nil) {
+  
+    self.tests = [ISListViewAdapterTests new];
+    self.tests.delegate = self;
+    self.adapter = [self.tests testAdapter];
+    self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter collectionView:self.collectionView];
+    self.connector.incrementalUpdates = YES;
+    
+    [self.tests start];
+    
+  } else {
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      
+      ISListViewAdapterChanges *changes = [[ISListViewAdapterChanges alloc] initWithLogger:nil];
+
+      [changes moveSection:3
+                 toSection:0];
+      
+      [changes insertItem:0
+                inSection:0]; // New section.
+      
+      [changes deleteItem:0
+                inSection:1]; // Old section.
+      
+      [changes deleteItem:0
+                inSection:2]; // Old section.
+      [changes deleteItem:1
+                inSection:2];
+      [changes deleteItem:2
+                inSection:2];
+      [changes deleteItem:3
+                inSection:2];
+      
+      [changes insertItem:0
+                inSection:3]; // New section.
+      
+      self.items = [self fromJSON:@"[{\"title\":\"Section Two\",\"items\":[\"F\",\"H\"]},{\"title\":\"Section Four\",\"items\":[\"O\"]},{\"title\":\"Section Three\",\"items\":[\"M\"]},{\"title\":\"Section One\",\"items\":[\"C\"]}]"];
+      
+      NSLog(@"1: %@", self.items);
+      
+      [changes applyToCollectionView:self.collectionView];
+      
+    });
+    
+  }
+  
 }
 
+
+- (NSArray *)fromJSON:(NSString *)JSON
+{
+  NSData *data = [JSON dataUsingEncoding:NSUTF8StringEncoding];
+  NSArray *array =
+  [NSJSONSerialization JSONObjectWithData:data
+                                  options:0
+                                    error:nil];
+  return array;
+}
+                
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -58,19 +114,32 @@ static NSString *const kHeaderIdentifier = @"Header";
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-  return [self.connector numberOfSections];
+  if (self.items) {
+    return self.items.count;
+  } else {
+    return [self.connector numberOfSections];
+  }
 }
 
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-  return [self.connector numberOfItemsInSection:section];
+  if (self.items) {
+    return [self.items[section][@"items"] count];
+  } else {
+    return [self.connector numberOfItemsInSection:section];
+  }
 }
 
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-  NSString *title = [self.adapter titleForSection:section];
+  NSString *title = nil;
+  if (self.items) {
+    title = self.items[section][@"title"];
+  } else {
+    title = [self.adapter titleForSection:section];
+  }
   return title;
 }
 
