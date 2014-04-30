@@ -21,36 +21,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ISListViewAdapterLogger.h"
 
-@class ISListViewAdapter;
+typedef enum {
+  
+  ISListViewAdapterArrayOperationTypeInsert,
+  ISListViewAdapterArrayOperationTypeDelete,
+  ISListViewAdapterArrayOperationTypeMove,
+  
+} ISListViewAdapterArrayOperationType;
 
-@interface ISListViewAdapterChanges : NSObject
+@interface ISListViewAdapterArrayOperation : NSObject
 
-@property (nonatomic, strong) NSMutableArray *changes;
-
-+ (id)changesWithLogger:(id<ISListViewAdapterLogger>)logger;
-
-- (id)initWithLogger:(id<ISListViewAdapterLogger>)logger;
-
-- (void)deleteSection:(NSInteger)section;
-- (void)insertSection:(NSInteger)section;
-- (void)moveSection:(NSInteger)section
-          toSection:(NSInteger)toSection;
-
-- (void)deleteItem:(NSInteger)item
-         inSection:(NSInteger)section;
-- (void)insertItem:(NSInteger)item
-         inSection:(NSInteger)section;
-- (void)moveItem:(NSInteger)item
-       inSection:(NSInteger)section
-          toItem:(NSInteger)toItem
-       inSection:(NSInteger)toSection;
-
-- (void)applyToTableView:(UITableView *)tableView
-        withRowAnimation:(UITableViewRowAnimation)animation;
-- (void)applyToCollectionView:(UICollectionView *)collectionView;
-
-- (BOOL)empty;
+@property (nonatomic) ISListViewAdapterArrayOperationType type;
+@property (nonatomic, assign) NSUInteger from;
+@property (nonatomic, assign) NSUInteger to;
 
 @end

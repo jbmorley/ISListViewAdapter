@@ -31,6 +31,13 @@
 
 @implementation ISListViewAdapterChanges
 
+
++ (id)changesWithLogger:(id<ISListViewAdapterLogger>)logger
+{
+  return [[self alloc] initWithLogger:logger];
+}
+
+
 - (id)initWithLogger:(id<ISListViewAdapterLogger>)logger
 {
   self = [super init];
@@ -41,6 +48,7 @@
   }
   return self;
 }
+
 
 - (ISListViewAdapterOperation *)_operation
 {
@@ -229,6 +237,17 @@
 - (BOOL)empty
 {
   return (self.changes.count == 0);
+}
+
+
+- (NSString *)description
+{
+  NSMutableArray *changes =
+  [NSMutableArray arrayWithCapacity:self.changes.count];
+  for (ISListViewAdapterOperation *op in self.changes) {
+    [changes addObject:[op description]];
+  }
+  return [changes componentsJoinedByString:@"\n"];
 }
 
 

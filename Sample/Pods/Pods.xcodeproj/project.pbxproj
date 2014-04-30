@@ -48,6 +48,7 @@
 		BEBCC62A65574EA1BAE04EEA /* ISListViewAdapterItemDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 63DA2F90424E4B26A0E1DEC0 /* ISListViewAdapterItemDescription.h */; };
 		C413D62BE6E642A88B182557 /* NSDictionary+JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = BBEB056408B5462489D97CA6 /* NSDictionary+JSON.h */; };
 		CAC96BB74F14478DA05AD9D8 /* NSObject+Serialize.m in Sources */ = {isa = PBXBuildFile; fileRef = 6903111FEB9E488E91E21CE8 /* NSObject+Serialize.m */; settings = {COMPILER_FLAGS = "-fobjc-arc"; }; };
+		D84415161910DC38001B78FC /* ISListViewAdapterArrayOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = D84415151910DC38001B78FC /* ISListViewAdapterArrayOperation.m */; };
 		DBFB3EE669C44144BB30A895 /* Pods-ISUtilities-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E0AADC1746C4CEDA53FA82E /* Pods-ISUtilities-dummy.m */; };
 		E133355598804068BEB810AE /* ISListViewAdapterDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F29EFD8DFE48FA8327E475 /* ISListViewAdapterDataSource.h */; };
 		EBE4AD7571A64153AB91E1DF /* UIAlertView+Block.h in Headers */ = {isa = PBXBuildFile; fileRef = B800FB4E1A0A4A9EA8440AE1 /* UIAlertView+Block.h */; };
@@ -126,6 +127,8 @@
 		C835B1C7C5904FB3BC4092CD /* UIView+Utilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+Utilities.m"; path = "Classes/UIView+Utilities.m"; sourceTree = "<group>"; };
 		CBA9186548D049C4A256118B /* ISListViewAdapterItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ISListViewAdapterItem.h; path = Classes/ISListViewAdapterItem.h; sourceTree = "<group>"; };
 		CBDBDC146B50430F9E660B68 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Pods.xcconfig; sourceTree = "<group>"; };
+		D84415141910DC38001B78FC /* ISListViewAdapterArrayOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ISListViewAdapterArrayOperation.h; sourceTree = "<group>"; };
+		D84415151910DC38001B78FC /* ISListViewAdapterArrayOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ISListViewAdapterArrayOperation.m; sourceTree = "<group>"; };
 		D8C29E6591454DE4AA82A8CA /* ISListViewAdapterItem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ISListViewAdapterItem.m; path = Classes/ISListViewAdapterItem.m; sourceTree = "<group>"; };
 		E4088F17EA00452F82D5C782 /* Pods-ISListViewAdapter-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ISListViewAdapter-Private.xcconfig"; sourceTree = "<group>"; };
 		EA9A314CE34044A0A9CDCA95 /* libPods-ISListViewAdapter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ISListViewAdapter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -232,6 +235,8 @@
 				F08AB28C071D441F93835302 /* ISListViewAdapterSection.h */,
 				935432A620B64ABBA1B5AD24 /* ISListViewAdapterSection.m */,
 				84D8BCAEDDF74A6DB5B5C9FD /* Support Files */,
+				D84415141910DC38001B78FC /* ISListViewAdapterArrayOperation.h */,
+				D84415151910DC38001B78FC /* ISListViewAdapterArrayOperation.m */,
 			);
 			name = ISListViewAdapter;
 			path = ../..;
@@ -480,6 +485,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D84415161910DC38001B78FC /* ISListViewAdapterArrayOperation.m in Sources */,
 				3BEB3899F4034632BC9ECB11 /* Pods-dummy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

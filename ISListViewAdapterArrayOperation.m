@@ -20,37 +20,8 @@
 // SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import "ISListViewAdapterLogger.h"
+#import "ISListViewAdapterArrayOperation.h"
 
-@class ISListViewAdapter;
-
-@interface ISListViewAdapterChanges : NSObject
-
-@property (nonatomic, strong) NSMutableArray *changes;
-
-+ (id)changesWithLogger:(id<ISListViewAdapterLogger>)logger;
-
-- (id)initWithLogger:(id<ISListViewAdapterLogger>)logger;
-
-- (void)deleteSection:(NSInteger)section;
-- (void)insertSection:(NSInteger)section;
-- (void)moveSection:(NSInteger)section
-          toSection:(NSInteger)toSection;
-
-- (void)deleteItem:(NSInteger)item
-         inSection:(NSInteger)section;
-- (void)insertItem:(NSInteger)item
-         inSection:(NSInteger)section;
-- (void)moveItem:(NSInteger)item
-       inSection:(NSInteger)section
-          toItem:(NSInteger)toItem
-       inSection:(NSInteger)toSection;
-
-- (void)applyToTableView:(UITableView *)tableView
-        withRowAnimation:(UITableViewRowAnimation)animation;
-- (void)applyToCollectionView:(UICollectionView *)collectionView;
-
-- (BOOL)empty;
+@implementation ISListViewAdapterArrayOperation
 
 @end

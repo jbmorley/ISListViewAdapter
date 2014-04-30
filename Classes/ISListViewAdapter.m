@@ -228,6 +228,124 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
+- (ISListViewAdapterChanges *)_changesFromArray:(NSArray *)before
+                                        toArray:(NSArray *)after
+                                         result:(NSArray **)result
+{
+  ISListViewAdapterChanges *changes =
+  [ISListViewAdapterChanges changesWithLogger:self];
+//  NSMutableArray *changes = [NSMutableArray arrayWithCapacity:3];
+  
+  NSMutableArray *beforeUpToDate = [before mutableCopy];
+  NSMutableIndexSet *sectionRemovals =
+  [NSMutableIndexSet indexSet];
+  
+  // Process removes.
+  for (NSInteger i = 0; i < beforeUpToDate.count; i++) {
+    id itemBefore = before[i];
+    NSInteger idxBefore = i;
+    NSInteger idxAfter =
+    [after indexOfObject:itemBefore];
+    
+    // If the item doesn't exist in the new world, remove it.
+    if (idxAfter == NSNotFound) {
+      [changes deleteSection:idxBefore];
+      [sectionRemovals addIndex:idxBefore];
+    }
+    
+  }
+  
+  // Process item moves (ignoring insertions)
+  [beforeUpToDate removeObjectsAtIndexes:sectionRemovals];
+  NSInteger l = 0;
+  NSInteger r = 0;
+  while (l < after.count) {
+    [self log:@"Checking items: %lu", l];
+    
+    // Terminate when we have got to the end of beforeUpToDate.
+    // The remaining items must be new.
+    if (r >= beforeUpToDate.count) {
+      break;
+    }
+    
+    id itemBefore = beforeUpToDate[r];
+    id itemAfter = after[l];
+    
+    if ([itemBefore isEqual:itemAfter]) {
+      
+      l++; r++;
+      continue;
+      
+    } else if (![itemBefore isEqual:itemAfter]) {
+      
+      // Look for an item to move into place.
+      NSInteger move = [beforeUpToDate indexOfObject:itemAfter];
+      
+      // If we've found an object to move then do so.
+      // Note that we still use the _old_ initial indexes
+      // when moving items.
+      if (move != NSNotFound) {
+        NSInteger originalIndex =
+        [before indexOfObject:itemAfter];
+        [changes moveSection:originalIndex
+                   toSection:l];
+        
+        ISListViewAdapterSection *section =
+        [beforeUpToDate objectAtIndex:move];
+        [beforeUpToDate removeObjectAtIndex:move];
+        [beforeUpToDate insertObject:section
+                             atIndex:r];
+        
+        l++; r++;
+        continue;
+        
+      } else {
+        
+        // If the item is new, we step l knowing it will be
+        // inserted for us later.
+        l++;
+        continue;
+        
+      }
+      
+    }
+    
+  }
+  
+  // Process insertions.
+  for (NSInteger i = 0; i < after.count; i++) {
+    id itemAfter = after[i];
+    NSInteger idxAfter = i;
+    NSInteger idxBefore =
+    [beforeUpToDate indexOfObject:itemAfter];
+    
+    // If the item doesn't exist in the old world, add it.
+    if (idxBefore == NSNotFound) {
+      [changes insertSection:idxAfter];
+      [beforeUpToDate insertObject:itemAfter
+                           atIndex:idxAfter];
+    }
+  }
+  
+  // Create the new array.
+  NSMutableArray *res =
+  [NSMutableArray arrayWithCapacity:after.count];
+  for (id item in after) {
+    NSInteger index = [before indexOfObject:item];
+    id newItem = nil;
+    if (index == NSNotFound) {
+      newItem = item;
+    } else {
+      newItem = [before objectAtIndex:index];
+    }
+    [res addObject:item];
+  }
+  *result = res;
+  
+  return changes;
+}
+
+
 - (ISListViewAdapterChanges *)_changesBetweenArray:(NSArray *)before andArray:(NSArray *)after
 {
   ISListViewAdapterChanges *changes =
@@ -505,16 +623,28 @@ NSInteger ISDBViewIndexUndefined = -1;
     [self _sectionsForItems:completionEntries forDataSource:dataSource];
     
     // First, apply the section changes.
+    NSArray *result;
+    ISListViewAdapterChanges *changes =
+    [self _changesFromArray:sections
+                    toArray:updatedSections
+                     result:&result];
+    [self _applyChanges:changes
+               forState:result
+             dataSource:dataSource];
+    
+    NSLog(@"Changes: %@", changes);
+    NSLog(@"Result: %@", result);
+
     
     
     // Second, apply the item changes.
     
     // Determine the changes to the sections.
-    ISListViewAdapterChanges *changes = [self _changesBetweenArray:sections andArray:updatedSections];
+//    ISListViewAdapterChanges *changes = [self _changesBetweenArray:sections andArray:updatedSections];
 
-    [self _applyChanges:changes
-               forState:updatedSections
-             dataSource:dataSource];
+//    [self _applyChanges:changes
+//               forState:updatedSections
+//             dataSource:dataSource];
     
   });
   
