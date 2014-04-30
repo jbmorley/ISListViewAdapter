@@ -60,7 +60,6 @@ extern NSInteger ISDBViewIndexUndefined;
 - (void)invalidate;
 
 - (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath;
-- (ISListViewAdapterItem *)itemForIdentifier:(id)identifier;
 - (NSString *)titleForSection:(NSInteger)section;
 
 - (void)addAdapterObserver:(id<ISListViewAdapterObserver>)observer;

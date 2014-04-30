@@ -163,6 +163,7 @@ NSInteger ISDBViewIndexUndefined = -1;
            sectionForItem:item];
     }
   }];
+  description.dataSource = dataSource;
   return description;
 }
 
@@ -567,20 +568,13 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (ISListViewAdapterItem *)itemForIdentifier:(id)identifier
-{
-  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:identifier];
-  return item;
-}
-
-
 - (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath
 {
   ISListViewAdapterSection *s =
   self.sections[indexPath.section];
   ISListViewAdapterItemDescription *description =
   s.items[indexPath.item];
-  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self identifier:description.identifier];
+  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self dataSource:description.dataSource identifier:description.identifier];
   return item;
 }
 

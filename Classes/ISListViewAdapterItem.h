@@ -28,20 +28,11 @@
 
 @interface ISListViewAdapterItem : NSObject
 
-// TODO This should be read-only.
-//@property (nonatomic, strong) NSDictionary *userInfo;
-
-//+ (id)entryWithAdapter:(ISListViewAdapter *)adapter
-//                 index:(NSUInteger)index;
-//+ (id)entryWithAdapter:(ISListViewAdapter *)adapter
-//                 index:(NSUInteger)index
-//            identifier:(id)identifier;
-//- (id)initWithAdapter:(ISListViewAdapter *)adapter
-//                index:(NSUInteger)index
-//           identifier:(id)identifier;
 + (id)itemWithAdapter:(ISListViewAdapter *)adapter
+           dataSource:(id<ISListViewAdapterDataSource>)dataSource
            identifier:(id)identifier;
 - (id)initWithAdapter:(ISListViewAdapter *)adapter
+              dataSource:(id<ISListViewAdapterDataSource>)dataSource
            identifier:(id)identifier;
 - (void)fetch:(ISListViewAdapterBlock)completionBlock;
 - (id)fetchBlocking;

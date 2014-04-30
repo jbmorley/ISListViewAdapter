@@ -21,12 +21,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ISListViewAdapterDataSource.h"
 
 @interface ISListViewAdapterItemDescription : NSObject
 
 @property (nonatomic, strong) id identifier;
 @property (nonatomic, strong) id summary;
 @property (nonatomic, strong) NSString *section;
+@property (nonatomic, strong) id<ISListViewAdapterDataSource> dataSource;
 
 - (BOOL)isSummaryEqual:(ISListViewAdapterItemDescription *)object;
 

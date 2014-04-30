@@ -21,12 +21,11 @@
 //
 
 #import "ISListViewAdapterItem.h"
-#import "ISListViewAdapterPrivate.h"
 
 @interface ISListViewAdapterItem ()
 
 @property (nonatomic, weak) ISListViewAdapter *adapter;
-//@property (nonatomic) NSUInteger index;
+@property (nonatomic, strong) id<ISListViewAdapterDataSource> dataSource;
 @property (nonatomic, strong) id identifier;
 
 @end
@@ -34,57 +33,24 @@
 @implementation ISListViewAdapterItem
 
 
-//+ (id)entryWithAdapter:(ISListViewAdapter *)adapter
-//              index:(NSUInteger)index
-//{
-//  return [[self alloc] initWithAdapter:adapter
-//                              index:index
-//                         identifier:nil];
-//}
-//
-//
-//+ (id)entryWithAdapter:(ISListViewAdapter *)adapter
-//              index:(NSUInteger)index
-//         identifier:(id)identifier
-//{
-//  return [[self alloc] initWithAdapter:adapter
-//                                 index:index
-//                            identifier:identifier];
-//}
-//
-//
-//- (id)initWithAdapter:(ISListViewAdapter *)view
-//                index:(NSUInteger)index
-//           identifier:(id)identifier
-//{
-//  self = [super init];
-//  if (self) {
-//    self.view = view;
-//    self.index = index;
-//    if (identifier == nil) {
-//      self.identifier = [self.view identifierForIndex:self.index];
-//    } else {
-//      self.identifier = identifier;
-//    }
-//  }
-//  return self;
-//}
-
-
 + (id)itemWithAdapter:(ISListViewAdapter *)adapter
+           dataSource:(id<ISListViewAdapterDataSource>)dataSource
            identifier:(id)identifier
 {
     return [[self alloc] initWithAdapter:adapter
+                              dataSource:dataSource
                               identifier:identifier];
 }
 
 
 - (id)initWithAdapter:(ISListViewAdapter *)adapter
+           dataSource:(id<ISListViewAdapterDataSource>)dataSource
            identifier:(id)identifier
 {
   self = [super init];
   if (self) {
     self.adapter = adapter;
+    self.dataSource = dataSource;
     self.identifier = identifier;
   }
   return self;
@@ -93,24 +59,28 @@
 
 - (void)fetch:(ISListViewAdapterBlock)completionBlock
 {
+  assert(self.adapter != nil);
+  assert(self.dataSource != nil);
   dispatch_async(dispatch_get_main_queue(), ^{
-    [self.adapter itemForIdentifier:self.identifier
-                         completion:^(id item) {
-                           completionBlock(item);
-                         }];
+    [self.dataSource adapter:self.adapter
+           itemForIdentifier:self.identifier
+             completionBlock:completionBlock];
   });
 }
 
 
 - (id)fetchBlocking
 {
+  assert(self.adapter != nil);
+  assert(self.dataSource != nil);
   __block id result = nil;
   dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-  [self.adapter itemForIdentifier:self.identifier
-                       completion:^(id item) {
-                         result = item;
-                         dispatch_semaphore_signal(sema);
-                       }];
+  [self.dataSource adapter:self.adapter
+         itemForIdentifier:self.identifier
+           completionBlock:^(id item) {
+                  result = item;
+                  dispatch_semaphore_signal(sema);
+                }];
   dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
   return result;
 }

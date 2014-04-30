@@ -157,6 +157,11 @@ static NSString *const kHeaderIdentifier = @"Header";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+  // Check that we can fetch the item.
+  ISListViewAdapterItem *item =
+  [self.adapter itemForIndexPath:indexPath];
+  [item fetchBlocking];
+  
   UICollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCellIdentifier forIndexPath:indexPath];
   cell.backgroundColor = [UIColor cyanColor];
   return cell;
