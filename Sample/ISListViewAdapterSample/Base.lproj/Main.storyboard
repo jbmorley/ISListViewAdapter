@@ -1,75 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Dw6-4J-ffy">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Dw6-4J-ffy">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Collection View Controller-->
-        <scene sceneID="5PO-eZ-Vf7">
+        <!--View Controller - ISListViewAdapterTests-->
+        <scene sceneID="EyR-JO-8rU">
             <objects>
-                <collectionViewController autoresizesArchivedViewToFullSize="NO" id="nA2-Y1-QoI" customClass="ISCollectionViewController" sceneMemberID="viewController">
-                    <collectionView key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="gxh-r7-aS1">
+                <viewController id="vDm-CU-3ad" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2JH-RF-H1r"/>
+                        <viewControllerLayoutGuide type="bottom" id="uoL-Zn-37f"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="ZAV-MF-gYc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="glo-XF-AHG">
-                            <size key="itemSize" width="100" height="100"/>
-                            <size key="headerReferenceSize" width="320" height="20"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="10" maxX="0.0" maxY="10"/>
-                        </collectionViewFlowLayout>
-                        <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="h3x-fD-Jz9">
-                                <rect key="frame" x="0.0" y="94" width="100" height="100"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                    <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                </view>
-                            </collectionViewCell>
-                        </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Header" id="I6v-dA-3CX">
-                            <rect key="frame" x="0.0" y="64" width="320" height="20"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </collectionReusableView>
-                        <connections>
-                            <outlet property="dataSource" destination="nA2-Y1-QoI" id="4zk-BC-sw1"/>
-                            <outlet property="delegate" destination="nA2-Y1-QoI" id="0RJ-eM-g1E"/>
-                        </connections>
-                    </collectionView>
-                    <navigationItem key="navigationItem" id="PH9-Ua-E1S"/>
-                </collectionViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="84j-RL-4HT" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="48" y="817"/>
-        </scene>
-        <!--View Controller - Root View Controller-->
-        <scene sceneID="MYG-4X-alX">
-            <objects>
-                <tableViewController id="ttx-0o-riW" customClass="ISViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="pQ9-8Q-wCm">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1ON-q7-Gtd">
-                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1ON-q7-Gtd" id="Lng-qQ-JWY">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="ttx-0o-riW" id="rJZ-sL-nSy"/>
-                            <outlet property="delegate" destination="ttx-0o-riW" id="f8j-2w-Jj0"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="7e1-Rc-mwJ"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Wyb-oQ-yJq" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="ISListViewAdapterTests" id="2Dz-ny-8OI"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="aqB-iC-HNE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="48" y="112"/>
         </scene>
@@ -81,7 +31,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="nA2-Y1-QoI" kind="relationship" relationship="rootViewController" id="PfZ-el-EU2"/>
+                        <segue destination="vDm-CU-3ad" kind="relationship" relationship="rootViewController" id="GpB-rX-kgN"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZsQ-XR-RZW" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -21,12 +21,21 @@
 //
 
 #import "ISAppDelegate.h"
+#import "ISViewController.h"
 
 @implementation ISAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  ISViewController *viewController = [ISViewController new];
+  [self.navigationController pushViewController:viewController
+                                       animated:YES];
   return YES;
+}
+
+- (UINavigationController *)navigationController
+{
+  return (UINavigationController *)self.window.rootViewController;
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application

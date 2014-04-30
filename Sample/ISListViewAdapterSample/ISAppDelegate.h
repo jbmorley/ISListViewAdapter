@@ -25,5 +25,6 @@
 @interface ISAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, readonly) UINavigationController *navigationController;
 
 @end
