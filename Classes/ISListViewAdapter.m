@@ -229,15 +229,18 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (NSMutableArray *)_changesFromArray:(NSArray *)before
-                              toArray:(NSArray *)after
-                               result:(NSArray **)result
+- (NSArray *)_changesFromArray:(NSArray *)before
+                       toArray:(NSArray *)after
+                        result:(NSArray **)result
 {
   NSMutableArray *changes = [NSMutableArray arrayWithCapacity:3];
   
   NSMutableArray *beforeUpToDate = [before mutableCopy];
   NSMutableIndexSet *sectionRemovals =
   [NSMutableIndexSet indexSet];
+  
+  [self log:@"From Array: %@", before];
+  [self log:@"To Array: %@", after];
   
   // Process removes.
   for (NSInteger i = 0; i < beforeUpToDate.count; i++) {
@@ -259,8 +262,7 @@ NSInteger ISDBViewIndexUndefined = -1;
   NSInteger l = 0;
   NSInteger r = 0;
   while (l < after.count) {
-    [self log:@"Checking items: %lu", l];
-    
+
     // Terminate when we have got to the end of beforeUpToDate.
     // The remaining items must be new.
     if (r >= beforeUpToDate.count) {
@@ -336,7 +338,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     } else {
       newItem = [before objectAtIndex:index];
     }
-    [res addObject:item];
+    [res addObject:newItem];
   }
   *result = res;
   
@@ -485,7 +487,6 @@ NSInteger ISDBViewIndexUndefined = -1;
       NSInteger l = 0;
       NSInteger r = 0;
       while (l < afterItems.count) {
-        [self log:@"Checking Items: %lu", l];
         
         // Terminate when we have got to the end of beforeUpToDate.
         // The remaining items must be new.
@@ -622,7 +623,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     
     // First, apply the section changes.
     NSArray *result;
-    NSMutableArray *changes =
+    NSArray *changes =
     [self _changesFromArray:sections
                     toArray:updatedSections
                      result:&result];
@@ -641,16 +642,59 @@ NSInteger ISDBViewIndexUndefined = -1;
                           toSection:operation.toIndex];
       }
     }
+    [self log:@"Applying section changes..."];
     [self _applyChanges:sectionChanges
                forState:result
              dataSource:dataSource];
     
-    NSLog(@"Changes: %@", changes);
-    NSLog(@"Result: %@", result);
-
+    // Second, item changes.
     
+    // Calculate item the changes.
+    // TODO We should mark the sections which haven't
+    // changed so we don't bother updating these.
+    ISListViewAdapterChanges *itemChanges =
+    [ISListViewAdapterChanges changesWithLogger:self];
+    for (int i=0; i<updatedSections.count; i++) {
+      ISListViewAdapterSection *sectionAfter = updatedSections[i];
+      NSInteger indexBefore = [sections indexOfObject:sectionAfter];
+      if (indexBefore == NSNotFound) {
+        continue;
+      }
+      ISListViewAdapterSection *sectionBefore = sections[indexBefore];
+      
+      NSArray *newItems = nil;
+      NSArray *changes =
+      [self _changesFromArray:sectionBefore.items
+                      toArray:sectionAfter.items
+                       result:&newItems];
+      sectionAfter.items = [newItems mutableCopy];
+      
+      // Iterate over the changes and apply them to a change set.
+      for (ISListViewAdapterArrayOperation *operation in changes) {
+        if (operation.type ==
+            ISListViewAdapterArrayOperationTypeInsert) {
+          [itemChanges insertItem:operation.index
+                        inSection:i];
+        } else if (operation.type ==
+                   ISListViewAdapterArrayOperationTypeDelete) {
+          [itemChanges deleteItem:operation.index
+                        inSection:i];
+        } else if (operation.type ==
+                   ISListViewAdapterArrayOperationTypeMove) {
+          [itemChanges moveItem:operation.index
+                      inSection:i
+                         toItem:operation.toIndex
+                      inSection:i];
+        }
+      }
+    }
     
-    // Second, apply the item changes.
+    // Apply the item changes.
+    [self log:@"Applying item changes..."];
+    [self _applyChanges:itemChanges
+               forState:updatedSections
+             dataSource:dataSource];
+    
     
     // Determine the changes to the sections.
 //    ISListViewAdapterChanges *changes = [self _changesBetweenArray:sections andArray:updatedSections];
@@ -668,6 +712,9 @@ NSInteger ISDBViewIndexUndefined = -1;
              forState:(NSArray *)state
            dataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
+  [self log:@"Changes: %@", changes];
+  [self log:@"State: %@", state];
+  
   // Update the state and notify our observers.
   dispatch_sync(dispatch_get_main_queue(), ^{
     
@@ -676,15 +723,15 @@ NSInteger ISDBViewIndexUndefined = -1;
     _version = _version + 1;
     
     // Update the internal state.
-    // TODO Items should keep references to their data source
-    // to ensure that items are always queried from the correct
-    // data source.
     self.dataSource = dataSource;
     self.sections = state;
     
     // Notify the observers of the additions, removals, moves.
     if (![changes empty]) {
-      [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:) withObject:self withObject:changes withObject:@(previousVersion)];
+      [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:)
+                 withObject:self
+                 withObject:changes
+                 withObject:@(previousVersion)];
     }
     
   });
@@ -717,7 +764,10 @@ NSInteger ISDBViewIndexUndefined = -1;
   self.sections[indexPath.section];
   ISListViewAdapterItemDescription *description =
   s.items[indexPath.item];
-  ISListViewAdapterItem *item = [ISListViewAdapterItem itemWithAdapter:self dataSource:description.dataSource identifier:description.identifier];
+  ISListViewAdapterItem *item =
+  [ISListViewAdapterItem itemWithAdapter:self
+                              dataSource:description.dataSource
+                              identifier:description.identifier];
   return item;
 }
 

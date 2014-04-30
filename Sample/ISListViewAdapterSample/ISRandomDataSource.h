@@ -21,9 +21,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <ISListViewAdapter/ISListViewAdapter.h>
+#import "ISCommonDataSource.h"
 
 @interface ISRandomDataSource : NSObject
-<ISListViewAdapterDataSource>
+<ISCommonDataSource>
 
 @end

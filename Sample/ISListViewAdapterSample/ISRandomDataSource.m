@@ -26,6 +26,7 @@
 
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSMutableArray *candidates;
+@property (nonatomic, weak) ISListViewAdapter *adapter;
 
 @end
 
@@ -54,6 +55,12 @@
 {
   NSUInteger index = arc4random() % self.sections.count;
   return self.sections[index];
+}
+
+
+- (void)initializeAdapter:(ISListViewAdapter *)adapter
+{
+  self.adapter = adapter;
 }
 
 
@@ -98,6 +105,13 @@
 - (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item
 {
   return [self _randomSection];
+}
+
+
+- (BOOL)next
+{
+  [self.adapter invalidate];
+  return YES;
 }
 
 

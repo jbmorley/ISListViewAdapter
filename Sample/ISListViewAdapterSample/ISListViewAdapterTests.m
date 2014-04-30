@@ -42,7 +42,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
 #define DEFAULT_ITERATIONS 100
 
-//#define TEST_SPECIAL_CASES
+#define TEST_SPECIAL_CASES
 #define TEST_SECTIONS
 #define TEST_ITEMS
 #define TEST_ALL
@@ -181,7 +181,7 @@ NSString *const kSourceDataSource = @"dataSource";
     dataSource.movesSections = NO;
     dataSource.togglesItems = NO;
     dataSource.movesItems = NO;
-    dataSource.iterations = DEFAULT_ITERATIONS;
+    dataSource.iterations = 10;
     return dataSource;
   }()}];
 
