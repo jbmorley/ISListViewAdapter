@@ -339,6 +339,7 @@ NSString *const kSourceDataSource = @"dataSource";
      kSourceDataSource: ^(){
     ISRandomDataSource *dataSource =
     [ISRandomDataSource new];
+    dataSource.iterations = DEFAULT_ITERATIONS;
     return dataSource;
   }()}];
   

@@ -26,4 +26,6 @@
 @interface ISRandomDataSource : NSObject
 <ISCommonDataSource>
 
+@property (nonatomic, assign) NSUInteger iterations; // Zero is infinite.
+
 @end

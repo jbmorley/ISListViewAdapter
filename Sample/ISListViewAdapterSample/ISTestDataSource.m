@@ -162,19 +162,23 @@ static NSString *const kSectionItems = @"items";
 }
 
 
-- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item
+- (id)adapter:(ISListViewAdapter *)adapter
+identifierForItem:(id)item
 {
   return item;
 }
 
 
-- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock
+- (void)adapter:(ISListViewAdapter *)adapter
+itemForIdentifier:(id)identifier
+completionBlock:(ISListViewAdapterBlock)completionBlock
 {
   completionBlock(identifier);
 }
 
 
-- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item
+- (id)adapter:(ISListViewAdapter *)adapter
+summaryForItem:(id)item
 {
   return @" ";
 }

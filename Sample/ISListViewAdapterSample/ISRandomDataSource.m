@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSMutableArray *candidates;
 @property (nonatomic, weak) ISListViewAdapter *adapter;
+@property (nonatomic, assign) NSUInteger iteration;
 
 @end
 
@@ -111,7 +112,12 @@
 - (BOOL)next
 {
   [self.adapter invalidate];
-  return YES;
+  self.iteration++;
+  if (self.iterations == 0) {
+    return YES;
+  } else {
+    return (self.iteration < self.iterations);
+  }
 }
 
 
