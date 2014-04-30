@@ -503,29 +503,47 @@ NSInteger ISDBViewIndexUndefined = -1;
     NSArray *updatedSections =
     [self _sectionsForItems:completionEntries forDataSource:dataSource];
     
+    // First, apply the section changes.
+    
+    
+    // Second, apply the item changes.
+    
     // Determine the changes to the sections.
     ISListViewAdapterChanges *changes = [self _changesBetweenArray:sections andArray:updatedSections];
-    
-    // Update the state and notify our observers.
-    dispatch_sync(dispatch_get_main_queue(), ^{
-      
-      // Increment the version seen.
-      NSUInteger previousVersion = _version;
-      _version = _version + 1;
-      
-      // Update the internal state.
-      self.dataSource = dataSource;
-      self.sections = updatedSections;
-      
-      // Notify the observers of the additions, removals, moves.
-      if (![changes empty]) {
-        [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:) withObject:self withObject:changes withObject:@(previousVersion)];
-      }
-      
-    });
 
+    [self _applyChanges:changes
+               forState:updatedSections
+             dataSource:dataSource];
+    
   });
   
+}
+
+
+- (void)_applyChanges:(ISListViewAdapterChanges *)changes
+             forState:(NSArray *)state
+           dataSource:(id<ISListViewAdapterDataSource>)dataSource
+{
+  // Update the state and notify our observers.
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    
+    // Increment the version seen.
+    NSUInteger previousVersion = _version;
+    _version = _version + 1;
+    
+    // Update the internal state.
+    // TODO Items should keep references to their data source
+    // to ensure that items are always queried from the correct
+    // data source.
+    self.dataSource = dataSource;
+    self.sections = state;
+    
+    // Notify the observers of the additions, removals, moves.
+    if (![changes empty]) {
+      [self.notifier notify:@selector(adapter:performBatchUpdates:fromVersion:) withObject:self withObject:changes withObject:@(previousVersion)];
+    }
+    
+  });
 }
 
 
