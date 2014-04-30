@@ -40,9 +40,8 @@ static NSString *const kHeaderIdentifier = @"Header";
 {
   [super viewDidLoad];
   
-  self.items = [self fromJSON:@"[{\"title\":\"Section Four\",\"items\":[\"O\"]},{\"title\":\"Section Three\",\"items\":[\"I\",\"M\"]},{\"title\":\"Section One\",\"items\":[\"A\",\"B\",\"D\",\"E\"]},{\"title\":\"Section Two\",\"items\":[\"H\"]}]"];
-  
-  NSLog(@"1: %@", self.items);
+//  self.items = [self fromJSON:@"[{\"title\":\"Section Four\",\"items\":[\"O\"]},{\"title\":\"Section Three\",\"items\":[\"I\",\"M\"]},{\"title\":\"Section One\",\"items\":[\"A\",\"B\",\"D\",\"E\"]},{\"title\":\"Section Two\",\"items\":[\"H\"]}]"];
+//  NSLog(@"1: %@", self.items);
 
   if (self.items == nil) {
   

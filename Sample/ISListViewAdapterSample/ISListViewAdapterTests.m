@@ -42,7 +42,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
 #define DEFAULT_ITERATIONS 100
 
-#define TEST_SPECIAL_CASES
+//#define TEST_SPECIAL_CASES
 #define TEST_SECTIONS
 #define TEST_ITEMS
 #define TEST_ALL
