@@ -24,4 +24,34 @@
 
 @implementation ISListViewAdapterArrayOperation
 
+
++ (id)insert:(NSUInteger)index
+{
+  ISListViewAdapterArrayOperation *op = [self new];
+  op.type = ISListViewAdapterArrayOperationTypeInsert;
+  op.index = index;
+  return op;
+}
+
+
++ (id)delete:(NSUInteger)index
+{
+  ISListViewAdapterArrayOperation *op = [self new];
+  op.type = ISListViewAdapterArrayOperationTypeDelete;
+  op.index = index;
+  return op;
+}
+
+
++ (id)move:(NSUInteger)index
+        to:(NSUInteger)toIndex
+{
+  ISListViewAdapterArrayOperation *op = [self new];
+  op.type = ISListViewAdapterArrayOperationTypeMove;
+  op.index = index;
+  op.toIndex = toIndex;
+  return op;
+}
+
+
 @end

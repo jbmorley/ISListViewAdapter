@@ -26,6 +26,7 @@
 #import "ISListViewAdapterBlock.h"
 #import "ISListViewAdapterItemDescription.h"
 #import "ISListViewAdapterSection.h"
+#import "ISListViewAdapterArrayOperation.h"
 
 typedef enum {
   ISDBViewStateInvalid,
@@ -228,13 +229,11 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (ISListViewAdapterChanges *)_changesFromArray:(NSArray *)before
-                                        toArray:(NSArray *)after
-                                         result:(NSArray **)result
+- (NSMutableArray *)_changesFromArray:(NSArray *)before
+                              toArray:(NSArray *)after
+                               result:(NSArray **)result
 {
-  ISListViewAdapterChanges *changes =
-  [ISListViewAdapterChanges changesWithLogger:self];
-//  NSMutableArray *changes = [NSMutableArray arrayWithCapacity:3];
+  NSMutableArray *changes = [NSMutableArray arrayWithCapacity:3];
   
   NSMutableArray *beforeUpToDate = [before mutableCopy];
   NSMutableIndexSet *sectionRemovals =
@@ -249,7 +248,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     
     // If the item doesn't exist in the new world, remove it.
     if (idxAfter == NSNotFound) {
-      [changes deleteSection:idxBefore];
+      [changes addObject:[ISListViewAdapterArrayOperation delete:idxBefore]];
       [sectionRemovals addIndex:idxBefore];
     }
     
@@ -287,8 +286,7 @@ NSInteger ISDBViewIndexUndefined = -1;
       if (move != NSNotFound) {
         NSInteger originalIndex =
         [before indexOfObject:itemAfter];
-        [changes moveSection:originalIndex
-                   toSection:l];
+        [changes addObject:[ISListViewAdapterArrayOperation move:originalIndex to:l]];
         
         ISListViewAdapterSection *section =
         [beforeUpToDate objectAtIndex:move];
@@ -321,7 +319,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     
     // If the item doesn't exist in the old world, add it.
     if (idxBefore == NSNotFound) {
-      [changes insertSection:idxAfter];
+      [changes addObject:[ISListViewAdapterArrayOperation insert:idxAfter]];
       [beforeUpToDate insertObject:itemAfter
                            atIndex:idxAfter];
     }
@@ -624,11 +622,26 @@ NSInteger ISDBViewIndexUndefined = -1;
     
     // First, apply the section changes.
     NSArray *result;
-    ISListViewAdapterChanges *changes =
+    NSMutableArray *changes =
     [self _changesFromArray:sections
                     toArray:updatedSections
                      result:&result];
-    [self _applyChanges:changes
+    ISListViewAdapterChanges *sectionChanges =
+    [ISListViewAdapterChanges changesWithLogger:self];
+    for (ISListViewAdapterArrayOperation *operation in changes) {
+      if (operation.type ==
+          ISListViewAdapterArrayOperationTypeInsert) {
+        [sectionChanges insertSection:operation.index];
+      } else if (operation.type ==
+                 ISListViewAdapterArrayOperationTypeDelete) {
+        [sectionChanges deleteSection:operation.index];
+      } else if (operation.type ==
+                 ISListViewAdapterArrayOperationTypeMove) {
+        [sectionChanges moveSection:operation.index
+                          toSection:operation.toIndex];
+      }
+    }
+    [self _applyChanges:sectionChanges
                forState:result
              dataSource:dataSource];
     

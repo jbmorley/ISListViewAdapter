@@ -33,7 +33,12 @@ typedef enum {
 @interface ISListViewAdapterArrayOperation : NSObject
 
 @property (nonatomic) ISListViewAdapterArrayOperationType type;
-@property (nonatomic, assign) NSUInteger from;
-@property (nonatomic, assign) NSUInteger to;
+@property (nonatomic, assign) NSUInteger index;
+@property (nonatomic, assign) NSUInteger toIndex;
+
++ (id)insert:(NSUInteger)index;
++ (id)delete:(NSUInteger)index;
++ (id)move:(NSUInteger)index
+        to:(NSUInteger)toIndex;
 
 @end
