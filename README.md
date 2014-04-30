@@ -12,6 +12,14 @@ Getting Started
 
 ### Custom Observers
 
+Tests
+-----
+
+ISListViewAdapter includes some fairly comprehensive soak tests which attempt to drive UITableView and UICollectionView with as varied an input as possible.
+
+Limitations
+-----------
+
 Thanks
 ------
 
