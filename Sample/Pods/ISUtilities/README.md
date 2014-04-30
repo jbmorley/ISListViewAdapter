@@ -156,6 +156,22 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(
 });
 ```
 
+### UIApplication+IdleTimer
+
+Thread-safe category for managing the UIApplication idle timer by simply counting calls to `disableIdleTimer` and `enableIdleTimer`:
+
+```objc
+#import <ISUtilities/ISUtilities.h>
+
+// Disable the idle timer.
+[[UIApplication sharedApplication] disableIdleTimer];
+
+// Play a video, etc...
+
+// Re-enable the idle timer.
+[[UIApplication sharedApplication] enableIdleTimer];
+```
+
 
 ### UIView+Utilities
 
@@ -184,6 +200,17 @@ Resigns the first responder for the  UIView and any of its subviews. Returns `YE
 ```
 
 Walks the UIView's superviews and returns `YES` if any are of kind of class `aClass`, `NO` otherwise.
+
+Changelog
+---------
+
+### 1.0.1
+
+- FIX: Support for NULL blocks in UIAlertView+Block.
+
+### 1.0.0
+
+- Initiial release.
 
 License
 -------

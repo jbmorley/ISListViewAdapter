@@ -63,8 +63,10 @@ const char *kBlockCallback = "blockCallback";
 - (void)alertView:(UIAlertView *)alertView
 clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-  self.blockCallback(buttonIndex);
-  self.blockCallback = nil;
+  if (self.blockCallback) {
+    self.blockCallback(buttonIndex);
+    self.blockCallback = nil;
+  }
 }
 
 

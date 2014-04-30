@@ -161,9 +161,11 @@ static NSUInteger sImageIdentifier = 0;
     CGFloat currentRatio = currentSize.width/currentSize.height;
     
     if (currentRatio < targetRatio) {
-      newSize.height = targetSize.height / currentRatio;
+      // Current image is narrower.
+      newSize.height = targetSize.width / currentRatio;
     } else {
-      newSize.width = targetSize.width * currentRatio;
+      // Current image is wider.
+      newSize.width = targetSize.height * currentRatio;
     }
     
     // Since we're using a 'fill' the canvas size will always

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B7D367AE19F847EEBB2A046F"
+               BlueprintIdentifier = "616B15EC55E9458C99AE34FD"
                BuildableName = "libPods-ISListViewAdapter.a"
                BlueprintName = "Pods-ISListViewAdapter"
                ReferencedContainer = "container:Pods.xcodeproj">

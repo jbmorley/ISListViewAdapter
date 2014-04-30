@@ -7,10 +7,10 @@
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in
 // all copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,16 +18,54 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-// 
+//
 
-#import <Foundation/Foundation.h>
-
-#import "ISNotifier.h"
-#import "NSDictionary+JSON.h"
-#import "NSObject+Serialize.h"
-#import "UIAlertView+Block.h"
-#import "UIApplication+Activity.h"
 #import "UIApplication+IdleTimer.h"
-#import "UIView+Utilities.h"
-#import "UINavigationController+Pops.h"
+#import <objc/runtime.h>
 
+static char *const kIdleTimerCount = "is_idleTimerCount";
+
+@implementation UIApplication (IdleTimer)
+
+
+- (void)disableIdleTimer
+{
+  @synchronized(self) {
+    self.idleTimerCount++;
+    self.idleTimerDisabled = YES;
+  }
+}
+
+
+- (void)enableIdleTimer
+{
+  @synchronized(self) {
+    self.idleTimerCount--;
+    if (self.idleTimerCount <= 0) {
+      self.idleTimerDisabled = NO;
+    }
+  }
+}
+
+
+- (NSInteger)idleTimerCount
+{
+  NSNumber *networkActivityCount =
+  objc_getAssociatedObject(self, kIdleTimerCount);
+  if (networkActivityCount) {
+    return [networkActivityCount integerValue];
+  } else {
+    return 0;
+  }
+}
+
+
+- (void)setIdleTimerCount:(NSInteger)idleTimerCount
+{
+  objc_setAssociatedObject(self,
+                           kIdleTimerCount,
+                           @(idleTimerCount),
+                           OBJC_ASSOCIATION_RETAIN);
+}
+
+@end
