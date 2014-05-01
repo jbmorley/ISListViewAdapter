@@ -116,7 +116,6 @@
 
 - (void)adapter:(ISListViewAdapter *)adapter
 performBatchUpdates:(ISListViewAdapterChanges *)updates
-    fromVersion:(NSNumber *)version
 {
   if (self.incrementalUpdates) {
     if (_initialized) {

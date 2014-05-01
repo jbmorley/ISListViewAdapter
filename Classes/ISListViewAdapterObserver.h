@@ -28,8 +28,7 @@
 @protocol ISListViewAdapterObserver <NSObject>
 
 - (void)adapter:(ISListViewAdapter *)adapter
-performBatchUpdates:(ISListViewAdapterChanges *)updates
-    fromVersion:(NSNumber *)version;
+performBatchUpdates:(ISListViewAdapterChanges *)updates;
 
 @end
 

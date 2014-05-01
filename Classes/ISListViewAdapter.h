@@ -46,7 +46,6 @@ extern NSInteger ISDBViewIndexUndefined;
   
 }
 
-@property (nonatomic, readonly) NSUInteger version;
 @property (nonatomic) BOOL debug;
 
 + (id)adapterWithDataSource:(id<ISListViewAdapterDataSource>)dataSource;
