@@ -760,6 +760,13 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath
 {
+  // Check that we're asking for a valid index.
+  // Sometimes it seems possible that UICollectionView and friends
+  // will ask us for a cell we've already told it is disappearing.
+  if ((indexPath.section >= self.sections.count) || (indexPath.row >= [self.sections[indexPath.section] items].count)) {
+    return nil;
+  }
+  
   ISListViewAdapterSection *s =
   self.sections[indexPath.section];
   ISListViewAdapterItemDescription *description =
