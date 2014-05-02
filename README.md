@@ -15,6 +15,7 @@ Getting Started
 ```objc
 #import <ISListViewAdapter/ISListViewAdapter.h>
 #import "CustomDataSource.h"
+#import "CustomItem.h"
 
 @interface CustomTableViewController ()
 
