@@ -95,7 +95,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 
 @interface CustomDataSource ()
 @property (nonatomic, strong) NSDictionary *items;
-@property (nonatomic, weak) ISListViewAdapter *adapter;
+@property (nonatomic, strong) ISListViewAdapterInvalidator *invalidator;
 @end
 
 @implementation CustomDataSource
@@ -150,14 +150,12 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
   reeturn item[@"section"];
 }
 
-- (void)initializeAdapter:(ISListViewAdapter *)adapter
+- (void)adater:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator
 {
-  // Called when the data source is added to the adapter in case it is
-  // required for future use (e.g. to invalidate the adapter if the data
-  // changes.
-  // N.B. When storing a reference to the adapter, you must use a weak
-  // reference to avoid retain cycles.
-  self.adapter = adapter;
+  // Called when the data source is added to the adapter.
+  // ISListViewAdapterInvalidator should be retained if it is ever necessary for
+  // the data source to invalidate the ISListViewAdapter.
+  self.invalidator = invalidator;
 }
 
 @end
