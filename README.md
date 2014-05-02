@@ -87,22 +87,6 @@ titleForHeaderInSection:(NSInteger)section
 
 Clients must provide a custom implementation of the `ISListViewAdapterDataSource` protocol which serves as the data model for `ISListViewAdapter`. `ISListViewAdapterDataSource` indexes items by opaque identifiers and `ISListViewAdapter` maintains a mapping between the index paths used by `UITableView` and `UICollectionView` and these identifiers.
 
-```objc
-@protocol ISListViewAdapterDataSource <NSObject>
-
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock;
-- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item;
-- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock;
-
-@optional
-
-- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item;
-- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item;
-- (void)initializeAdapter:(ISListViewAdapter *)adapter;
-
-@end
-```
-
 A simple (and rather dumb) implementation of this protocol that corresponds to the example given above might look as follows:
 
 ```objc
@@ -111,6 +95,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 
 @interface CustomDataSource ()
 @property (nonatomic, strong) NSDictionary *items;
+@property (nonatomic, weak) ISListViewAdapter *adapter;
 @end
 
 @implementation CustomDataSource
@@ -121,7 +106,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
   if (self) {
     self.items =
     @{@"item_a": @{@"title": @"Title For Item A",
-                   @"type": @"Section One"},
+                   @"section": @"Section One"},
       @"item_b": @{@"title": @"Title For Item B",
                    @"section": @"Section Two"},
       @"item_c": @{@"title": @"Title For Item C",
@@ -129,6 +114,8 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
   }
   return self;
 }
+
+// Required
 
 - (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
 {
@@ -144,6 +131,33 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 {
   NSDictionary *item = self.items[identifier];
   completionBlock(item);
+}
+
+// Optional
+
+- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item
+{
+  NSDictionary *item = self.items[identifier];
+  return [NSString stringWithFormat:
+          @"%@, %@",
+          item[@"title"],
+          item[@"section"]];
+}
+
+- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item
+{
+  NSDictionary *item = self.items[identifier];
+  reeturn item[@"section"];
+}
+
+- (void)initializeAdapter:(ISListViewAdapter *)adapter
+{
+  // Called when the data source is added to the adapter in case it is
+  // required for future use (e.g. to invalidate the adapter if the data
+  // changes.
+  // N.B. When storing a reference to the adapter, you must use a weak
+  // reference to avoid retain cycles.
+  self.adapter = adapter;
 }
 
 @end
