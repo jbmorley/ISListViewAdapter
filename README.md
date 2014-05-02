@@ -3,6 +3,15 @@ ISListViewAdapter
 
 `ISListViewAdapter` automatically determines additions, removals, updates and moves in an array of items, providing a delegate mechanim for observers wishing to act on these. Convenience bindings are provided for `UITableView` and `UICollectionView`.
 
+Installation
+------------
+
+ISListViewAdapter is available through [CocoaPods](http://cocoapods.org/):
+
+```
+platform: ios, '6.0'
+pod "ISListViewAdapter", "~> 1.0"
+```
 
 Getting Started
 ---------------
