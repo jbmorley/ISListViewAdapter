@@ -25,7 +25,6 @@
 
 @class ISListViewAdapter;
 
-
 @protocol ISListViewAdapterDataSource <NSObject>
 
 - (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock;
