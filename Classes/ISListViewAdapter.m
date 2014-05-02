@@ -63,7 +63,7 @@ NSInteger ISDBViewIndexUndefined = -1;
   self = [super init];
   if (self) {
     self.dataSource = dataSource;
-    self.state = ISDBViewStateInvalid;
+    self.state = ISDBViewStateValid;
     self.notifier = [ISNotifier new];
     self.sections = @[];
     
@@ -80,7 +80,7 @@ NSInteger ISDBViewIndexUndefined = -1;
     self.comparisonQueue
     = dispatch_queue_create([queueIdentifier UTF8String], DISPATCH_QUEUE_SERIAL);
     
-    [self updateEntries];
+    [self invalidate];
   }
   return self;
 }
@@ -118,12 +118,15 @@ NSInteger ISDBViewIndexUndefined = -1;
 - (void)invalidate
 {
   @synchronized (self) {
-    self.state = ISDBViewStateInvalid;
-
-    // Only attempt to reload if we have no observers.
-    if (self.notifier.count > 0) {
-      [self updateEntries];
+    
+    // Don't attempt to perform another update if we're
+    // already marked as invalid.
+    if (self.state == ISDBViewStateInvalid) {
+      return;
     }
+    
+    self.state = ISDBViewStateInvalid;
+    [self updateEntries];
   }
 }
 
@@ -358,14 +361,6 @@ NSInteger ISDBViewIndexUndefined = -1;
   // without entering a synchronized block.
   dispatch_async(self.comparisonQueue, ^{
     
-    // Only run if we believe the state is invalid.
-    // TODO This is not good enough.
-    @synchronized (self) {
-      if (self.state == ISDBViewStateValid) {
-        return;
-      }
-    }
-    
     // Get our desired data source.
     __block id<ISListViewAdapterDataSource> dataSource;
     dispatch_sync(dispatch_get_main_queue(), ^{
@@ -506,7 +501,6 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (NSUInteger)numberOfItemsInSection:(NSUInteger)section
 {
-  [self updateEntries];
   ISListViewAdapterSection *s = self.sections[section];
   return s.items.count;
 }
