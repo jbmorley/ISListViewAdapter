@@ -139,7 +139,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 {
   CustomItem *item = [CustomItem new];
   item.title = self.items[identifier];
-  return item;
+  completionBlock(item);
 }
 
 @end
