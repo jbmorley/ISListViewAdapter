@@ -22,7 +22,6 @@ Getting Started
 #import <ISListViewAdapter/ISListViewAdapter.h>
 #import "CustomTableViewController.h"
 #import "CustomDataSource.h"
-#import "CustomItem.h"
 
 @interface CustomTableViewController ()
 @property (nonatomic, strong) id<ISListViewAdapterDataSource> dataSource;
@@ -72,11 +71,10 @@ titleForHeaderInSection:(NSInteger)section
   UITableViewCell *cell =
   [self.tableView dequeueReusableCellWithIdentifier:kCellIdentifier
                                        forIndexPath:indexPath];
-  CustomItem *item = (CustomItem *)[[self.adapter itemForIndexPath:indexPath] fetchBlocking];
+  NSDictionary *item = (NSDictionary *)[[self.adapter itemForIndexPath:indexPath] fetchBlocking];
 
-  // Configure the cell using the details of the fetched item.
-  // e.g.
-  // cell.textLabel.text = item.title;
+  // Configure the cell using the details of the fetched item. e.g.
+  cell.textLabel.text = item[@"title"];
   
   return cell;
 }
@@ -110,7 +108,6 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 ```objc
 #import <ISListViewAdapter/ISListViewAdapter.h>
 #import "CustomDataSource.h"
-#import "CustomItem.h"
 
 @interface CustomDataSource ()
 @property (nonatomic, strong) NSDictionary *items;
@@ -123,9 +120,12 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
   self = [super init];
   if (self) {
     self.items =
-    @{@"item_a": @"Title For Item A",
-      @"item_b": @"Title For Item B",
-      @"item_c": @"Title For Item C"};};
+    @{@"item_a": @{@"title": @"Title For Item A",
+                   @"type": @"Section One"},
+      @"item_b": @{@"title": @"Title For Item B",
+                   @"section": @"Section Two"},
+      @"item_c": @{@"title": @"Title For Item C",
+                   @"section": @"Section One"}};
   }
   return self;
 }
@@ -142,8 +142,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 
 - (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock
 {
-  CustomItem *item = [CustomItem new];
-  item.title = self.items[identifier];
+  NSDictionary *item = self.items[identifier];
   completionBlock(item);
 }
 
