@@ -34,8 +34,8 @@
 
 @optional
 
-- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item;
-- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item;
+- (id)adapter:(ISListViewAdapter *)adapter summaryForIdentifier:(id)identifier;
+- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForIdentifier:(id)identifier;
 - (void)adapter:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator;
 
 @end

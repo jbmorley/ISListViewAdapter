@@ -99,13 +99,13 @@
 }
 
 
-- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item
+- (id)adapter:(ISListViewAdapter *)adapter summaryForIdentifier:(id)identifier
 {
   return @" ";
 }
 
 
-- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item
+- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForIdentifier:(id)identifier
 {
   return [self _randomSection];
 }

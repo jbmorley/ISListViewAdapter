@@ -117,20 +117,18 @@ completionBlock:(ISListViewAdapterBlock)completionBlock
 }
 
 
-- (id)adapter:(ISListViewAdapter *)adapter
-summaryForItem:(id)item
+- (id)adapter:(ISListViewAdapter *)adapter summaryForIdentifier:(id)identifier
 {
   return @" ";
 }
 
 
-- (NSString *)adapter:(ISListViewAdapter *)adapter
-       sectionForItem:(id)item
+- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForIdentifier:(id)identifier
 {
   NSArray *current = [self stateForIndex:self.index];
   for (NSDictionary *section in current) {
     for (NSString *i in section[kSectionItems]) {
-      if ([i isEqual:item]) {
+      if ([i isEqual:identifier]) {
         return section[kSectionTitle];
       }
     }

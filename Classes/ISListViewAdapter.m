@@ -141,8 +141,8 @@ NSInteger ISDBViewIndexUndefined = -1;
 - (ISListViewAdapterItemDescription *)_descriptionForItem:(id)item forDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   // TODO Move this elsewhere?
-  BOOL dataSourceSupportsSummaries = [dataSource respondsToSelector:@selector(adapter:summaryForItem:)];
-  BOOL dataSourceSupportsSections = [dataSource respondsToSelector:@selector(adapter:sectionForItem:)];
+  BOOL dataSourceSupportsSummaries = [dataSource respondsToSelector:@selector(adapter:summaryForIdentifier:)];
+  BOOL dataSourceSupportsSections = [dataSource respondsToSelector:@selector(adapter:sectionForIdentifier:)];
   
   __block ISListViewAdapterItemDescription *description =
   [ISListViewAdapterItemDescription new];
@@ -153,12 +153,12 @@ NSInteger ISDBViewIndexUndefined = -1;
     if (dataSourceSupportsSummaries) {
       description.summary =
       [dataSource adapter:self
-           summaryForItem:item];
+     summaryForIdentifier:item];
     }
     if (dataSourceSupportsSections) {
       description.section =
       [dataSource adapter:self
-           sectionForItem:item];
+     sectionForIdentifier:item];
     }
   }];
   description.dataSource = dataSource;
@@ -181,7 +181,7 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (NSArray *)_sectionsForItems:(NSArray *)items forDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
-  BOOL dataSourceSupportsSections = [dataSource respondsToSelector:@selector(adapter:sectionForItem:)];
+  BOOL dataSourceSupportsSections = [dataSource respondsToSelector:@selector(adapter:sectionForIdentifier:)];
   
   // Conver the items to descriptions.
   NSArray *descriptions =
