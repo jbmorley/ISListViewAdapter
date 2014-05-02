@@ -166,11 +166,10 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 
 ### Custom Observers
 
-Synchronous vs. Asynchronous Fetches
-------------------------------------
-
 Performance
 -----------
+
+### Synchronous vs. Asynchronous Fetches
 
 Databases
 ---------
