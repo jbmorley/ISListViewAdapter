@@ -11,6 +11,7 @@ Getting Started
 
 ```objc
 #import <ISListViewAdapter/ISListViewAdapter.h>
+#import "CustomTableViewController.h"
 #import "CustomDataSource.h"
 #import "CustomItem.h"
 
@@ -93,6 +94,53 @@ Clients must provide a custom implementation of the `ISListViewAdapterDataSource
 - (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item;
 - (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item;
 - (void)initializeAdapter:(ISListViewAdapter *)adapter;
+
+@end
+```
+
+A simple (and rather dumb) implementation of this protocol that corresponds to the example given above might look as follows:
+
+```objc
+#import <ISListViewAdapter/ISListViewAdapter.h>
+#import "CustomDataSource.h"
+#import "CustomItem.h"
+
+@interface CustomDataSource ()
+
+@property (nonatomic, strong) NSDictionary *items;
+
+@end
+
+@implementation CustomDataSource
+
+- (id)init
+{
+  self = [super init];
+  if (self) {
+    self.items =
+    @{@"item_a": @"Title For Item A",
+      @"item_b": @"Title For Item B",
+      @"item_c": @"Title For Item C"};};
+  }
+  return self;
+}
+
+- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
+{
+  completionBlock([self.items allKeys]);
+}
+
+- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item
+{
+  return item;
+}
+
+- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock
+{
+  CustomItem *item = [CustomItem new];
+  item.title = self.items[identifier];
+  return item;
+}
 
 @end
 ```
