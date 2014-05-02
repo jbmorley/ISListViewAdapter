@@ -26,7 +26,7 @@
 
 @property (nonatomic, strong) NSArray *sections;
 @property (nonatomic, strong) NSMutableArray *candidates;
-@property (nonatomic, weak) ISListViewAdapter *adapter;
+@property (nonatomic, strong) ISListViewAdapterInvalidator *invalidator;
 @property (nonatomic, assign) NSUInteger iteration;
 
 @end
@@ -59,13 +59,15 @@
 }
 
 
-- (void)initializeAdapter:(ISListViewAdapter *)adapter
+- (void)adapter:(ISListViewAdapter *)adapter
+     initialize:(ISListViewAdapterInvalidator *)invalidator
 {
-  self.adapter = adapter;
+  self.invalidator = invalidator;
 }
 
 
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
+- (void)itemsForAdapter:(ISListViewAdapter *)adapter
+        completionBlock:(ISListViewAdapterBlock)completionBlock
 {
   [self _populateCandidates];
   
@@ -111,7 +113,7 @@
 
 - (BOOL)next
 {
-  [self.adapter invalidate];
+  [self.invalidator invalidate];
   self.iteration++;
   if (self.iterations == 0) {
     return YES;

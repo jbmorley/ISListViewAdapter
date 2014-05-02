@@ -43,7 +43,6 @@ static NSString *const kHeaderIdentifier = @"Header";
   self.tests.delegate = self;
   self.adapter = [self.tests testAdapter];
   self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter collectionView:self.collectionView];
-  self.connector.incrementalUpdates = YES;
   
   [self.tests start];
 }

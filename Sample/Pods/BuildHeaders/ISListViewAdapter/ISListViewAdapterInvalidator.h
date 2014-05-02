@@ -1,0 +1,1 @@
+../../../../Classes/ISListViewAdapterInvalidator.h

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 InSeven Limited.
+// Copyright (c) 2013-2014 InSeven Limited.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -20,22 +20,38 @@
 // SOFTWARE.
 //
 
-#import <Foundation/Foundation.h>
-#import "ISListViewAdapterBlock.h"
 #import "ISListViewAdapterInvalidator.h"
+#import "ISListViewAdapter.h"
 
-@class ISListViewAdapter;
+@interface ISListViewAdapterInvalidator ()
 
-@protocol ISListViewAdapterDataSource <NSObject>
+@property (nonatomic, weak) ISListViewAdapter *adapter;
 
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock;
-- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item;
-- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock;
+@end
 
-@optional
+@implementation ISListViewAdapterInvalidator
 
-- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item;
-- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item;
-- (void)adapter:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator;
+
++ (id)invalidatorWithAdapter:(ISListViewAdapter *)adapter
+{
+  return [[self alloc] initWithAdapter:adapter];
+}
+
+
+- (id)initWithAdapter:(ISListViewAdapter *)adapter
+{
+  self = [super init];
+  if (self) {
+    self.adapter = adapter;
+  }
+  return self;
+}
+
+
+- (void)invalidate
+{
+  [self.adapter invalidate];
+}
+
 
 @end

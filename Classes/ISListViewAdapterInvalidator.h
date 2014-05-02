@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2013 InSeven Limited.
+// Copyright (c) 2013-2014 InSeven Limited.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ISListViewAdapterBlock.h"
-#import "ISListViewAdapterInvalidator.h"
 
 @class ISListViewAdapter;
 
-@protocol ISListViewAdapterDataSource <NSObject>
+@interface ISListViewAdapterInvalidator : NSObject
 
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock;
-- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item;
-- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock;
++ (id)invalidatorWithAdapter:(ISListViewAdapter *)adapter;
+- (id)initWithAdapter:(ISListViewAdapter *)adapter;
 
-@optional
-
-- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item;
-- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item;
-- (void)adapter:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator;
+- (void)invalidate;
 
 @end

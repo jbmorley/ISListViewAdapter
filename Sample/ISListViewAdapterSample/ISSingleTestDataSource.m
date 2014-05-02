@@ -26,7 +26,7 @@
 
 @property (nonatomic, strong) NSMutableArray *states;
 @property (nonatomic, assign) NSUInteger index;
-@property (nonatomic, weak) ISListViewAdapter *adapter;
+@property (nonatomic, strong) ISListViewAdapterInvalidator *invalidator;
 
 
 @end
@@ -71,7 +71,7 @@ static NSString *const kSectionItems = @"items";
 - (BOOL)next
 {
   self.index++;
-  [self.adapter invalidate];
+  [self.invalidator invalidate];
   return (self.index < (self.states.count - 1));
 }
 
@@ -79,9 +79,10 @@ static NSString *const kSectionItems = @"items";
 #pragma mark - ISListViewAdapterDataSource
 
 
-- (void)initializeAdapter:(ISListViewAdapter *)adapter
+- (void)adapter:(ISListViewAdapter *)adapter
+     initialize:(ISListViewAdapterInvalidator *)invalidator
 {
-  self.adapter = adapter;
+  self.invalidator = invalidator;
 }
 
 

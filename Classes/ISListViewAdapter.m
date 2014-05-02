@@ -67,8 +67,8 @@ NSInteger ISDBViewIndexUndefined = -1;
     self.notifier = [ISNotifier new];
     self.sections = @[];
     
-    if ([self.dataSource respondsToSelector:@selector(initializeAdapter:)]) {
-      [self.dataSource initializeAdapter:self];
+    if ([self.dataSource respondsToSelector:@selector(adapter:initialize:)]) {
+      [self.dataSource adapter:self initialize:[ISListViewAdapterInvalidator invalidatorWithAdapter:self]];
     }
     
     // Create a worker queue on which to perform the
@@ -100,8 +100,8 @@ NSInteger ISDBViewIndexUndefined = -1;
 - (void)transitionToDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   self.pendingDataSource = dataSource;
-  if ([self.pendingDataSource respondsToSelector:@selector(initializeAdapter:)]) {
-    [self.pendingDataSource initializeAdapter:self];
+  if ([self.pendingDataSource respondsToSelector:@selector(adapter:initialize:)]) {
+    [self.pendingDataSource adapter:self initialize:[ISListViewAdapterInvalidator invalidatorWithAdapter:self]];
   }
   [self invalidate];
 }
