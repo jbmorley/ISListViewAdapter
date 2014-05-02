@@ -10,7 +10,7 @@ Clients must provide an implementation of the `ISListViewAdapterDataSource` prot
 Getting Started
 ---------------
 
-`ISListViewAdapter` is relatively simple to use but, due to its generic nature, involves a little bolier-plate so have patience.  The easiest way to get started is to look at a simple example for a `UITableViewController` subclasss, `CustomTableViewController`:
+`ISListViewAdapter` is relatively simple to use but, due to its generic nature, involves a little bolier-plate so have patience.  The easiest way to get started is to look at a simple example for a `UITableViewController` subclasss:
 
 ```objc
 #import <ISListViewAdapter/ISListViewAdapter.h>
