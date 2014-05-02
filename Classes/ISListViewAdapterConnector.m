@@ -117,16 +117,12 @@
 - (void)adapter:(ISListViewAdapter *)adapter
 performBatchUpdates:(ISListViewAdapterChanges *)updates
 {
-  if (self.incrementalUpdates) {
-    if (_initialized) {
-      if (self.collectionView) {
-        [updates applyToCollectionView:self.collectionView];
-      } else if (self.tableView) {
-        [updates applyToTableView:self.tableView
-                 withRowAnimation:UITableViewRowAnimationFade];
-      }
-    } else {
-      [self reloadData];
+  if (_initialized) {
+    if (self.collectionView) {
+      [updates applyToCollectionView:self.collectionView];
+    } else if (self.tableView) {
+      [updates applyToTableView:self.tableView
+               withRowAnimation:UITableViewRowAnimationFade];
     }
   } else {
     [self reloadData];
