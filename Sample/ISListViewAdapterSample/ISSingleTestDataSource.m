@@ -86,7 +86,7 @@ static NSString *const kSectionItems = @"items";
 }
 
 
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
+- (void)identifiersForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
 {
   NSArray *current = [self stateForIndex:self.index];
   NSMutableArray *items = [NSMutableArray arrayWithCapacity:3];
@@ -99,13 +99,6 @@ static NSString *const kSectionItems = @"items";
   NSLog(@"%@", current);
   
   completionBlock(items);
-}
-
-
-- (id)adapter:(ISListViewAdapter *)adapter
-identifierForItem:(id)item
-{
-  return item;
 }
 
 

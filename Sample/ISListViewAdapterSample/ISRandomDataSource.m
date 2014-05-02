@@ -66,8 +66,8 @@
 }
 
 
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter
-        completionBlock:(ISListViewAdapterBlock)completionBlock
+- (void)identifiersForAdapter:(ISListViewAdapter *)adapter
+              completionBlock:(ISListViewAdapterBlock)completionBlock
 {
   [self _populateCandidates];
   
@@ -84,12 +84,6 @@
   }
   
   completionBlock(items);
-}
-
-
-- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item
-{
-  return item;
 }
 
 

@@ -138,7 +138,7 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (ISListViewAdapterItemDescription *)_descriptionForItem:(id)item forDataSource:(id<ISListViewAdapterDataSource>)dataSource
+- (ISListViewAdapterItemDescription *)_descriptionForIdentifier:(id)identifier forDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   // TODO Move this elsewhere?
   BOOL dataSourceSupportsSummaries = [dataSource respondsToSelector:@selector(adapter:summaryForIdentifier:)];
@@ -147,18 +147,16 @@ NSInteger ISDBViewIndexUndefined = -1;
   __block ISListViewAdapterItemDescription *description =
   [ISListViewAdapterItemDescription new];
   [self _runOnMainThread:^{
-    description.identifier =
-    [dataSource adapter:self
-      identifierForItem:item];
+    description.identifier = identifier;
     if (dataSourceSupportsSummaries) {
       description.summary =
       [dataSource adapter:self
-     summaryForIdentifier:item];
+     summaryForIdentifier:identifier];
     }
     if (dataSourceSupportsSections) {
       description.section =
       [dataSource adapter:self
-     sectionForIdentifier:item];
+     sectionForIdentifier:identifier];
     }
   }];
   description.dataSource = dataSource;
@@ -166,26 +164,26 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (NSArray *)_descriptionsForItems:(NSArray *)items forDataSource:(id<ISListViewAdapterDataSource>)dataSource
+- (NSArray *)_descriptionsForIdentifiers:(NSArray *)identifiers forDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   NSMutableArray *descriptions =
-  [NSMutableArray arrayWithCapacity:items.count];
-  for (id item in items) {
+  [NSMutableArray arrayWithCapacity:identifiers.count];
+  for (id identifier in identifiers) {
     ISListViewAdapterItemDescription *description =
-    [self _descriptionForItem:item forDataSource:dataSource];
+    [self _descriptionForIdentifier:identifier forDataSource:dataSource];
     [descriptions addObject:description];
   };
   return descriptions;
 }
 
 
-- (NSArray *)_sectionsForItems:(NSArray *)items forDataSource:(id<ISListViewAdapterDataSource>)dataSource
+- (NSArray *)_sectionsForIdentifiers:(NSArray *)identifiers forDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
   BOOL dataSourceSupportsSections = [dataSource respondsToSelector:@selector(adapter:sectionForIdentifier:)];
   
   // Conver the items to descriptions.
   NSArray *descriptions =
-  [self _descriptionsForItems:items forDataSource:dataSource];
+  [self _descriptionsForIdentifiers:identifiers forDataSource:dataSource];
   
   // Build the section structure.
   NSMutableDictionary *sectionLookup =
@@ -385,7 +383,8 @@ NSInteger ISDBViewIndexUndefined = -1;
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
     dispatch_sync(dispatch_get_main_queue(), ^{
       sections = [self.sections copy];
-      [dataSource itemsForAdapter:self
+      [dataSource
+       identifiersForAdapter:self
        completionBlock:^(NSArray *entries) {
          completionEntries = [entries mutableCopy];
          self.state = ISDBViewStateValid;
@@ -396,7 +395,7 @@ NSInteger ISDBViewIndexUndefined = -1;
 
     // Generate descriptions for the items.
     NSArray *updatedSections =
-    [self _sectionsForItems:completionEntries forDataSource:dataSource];
+    [self _sectionsForIdentifiers:completionEntries forDataSource:dataSource];
     
     // First, apply the section changes.
     NSArray *result;
@@ -426,9 +425,6 @@ NSInteger ISDBViewIndexUndefined = -1;
     
     // Second, item changes.
     
-    // Calculate item the changes.
-    // TODO We should mark the sections which haven't
-    // changed so we don't bother updating these.
     ISListViewAdapterChanges *itemChanges =
     [ISListViewAdapterChanges changesWithLogger:self];
     for (int i=0; i<updatedSections.count; i++) {
