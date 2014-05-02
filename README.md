@@ -158,13 +158,10 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 
 ### Updating Data
 
-### ISListViewAdapterDataSource
-
-### ISListViewAdapterConnector
+### Connectors and Observers
 
 `ISListViewAdapterConnector` provides an off-the-shelf connector between an `ISListViewAdapter` instance and table views and collection views.
 
-### Custom Observers
 
 Performance
 -----------
