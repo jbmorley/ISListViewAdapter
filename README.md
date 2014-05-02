@@ -150,7 +150,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
   reeturn item[@"section"];
 }
 
-- (void)adater:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator
+- (void)adapter:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator
 {
   // Called when the data source is added to the adapter.
   // ISListViewAdapterInvalidator should be retained if it is ever necessary for
