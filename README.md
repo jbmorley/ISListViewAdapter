@@ -3,9 +3,6 @@ ISListViewAdapter
 
 `ISListViewAdapter` automatically determines additions, removals, updates and moves in an array of items, providing a delegate mechanim for observers wishing to act on these. Convenience bindings are provided for `UITableView` and `UICollectionView`.
 
-Clients must provide an implementation of the `ISListViewAdapterDataSource` protocol which serves as the data model for `ISListViewAdapter`. `ISListViewAdapterDataSource` indexes items by opaque identifiers and `ISListViewAdapter` maintains a mapping between the index paths used by `UITableView` and `UICollectionView` and these identifiers.
-
-
 
 Getting Started
 ---------------
@@ -82,6 +79,8 @@ titleForHeaderInSection:(NSInteger)section
 
 ### Data Source
 
+Clients must provide a custom implementation of the `ISListViewAdapterDataSource` protocol which serves as the data model for `ISListViewAdapter`. `ISListViewAdapterDataSource` indexes items by opaque identifiers and `ISListViewAdapter` maintains a mapping between the index paths used by `UITableView` and `UICollectionView` and these identifiers.
+
 ```objc
 @protocol ISListViewAdapterDataSource <NSObject>
 
@@ -99,7 +98,6 @@ titleForHeaderInSection:(NSInteger)section
 ```
 
 ### Updating Data
-
 
 ### ISListViewAdapterDataSource
 
