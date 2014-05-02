@@ -16,11 +16,9 @@ Getting Started
 #import "CustomItem.h"
 
 @interface CustomTableViewController ()
-
 @property (nonatomic, strong) id<ISListViewAdapterDataSource> dataSource;
 @property (nonatomic, strong) ISListViewAdapter *adapter;
 @property (nonatomic, strong) ISListViewAdapterConnector *connector;
-
 @end
 
 @implementation CustomTableViewController
@@ -106,9 +104,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 #import "CustomItem.h"
 
 @interface CustomDataSource ()
-
 @property (nonatomic, strong) NSDictionary *items;
-
 @end
 
 @implementation CustomDataSource
