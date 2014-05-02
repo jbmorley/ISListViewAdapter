@@ -117,14 +117,9 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 
 // Required
 
-- (void)itemsForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
+- (void)identifiersForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
 {
   completionBlock([self.items allKeys]);
-}
-
-- (id)adapter:(ISListViewAdapter *)adapter identifierForItem:(id)item
-{
-  return item;
 }
 
 - (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock
@@ -135,7 +130,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
 
 // Optional
 
-- (id)adapter:(ISListViewAdapter *)adapter summaryForItem:(id)item
+- (id)adapter:(ISListViewAdapter *)adapter summaryForIdentifier:(id)identifier
 {
   NSDictionary *item = self.items[identifier];
   return [NSString stringWithFormat:
@@ -144,7 +139,7 @@ A simple (and rather dumb) implementation of this protocol that corresponds to t
           item[@"section"]];
 }
 
-- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForItem:(id)item
+- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForIdentifier:(id)identifier
 {
   NSDictionary *item = self.items[identifier];
   reeturn item[@"section"];
