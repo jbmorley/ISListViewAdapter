@@ -22,7 +22,7 @@ Getting Started
 
 Clients must provide a custom implementation of the `ISListViewAdapterDataSource` protocol which serves as the data model for `ISListViewAdapter`. `ISListViewAdapterDataSource` indexes items by opaque identifiers and `ISListViewAdapter` maintains a mapping between the index paths used by `UITableView` and `UICollectionView` and these identifiers.
 
-A simple (and rather dumb) implementation of this protocol that corresponds to the example given above might look as follows:
+A simple implementation of this protocol that corresponds to the example given above might look as follows. This simply exposes the contents on an `NSDictionary`:
 
 ```objc
 #import <ISListViewAdapter/ISListViewAdapter.h>
