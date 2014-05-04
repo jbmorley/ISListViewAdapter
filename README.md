@@ -251,7 +251,7 @@ xcodebuild build -workspace ISListViewAdapterSample.xcworkspace -scheme ISListVi
 Limitations
 -----------
 
-`ISListViewAdapter` determines changes by first identifying and applying section insertions, deletions and moves and then, only once the section changes have been applied to the list, does it attempt to update the list with ISListView
+`ISListViewAdapter` determines changes by first identifying and applying section insertions, deletions and moves and then, only once the section changes have been applied does it determine item changes. This means that items will never be animated transitioning between sections in the current implementation.
 
 Changelog
 ---------
