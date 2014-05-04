@@ -95,7 +95,7 @@ All datasource callbacks are performed on the main run loop.  Results for long-r
 
 Summary and section callbacks are optional:
 
-- `adapter:summaryForIdentifier:` returns an id conforming to `NSObject` (to be compared using `isEqual:`) that describes the current state of the item for a given identifier. It is used by `ISListViewAdapter` to identify updates to items. If no summary is provided, it is assumed that objects are immutable and items will not be updated or reloaded.
+- `adapter:summaryForIdentifier:` returns an `id` conforming to `NSObject` (to be compared using `isEqual:`) that describes the current state of the item for a given identifier. It is used by `ISListViewAdapter` to identify updates to items. If no summary is provided, it is assumed that objects are immutable and items will not be updated or reloaded.
 - `adapter:sectionForIdentifier:` returns the title (assumed unique) for the section in which the item for a given identifier should be shown. Item ordering within sections corresponds to the ordering returned via. `identifiersForAdapter:completionBlock:`. Section ordering corresponds to the order in which items for a given section are seen as returned via. `identifiersForAdapter:completionBlock:`.
 
 ### Connectors and Observers
