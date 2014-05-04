@@ -133,6 +133,18 @@
 }
 
 
+- (void)updateItem:(NSInteger)item
+         inSection:(NSInteger)section
+{
+  ISListViewAdapterOperation *operation = [self _operation];
+  operation.type = ISListViewAdapterOperationTypeUpdateItem;
+  operation.indexPath =
+  [NSIndexPath indexPathForItem:item inSection:section];
+  [self.logger log:@"%@", operation];
+  [self.operations addObject:operation];
+}
+
+
 - (void)applyToTableView:(UITableView *)tableView
         withRowAnimation:(UITableViewRowAnimation)animation
 {
@@ -173,7 +185,7 @@
     } else if (operation.type ==
                ISListViewAdapterOperationTypeUpdateItem) {
       
-      // TODO Update.
+      [tableView reloadRowsAtIndexPaths:@[operation.indexPath] withRowAnimation:animation];
       
     }
     
@@ -223,7 +235,7 @@
       } else if (operation.type ==
                  ISListViewAdapterOperationTypeUpdateItem) {
         
-        // TODO Update.
+        [collectionView reloadItemsAtIndexPaths:@[operation.indexPath]];
         
       }
       

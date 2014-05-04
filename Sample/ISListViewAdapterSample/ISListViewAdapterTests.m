@@ -42,7 +42,8 @@ NSString *const kSourceDataSource = @"dataSource";
 
 #define DEFAULT_ITERATIONS 50
 
-#define TEST_SPECIAL_CASES
+//#define TEST_SPECIAL_CASES
+#define TEST_UPDATES
 #define TEST_SECTIONS
 #define TEST_ITEMS
 #define TEST_ALL
@@ -112,6 +113,23 @@ NSString *const kSourceDataSource = @"dataSource";
      kSourceDataSource: ^(){
     ISSingleTestDataSource *dataSource =
     [[ISSingleTestDataSource alloc] initWithInitialState:@"[{\"title\":\"Section Four\",\"items\":[\"O\"]},{\"title\":\"Section Three\",\"items\":[\"I\",\"M\"]},{\"title\":\"Section One\",\"items\":[\"A\",\"B\",\"D\",\"E\"]},{\"title\":\"Section Two\",\"items\":[\"H\"]}]" finalState:@"[{\"title\":\"Section Two\",\"items\":[\"F\",\"H\"]},{\"title\":\"Section Four\",\"items\":[\"O\"]},{\"title\":\"Section Three\",\"items\":[\"M\"]},{\"title\":\"Section One\",\"items\":[\"C\"]}]"];
+    return dataSource;
+  }()}];
+  
+#endif
+  
+#ifdef TEST_UPDATES
+  
+  // Static sections.
+  [dataSources addObject:
+   @{kSourceTitle: @"Updates",
+     kSourceDataSource: ^(){
+    ISTestDataSource *dataSource =
+    [ISTestDataSource new];
+    dataSource.togglesSections = NO;
+    dataSource.movesSections = NO;
+    dataSource.updatesItems = YES;
+    dataSource.iterations = 100;
     return dataSource;
   }()}];
   

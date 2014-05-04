@@ -30,6 +30,7 @@
 @property (nonatomic, assign) BOOL movesSections;
 @property (nonatomic, assign) BOOL togglesItems;
 @property (nonatomic, assign) BOOL movesItems;
+@property (nonatomic, assign) BOOL updatesItems;
 @property (nonatomic, assign) NSUInteger iterations; // Zero is infinite.
 
 @end

@@ -47,6 +47,9 @@
           toItem:(NSInteger)toItem
        inSection:(NSInteger)toSection;
 
+- (void)updateItem:(NSInteger)item
+         inSection:(NSInteger)section;
+
 - (void)applyToTableView:(UITableView *)tableView
         withRowAnimation:(UITableViewRowAnimation)animation;
 - (void)applyToCollectionView:(UICollectionView *)collectionView;

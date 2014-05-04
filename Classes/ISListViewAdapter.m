@@ -145,7 +145,6 @@ NSInteger ISDBViewIndexUndefined = -1;
 
 - (ISListViewAdapterItemDescription *)_descriptionForIdentifier:(id)identifier forDataSource:(id<ISListViewAdapterDataSource>)dataSource
 {
-  // TODO Move this elsewhere?
   BOOL dataSourceSupportsSummaries = [dataSource respondsToSelector:@selector(adapter:summaryForIdentifier:)];
   BOOL dataSourceSupportsSections = [dataSource respondsToSelector:@selector(adapter:sectionForIdentifier:)];
   
@@ -424,9 +423,10 @@ NSInteger ISDBViewIndexUndefined = -1;
                forState:result
              dataSource:dataSource];
     
-    // Second, item changes.
-    
+    // Second, item changes.    
     ISListViewAdapterChanges *itemChanges =
+    [ISListViewAdapterChanges changesWithLogger:self];
+    ISListViewAdapterChanges *itemUpdates =
     [ISListViewAdapterChanges changesWithLogger:self];
     for (int i=0; i<updatedSections.count; i++) {
       ISListViewAdapterSection *sectionAfter = updatedSections[i];
@@ -436,6 +436,23 @@ NSInteger ISDBViewIndexUndefined = -1;
       }
       ISListViewAdapterSection *sectionBefore = sections[indexBefore];
       
+      // Enumerate the updates.
+      for (NSInteger idxAfter = 0;
+           idxAfter < sectionAfter.items.count;
+           idxAfter++) {
+        ISListViewAdapterItemDescription *itemAfter =
+        sectionAfter.items[idxAfter];
+        NSInteger idxBefore =
+        [sectionBefore.items indexOfObject:itemAfter];
+        if (idxBefore != NSNotFound) {
+          ISListViewAdapterItemDescription *itemBefore = sectionBefore.items[idxBefore];
+          if (![itemBefore isSummaryEqual:itemAfter]) {
+            [itemUpdates updateItem:idxAfter inSection:i];
+          }
+        }
+      }
+      
+      // Enumerate the inserts, deletes and moves.
       NSArray *newItems = nil;
       NSArray *changes =
       [self _changesFromArray:sectionBefore.items
@@ -466,6 +483,12 @@ NSInteger ISDBViewIndexUndefined = -1;
     // Apply the item changes.
     [self log:@"Applying item changes..."];
     [self _applyChanges:itemChanges
+               forState:updatedSections
+             dataSource:dataSource];
+    
+    // Apply the item updates.
+    [self log:@"Applying item updates..."];
+    [self _applyChanges:itemUpdates
                forState:updatedSections
              dataSource:dataSource];
     

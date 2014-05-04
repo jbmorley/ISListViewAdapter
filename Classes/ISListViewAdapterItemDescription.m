@@ -44,6 +44,11 @@
 
 - (BOOL)isSummaryEqual:(ISListViewAdapterItemDescription *)object
 {
+  // We assume that objects without summaries never change.
+  if ((self.summary == nil) &&
+      (object.summary == nil)) {
+    return YES;
+  }
   return [self.summary isEqual:object.summary];
 }
 

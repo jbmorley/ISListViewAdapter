@@ -88,7 +88,11 @@ static NSString *const kItemColor = @"color";
     NSMutableArray *sectionItems = [NSMutableArray arrayWithCapacity:tempItems.count];
     for (NSDictionary *item in tempItems) {
       NSMutableDictionary *mutableItem = [item mutableCopy];
-      mutableItem[kItemColor] = ((arc4random() % 2) == 0) ? @"Cyan" : @"Yellow";
+      if (self.updatesItems) {
+        mutableItem[kItemColor] = ((arc4random() % 2) == 0) ? @"Cyan" : @"Yellow";
+      } else {
+        mutableItem[kItemColor] = @"Cyan";
+      }
       [sectionItems addObject:mutableItem];
     }
     
@@ -195,7 +199,8 @@ completionBlock:(ISListViewAdapterBlock)completionBlock
 
 - (id)adapter:(ISListViewAdapter *)adapter summaryForIdentifier:(id)identifier
 {
-  return @" ";
+  NSDictionary *item = [self itemForIdentifier:identifier];
+  return item[kItemColor];
 }
 
 
