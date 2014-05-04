@@ -228,6 +228,16 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 }
 ```
 
+Transitioning Data Sources
+--------------------------
+
+Occasionally it is useful to transition between data sources. This can be done as follows:
+
+```objc
+CustomDataSource *secondDataSource = [CustomDataSource new];
+[self.adapter transitionToDataSource:secondDataSource];
+```
+
 Performance
 -----------
 
