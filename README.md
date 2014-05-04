@@ -98,9 +98,9 @@ Summary and section callbacks are optional:
 - `adapter:summaryForIdentifier:` returns a summary object which can be compared using `isEqual` that describes the current state of the item for a given identifier. It is used by `ISListViewAdapter` to identify updates to items. If no summary is provided, it is assumed that objects are immutable and items will not be updated or reloaded.
 - `adapter:sectionForIdentifier:` returns the title (assumed unique) for the section in which the item for a given identifier should be shown. Item ordering within sections corresponds to the ordering returned via. `identifiersForAdapter:completionBlock:`. Section ordering corresponds to the order in which items for a given section are seen as returned via. `identifiersForAdapter:completionBlock:`.
 
-### Binding
+### Connectors and Observers
 
-`ISListViewAdapter` is relatively simple to use but, due to its generic nature, involves a little bolier-plate so have patience.  The easiest way to get started is to look at a simple example for a `UITableViewController` subclasss:
+Once you have a data source, you must create an `ISListViewAdapter` instance and bind this to your list view instance.  `ISListViewAdapterConnector` provides an off-the-shelf connector between an `ISListViewAdapter` instance and table views and collection views:
 
 ```objc
 #import <ISListViewAdapter/ISListViewAdapter.h>
@@ -164,16 +164,27 @@ titleForHeaderInSection:(NSInteger)section
 }
 
 @end
-
 ```
 
-### Fetching Items
+If you wish to use `ISListViewAdapter` with your own list view implementation, or process the changes in a custom way (perhaps by scrolling changed items into view, etc), you can implement the `ISListViewAdapterObserver` protocol and observe the `ISListViewAdapter` using `addAdapterObserver:` and `removeAdapterObserver:`.
+
+```objc
+- (void)adapter:(ISListViewAdapter *)adapter performBatchUpdates:(ISListViewAdapterChanges *)changes
+{
+  for (ISListViewAdapterOperation *operation in changes.operations) {
+    // Check the type of the operation and determine the correct change...
+  }
+}
+```
+
+Fetching Items
+--------------
 
 `ISListViewAdapterItem` is provides a mechanism to fetch an item for a given `NSIndexPath`. Items themselves are of type `id`, allowing you to use any object internally: the example above makes use of `NSDictionary` instances as items, but this could just as well be your own custom object, `NSManagedObject`, `FCModel`, etc.
 
 Items can be fetched both synchronously and asynchronously. Typically it is safe to fetch items synchronously (if you are using a fast mechanism such as NSDictionary for item lookup), but you may wish to use an asynchronous fetch if you are performing a fetch from a database, or some slower data source. In an extreme case, asynchronous fetches might be used to fetch items directly from the network.
 
-#### Synchronous Fetches
+### Synchronous Fetches
 
 ```objc
 - (UITableViewCell *)tableView:(UITableView *)tableView
@@ -214,14 +225,6 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
   return cell;
 }
 ```
-
-
-### Updating Data
-
-### Connectors and Observers
-
-`ISListViewAdapterConnector` provides an off-the-shelf connector between an `ISListViewAdapter` instance and table views and collection views.
-
 
 Performance
 -----------
