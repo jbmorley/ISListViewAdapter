@@ -64,7 +64,15 @@
   dispatch_async(dispatch_get_main_queue(), ^{
     [self.dataSource adapter:self.adapter
            itemForIdentifier:self.identifier
-             completionBlock:completionBlock];
+             completionBlock:^(id item) {
+               if ([NSThread isMainThread]) {
+                 completionBlock(item);
+               } else {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                   completionBlock(item);
+                 });
+               }
+             }];
   });
 }
 
