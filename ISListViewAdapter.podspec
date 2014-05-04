@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "ISListViewAdapter"
-  s.version      = "0.0.1"
+  s.version      = "1.0.0"
   s.summary      = "Adapter for managing UICollectionView and UITableView animations"
   s.homepage     = "https://github.com/jbmorley/ISListViewAdapter"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
