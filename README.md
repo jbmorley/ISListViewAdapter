@@ -209,7 +209,7 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  UITableViewCell *cell = /* ... */
+  UITableViewCell *cell = // ...
   
   __weak UITableViewCell *weakCell = cell;
   ISListViewAdapterItem *item = [self.adapter itemForIndexPath:indexPath];
