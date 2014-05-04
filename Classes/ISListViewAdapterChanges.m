@@ -44,7 +44,7 @@
   if (self) {
     self.logger = logger;
     [self.logger log:@"Creating new ISListViewAdapterChanges"];
-    self.changes = [NSMutableArray arrayWithCapacity:3];
+    self.operations = [NSMutableArray arrayWithCapacity:3];
   }
   return self;
 }
@@ -63,7 +63,7 @@
   operation.indexPath =
   [NSIndexPath indexPathForItem:0 inSection:section];
   [self.logger log:@"%@", operation];
-  [self.changes addObject:operation];
+  [self.operations addObject:operation];
 }
 
 
@@ -74,7 +74,7 @@
   operation.indexPath =
   [NSIndexPath indexPathForItem:0 inSection:section];
   [self.logger log:@"%@", operation];
-  [self.changes addObject:operation];
+  [self.operations addObject:operation];
 
 }
 
@@ -89,7 +89,7 @@
   operation.toIndexPath =
   [NSIndexPath indexPathForItem:0 inSection:toSection];
   [self.logger log:@"%@", operation];
-  [self.changes addObject:operation];
+  [self.operations addObject:operation];
 }
 
 
@@ -101,7 +101,7 @@
   operation.indexPath =
   [NSIndexPath indexPathForItem:item inSection:section];
   [self.logger log:@"%@", operation];
-  [self.changes addObject:operation];
+  [self.operations addObject:operation];
 }
 
 
@@ -113,7 +113,7 @@
   operation.indexPath =
   [NSIndexPath indexPathForItem:item inSection:section];
   [self.logger log:@"%@", operation];
-  [self.changes addObject:operation];
+  [self.operations addObject:operation];
 }
 
 
@@ -129,7 +129,7 @@
   operation.toIndexPath =
   [NSIndexPath indexPathForItem:toItem inSection:toSection];
   [self.logger log:@"%@", operation];
-  [self.changes addObject:operation];
+  [self.operations addObject:operation];
 }
 
 
@@ -138,7 +138,7 @@
 {
   [tableView beginUpdates];
   
-  for (ISListViewAdapterOperation *operation in self.changes) {
+  for (ISListViewAdapterOperation *operation in self.operations) {
   
     if (operation.type ==
         ISListViewAdapterOperationTypeDeleteSection) {
@@ -184,11 +184,11 @@
 
 - (void)applyToCollectionView:(UICollectionView *)collectionView
 {
-  [self.logger log:@"Changes: %@", self.changes];
+  [self.logger log:@"Changes: %@", self.operations];
   
   [collectionView performBatchUpdates:^{
 
-    for (ISListViewAdapterOperation *operation in self.changes) {
+    for (ISListViewAdapterOperation *operation in self.operations) {
       
       if (operation.type ==
           ISListViewAdapterOperationTypeDeleteSection) {
@@ -236,15 +236,15 @@
 
 - (BOOL)empty
 {
-  return (self.changes.count == 0);
+  return (self.operations.count == 0);
 }
 
 
 - (NSString *)description
 {
   NSMutableArray *changes =
-  [NSMutableArray arrayWithCapacity:self.changes.count];
-  for (ISListViewAdapterOperation *op in self.changes) {
+  [NSMutableArray arrayWithCapacity:self.operations.count];
+  for (ISListViewAdapterOperation *op in self.operations) {
     [changes addObject:[op description]];
   }
   return [changes componentsJoinedByString:@"\n"];

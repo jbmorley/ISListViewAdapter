@@ -27,7 +27,7 @@
 
 @interface ISListViewAdapterChanges : NSObject
 
-@property (nonatomic, strong) NSMutableArray *changes;
+@property (nonatomic, strong) NSMutableArray *operations;
 
 + (id)changesWithLogger:(id<ISListViewAdapterLogger>)logger;
 
