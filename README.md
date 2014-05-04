@@ -16,6 +16,89 @@ pod "ISListViewAdapter", "~> 1.0"
 Getting Started
 ---------------
 
+`ISListViewAdapter` requires clients to implement both a data source (`ISListViewAdaterDataSource`) and the glue to binds to the `UITableView` or `UICollectionView` instance.
+
+### Data Source
+
+Clients must provide a custom implementation of the `ISListViewAdapterDataSource` protocol which serves as the data model for `ISListViewAdapter`. `ISListViewAdapterDataSource` indexes items by opaque identifiers and `ISListViewAdapter` maintains a mapping between the index paths used by `UITableView` and `UICollectionView` and these identifiers.
+
+A simple (and rather dumb) implementation of this protocol that corresponds to the example given above might look as follows:
+
+```objc
+#import <ISListViewAdapter/ISListViewAdapter.h>
+#import "CustomDataSource.h"
+
+@interface CustomDataSource ()
+@property (nonatomic, strong) NSDictionary *items;
+@property (nonatomic, strong) ISListViewAdapterInvalidator *invalidator;
+@end
+
+@implementation CustomDataSource
+
+- (id)init
+{
+  self = [super init];
+  if (self) {
+    self.items =
+    @{@"item_a": @{@"title": @"Title For Item A",
+                   @"section": @"Section One"},
+      @"item_b": @{@"title": @"Title For Item B",
+                   @"section": @"Section Two"},
+      @"item_c": @{@"title": @"Title For Item C",
+                   @"section": @"Section One"}};
+  }
+  return self;
+}
+
+// Required
+
+- (void)identifiersForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
+{
+  completionBlock([self.items allKeys]);
+}
+
+- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock
+{
+  NSDictionary *item = self.items[identifier];
+  completionBlock(item);
+}
+
+// Optional
+
+- (id)adapter:(ISListViewAdapter *)adapter summaryForIdentifier:(id)identifier
+{
+  NSDictionary *item = self.items[identifier];
+  return [NSString stringWithFormat:
+          @"%@, %@",
+          item[@"title"],
+          item[@"section"]];
+}
+
+- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForIdentifier:(id)identifier
+{
+  NSDictionary *item = self.items[identifier];
+  reeturn item[@"section"];
+}
+
+// Called when the data source is added to the adapter.
+// ISListViewAdapterInvalidator should be retained if it is ever necessary for
+// the data source to invalidate the ISListViewAdapter.
+- (void)adapter:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator
+{
+  self.invalidator = invalidator;
+}
+
+@end
+```
+
+All datasource callbacks are performed on the main run loop.  Results for long-running operations can be provided to the `ISListViewAdapter` asynchronously by means of the completion blocks. N.B. Since all callbacks are performed on the main run loop you should cross-post any long running operations to avoid blocking the UI.
+
+Summary and section callbacks are optional:
+
+`adapter:summaryForIdentifier:` should return a summary object which can be compared using `isEqual` that describes the current state of the object. It is used by `ISListViewAdapter` to identify updates to objects.
+
+### Binding
+
 `ISListViewAdapter` is relatively simple to use but, due to its generic nature, involves a little bolier-plate so have patience.  The easiest way to get started is to look at a simple example for a `UITableViewController` subclasss:
 
 ```objc
@@ -131,78 +214,6 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 }
 ```
 
-### Data Source
-
-Clients must provide a custom implementation of the `ISListViewAdapterDataSource` protocol which serves as the data model for `ISListViewAdapter`. `ISListViewAdapterDataSource` indexes items by opaque identifiers and `ISListViewAdapter` maintains a mapping between the index paths used by `UITableView` and `UICollectionView` and these identifiers.
-
-A simple (and rather dumb) implementation of this protocol that corresponds to the example given above might look as follows:
-
-```objc
-#import <ISListViewAdapter/ISListViewAdapter.h>
-#import "CustomDataSource.h"
-
-@interface CustomDataSource ()
-@property (nonatomic, strong) NSDictionary *items;
-@property (nonatomic, strong) ISListViewAdapterInvalidator *invalidator;
-@end
-
-@implementation CustomDataSource
-
-- (id)init
-{
-  self = [super init];
-  if (self) {
-    self.items =
-    @{@"item_a": @{@"title": @"Title For Item A",
-                   @"section": @"Section One"},
-      @"item_b": @{@"title": @"Title For Item B",
-                   @"section": @"Section Two"},
-      @"item_c": @{@"title": @"Title For Item C",
-                   @"section": @"Section One"}};
-  }
-  return self;
-}
-
-// Required
-
-- (void)identifiersForAdapter:(ISListViewAdapter *)adapter completionBlock:(ISListViewAdapterBlock)completionBlock
-{
-  completionBlock([self.items allKeys]);
-}
-
-- (void)adapter:(ISListViewAdapter *)adapter itemForIdentifier:(id)identifier completionBlock:(ISListViewAdapterBlock)completionBlock
-{
-  NSDictionary *item = self.items[identifier];
-  completionBlock(item);
-}
-
-// Optional
-
-- (id)adapter:(ISListViewAdapter *)adapter summaryForIdentifier:(id)identifier
-{
-  NSDictionary *item = self.items[identifier];
-  return [NSString stringWithFormat:
-          @"%@, %@",
-          item[@"title"],
-          item[@"section"]];
-}
-
-- (NSString *)adapter:(ISListViewAdapter *)adapter sectionForIdentifier:(id)identifier
-{
-  NSDictionary *item = self.items[identifier];
-  reeturn item[@"section"];
-}
-
-- (void)adapter:(ISListViewAdapter *)adapter initialize:(ISListViewAdapterInvalidator *)invalidator
-{
-  // Called when the data source is added to the adapter.
-  // ISListViewAdapterInvalidator should be retained if it is ever necessary for
-  // the data source to invalidate the ISListViewAdapter.
-  self.invalidator = invalidator;
-}
-
-@end
-```
 
 ### Updating Data
 
