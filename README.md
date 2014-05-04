@@ -253,3 +253,14 @@ Limitations
 
 `ISListViewAdapter` determines changes by first identifying and applying section insertions, deletions and moves and then, only once the section changes have been applied to the list, does it attempt to update the list with ISListView
 
+Changelog
+---------
+
+### 1.0.0
+
+- Initiial release.
+
+License
+-------
+
+ISListViewAdapter is available under the MIT license. See the LICENSE file for more info.
