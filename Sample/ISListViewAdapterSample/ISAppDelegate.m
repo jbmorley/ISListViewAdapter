@@ -20,17 +20,54 @@
 // SOFTWARE.
 //
 
+#import <ISUtilities/ISUtilities.h>
 #import "ISAppDelegate.h"
-#import "ISViewController.h"
+#import "ISTableViewController.h"
+#import "ISCollectionViewController.h"
+
+typedef enum {
+  
+  ISTestSetNone,
+  ISTestSetTableView,
+  ISTestSetCollectionView,
+  
+} ISTestSet;
+
+@interface ISAppDelegate ()
+
+@property (nonatomic, assign) ISTestSet currentSet;
+
+@end
 
 @implementation ISAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  ISViewController *viewController = [ISViewController new];
-  [self.navigationController pushViewController:viewController
-                                       animated:YES];
+  [self startTest:ISTestSetTableView];
   return YES;
+}
+
+
+- (void)startTest:(ISTestSet)set
+{
+  self.currentSet = set;
+  
+  ISListViewAdapterTests *tests = [ISListViewAdapterTests new];
+  tests.completionDelegate = self;
+
+  UIViewController *viewController;
+  if (set == ISTestSetTableView) {
+
+    viewController = [[ISTableViewController alloc] initWithTests:tests];
+    
+  } else if (set == ISTestSetCollectionView) {
+    
+    viewController = [[ISCollectionViewController alloc] initWithTests:tests];
+    
+  }
+ 
+  [self.navigationController pushViewController:viewController
+                                       animated:NO];
 }
 
 - (UINavigationController *)navigationController
@@ -56,6 +93,22 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+}
+
+#pragma mark - ISListViewAdapterTestsCompletionDelegate
+
+- (void)testsDidFinish:(ISListViewAdapterTests *)tests
+               success:(BOOL)success
+{
+  
+  [self.navigationController popToRootViewControllerAnimated:NO];
+  
+  if (self.currentSet == ISTestSetTableView) {
+    [self startTest:ISTestSetCollectionView];
+  } else if (self.currentSet == ISTestSetCollectionView) {
+    [[[UIAlertView alloc] initWithTitle:@"PASSED" message:@"Well done!" completionBlock:NULL cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+  }
+  
 }
 
 @end

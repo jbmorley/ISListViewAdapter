@@ -20,11 +20,11 @@
 // SOFTWARE.
 //
 
-#import "ISViewController.h"
+#import "ISTableViewController.h"
 #import "ISRandomDataSource.h"
 #import "ISTestDataSource.h"
 
-@interface ISViewController ()
+@interface ISTableViewController ()
 
 @property (nonatomic, strong) ISListViewAdapterTests *tests;
 @property (nonatomic, strong) ISListViewAdapter *adapter;
@@ -34,7 +34,16 @@
 
 static NSString *const kCellIdentifier = @"Cell";
 
-@implementation ISViewController
+@implementation ISTableViewController
+
+- (id)initWithTests:(ISListViewAdapterTests *)tests
+{
+  self = [super initWithStyle:UITableViewStylePlain];
+  if (self) {
+    self.tests = tests;
+  }
+  return self;
+}
 
 - (void)viewDidLoad
 {
@@ -42,10 +51,11 @@ static NSString *const kCellIdentifier = @"Cell";
   
   [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:kCellIdentifier];
   
-  self.tests = [ISListViewAdapterTests new];
   self.tests.delegate = self;
   self.adapter = [self.tests testAdapter];
   self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter tableView:self.tableView];
+  
+  self.navigationItem.hidesBackButton = YES;
   
   [self.tests start];
 }

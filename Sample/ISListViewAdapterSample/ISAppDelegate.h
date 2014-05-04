@@ -21,8 +21,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ISListViewAdapterTests.h"
 
-@interface ISAppDelegate : UIResponder <UIApplicationDelegate>
+@interface ISAppDelegate : UIResponder
+<UIApplicationDelegate
+,ISListViewAdapterTestsCompletionDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, readonly) UINavigationController *navigationController;

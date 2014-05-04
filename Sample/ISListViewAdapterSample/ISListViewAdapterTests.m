@@ -40,7 +40,7 @@ NSString *const kSourceDataSource = @"dataSource";
 
 @end
 
-#define DEFAULT_ITERATIONS 5
+#define DEFAULT_ITERATIONS 50
 
 #define TEST_SPECIAL_CASES
 #define TEST_SECTIONS
@@ -91,9 +91,9 @@ NSString *const kSourceDataSource = @"dataSource";
     if (self.test < self.sources.count) {
       [self _reload];
     } else {
-      [[[UIAlertView alloc] initWithTitle:@"PASSED" message:@"Well done!" completionBlock:NULL cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
-    }
-    
+      [self.completionDelegate testsDidFinish:self
+                                      success:YES];
+    }    
   });
 }
 

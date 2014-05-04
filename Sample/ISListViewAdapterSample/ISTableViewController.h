@@ -23,7 +23,9 @@
 #import <UIKit/UIKit.h>
 #import "ISListViewAdapterTests.h"
 
-@interface ISViewController : UITableViewController
+@interface ISTableViewController : UITableViewController
 <ISlistViewAdapterTestsDelegate>
+
+- (id)initWithTests:(ISListViewAdapterTests *)tests;
 
 @end

@@ -35,14 +35,35 @@ static NSString *const kHeaderIdentifier = @"Header";
 
 @implementation ISCollectionViewController
 
+- (id)initWithTests:(ISListViewAdapterTests *)tests
+{
+  UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+  layout.itemSize = CGSizeMake(100.0f, 100.0f);
+  layout.headerReferenceSize = CGSizeMake(0.0f, 20.0f);
+  layout.minimumInteritemSpacing = 5.0f;
+  layout.minimumLineSpacing = 5.0f;
+  layout.sectionInset = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
+  
+  self = [super initWithCollectionViewLayout:layout];
+  if (self) {
+    self.tests = tests;
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:kCellIdentifier];
+    [self.collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kHeaderIdentifier];
+    self.collectionView.backgroundColor = [UIColor whiteColor];
+  }
+  return self;
+}
+
+
 - (void)viewDidLoad
 {
   [super viewDidLoad];
   
-  self.tests = [ISListViewAdapterTests new];
   self.tests.delegate = self;
   self.adapter = [self.tests testAdapter];
   self.connector = [ISListViewAdapterConnector connectorWithAdapter:self.adapter collectionView:self.collectionView];
+  
+  self.navigationItem.hidesBackButton = YES;
   
   [self.tests start];
 }

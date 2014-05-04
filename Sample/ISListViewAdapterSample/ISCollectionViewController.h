@@ -26,4 +26,6 @@
 @interface ISCollectionViewController : UICollectionViewController
 <ISlistViewAdapterTestsDelegate>
 
+- (id)initWithTests:(ISListViewAdapterTests *)tests;
+
 @end

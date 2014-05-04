@@ -34,9 +34,17 @@ extern NSString *const kSourceDataSource;
 
 @end
 
+@protocol ISListViewAdapterTestsCompletionDelegate <NSObject>
+
+- (void)testsDidFinish:(ISListViewAdapterTests *)tests
+               success:(BOOL)success;
+
+@end
+
 @interface ISListViewAdapterTests : NSObject
 
 @property (nonatomic, weak) id<ISlistViewAdapterTestsDelegate> delegate;
+@property (nonatomic, weak) id<ISListViewAdapterTestsCompletionDelegate> completionDelegate;
 
 - (ISListViewAdapter *)testAdapter;
 - (NSArray *)testDataSources;

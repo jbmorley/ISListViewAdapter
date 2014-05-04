@@ -18,7 +18,7 @@
 		D84915E918DE3F5D0091182E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D84915E818DE3F5D0091182E /* main.m */; };
 		D84915ED18DE3F5D0091182E /* ISAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D84915EC18DE3F5D0091182E /* ISAppDelegate.m */; };
 		D84915F018DE3F5D0091182E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D84915EE18DE3F5D0091182E /* Main.storyboard */; };
-		D84915F318DE3F5D0091182E /* ISViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D84915F218DE3F5D0091182E /* ISViewController.m */; };
+		D84915F318DE3F5D0091182E /* ISTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D84915F218DE3F5D0091182E /* ISTableViewController.m */; };
 		D84915F518DE3F5D0091182E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D84915F418DE3F5D0091182E /* Images.xcassets */; };
 		D84915FC18DE3F5D0091182E /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84915FB18DE3F5D0091182E /* XCTest.framework */; };
 		D84915FD18DE3F5D0091182E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D84915DC18DE3F5D0091182E /* Foundation.framework */; };
@@ -58,8 +58,8 @@
 		D84915EB18DE3F5D0091182E /* ISAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISAppDelegate.h; sourceTree = "<group>"; };
 		D84915EC18DE3F5D0091182E /* ISAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ISAppDelegate.m; sourceTree = "<group>"; };
 		D84915EF18DE3F5D0091182E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		D84915F118DE3F5D0091182E /* ISViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISViewController.h; sourceTree = "<group>"; };
-		D84915F218DE3F5D0091182E /* ISViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ISViewController.m; sourceTree = "<group>"; };
+		D84915F118DE3F5D0091182E /* ISTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ISTableViewController.h; sourceTree = "<group>"; };
+		D84915F218DE3F5D0091182E /* ISTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ISTableViewController.m; sourceTree = "<group>"; };
 		D84915F418DE3F5D0091182E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D84915FA18DE3F5D0091182E /* ISListViewAdapterSampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ISListViewAdapterSampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D84915FB18DE3F5D0091182E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -134,23 +134,23 @@
 		D84915E218DE3F5D0091182E /* ISListViewAdapterSample */ = {
 			isa = PBXGroup;
 			children = (
+				D84915F418DE3F5D0091182E /* Images.xcassets */,
 				D84915EB18DE3F5D0091182E /* ISAppDelegate.h */,
 				D84915EC18DE3F5D0091182E /* ISAppDelegate.m */,
-				D84915EE18DE3F5D0091182E /* Main.storyboard */,
-				D84915F118DE3F5D0091182E /* ISViewController.h */,
-				D84915F218DE3F5D0091182E /* ISViewController.m */,
-				D822F3C318DF2CFD00032900 /* ISListViewAdapterTests.h */,
-				D822F3C418DF2CFD00032900 /* ISListViewAdapterTests.m */,
 				D822F3C018DF2CCC00032900 /* ISCollectionViewController.h */,
 				D822F3C118DF2CCC00032900 /* ISCollectionViewController.m */,
 				D83CE420190658EF002A9E5A /* ISCommonDataSource.h */,
+				D822F3C318DF2CFD00032900 /* ISListViewAdapterTests.h */,
+				D822F3C418DF2CFD00032900 /* ISListViewAdapterTests.m */,
 				D871CD9518DE414300E43617 /* ISRandomDataSource.h */,
 				D871CD9618DE414300E43617 /* ISRandomDataSource.m */,
-				D871CD9818DEB44300E43617 /* ISTestDataSource.h */,
-				D871CD9918DEB44300E43617 /* ISTestDataSource.m */,
 				D83CE41D1904E9EF002A9E5A /* ISSingleTestDataSource.h */,
 				D83CE41E1904E9EF002A9E5A /* ISSingleTestDataSource.m */,
-				D84915F418DE3F5D0091182E /* Images.xcassets */,
+				D84915F118DE3F5D0091182E /* ISTableViewController.h */,
+				D84915F218DE3F5D0091182E /* ISTableViewController.m */,
+				D871CD9818DEB44300E43617 /* ISTestDataSource.h */,
+				D871CD9918DEB44300E43617 /* ISTestDataSource.m */,
+				D84915EE18DE3F5D0091182E /* Main.storyboard */,
 				D84915E318DE3F5D0091182E /* Supporting Files */,
 			);
 			path = ISListViewAdapterSample;
@@ -323,7 +323,7 @@
 				D84915E918DE3F5D0091182E /* main.m in Sources */,
 				D871CD9A18DEB44300E43617 /* ISTestDataSource.m in Sources */,
 				D83CE41F1904E9EF002A9E5A /* ISSingleTestDataSource.m in Sources */,
-				D84915F318DE3F5D0091182E /* ISViewController.m in Sources */,
+				D84915F318DE3F5D0091182E /* ISTableViewController.m in Sources */,
 				D822F3C218DF2CCC00032900 /* ISCollectionViewController.m in Sources */,
 				D871CD9718DE414300E43617 /* ISRandomDataSource.m in Sources */,
 			);
