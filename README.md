@@ -203,6 +203,8 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 
 ### Asynchronous Fetches
 
+`ISListViewAdapterItem fetch:` guarantees that callbacks occur on the main run loop, irrespective of the behaviour of the backing data source:
+
 ```objc
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
