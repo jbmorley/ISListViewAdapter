@@ -91,7 +91,7 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 
 #### Synchronous Fetches
 
-```ojbc
+```objc
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -108,17 +108,25 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 
 ### Asynchronous Fetches
 
-```ojbc
+```objc
 - (UITableViewCell *)tableView:(UITableView *)tableView
          cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
   UITableViewCell *cell = /* ... */
   
+  __weak UITableViewCell *weakCell = cell;
   ISListViewAdapterItem *item = [self.adapter itemForIndexPath:indexPath];
-  id myItem = [item fetch:];
+  [item fetch:^(id myItem) {
+    UITableViewCell *strongCell = weakCell;
+    if (cell) {
+    
+      // Configure the cell...
 
-  // Configure the cell...
-  
+      // Ensure the cell is redrawn.
+      [cell setNeedsLayout];
+    }
+  }];
+
   return cell;
 }
 ```
