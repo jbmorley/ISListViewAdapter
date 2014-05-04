@@ -231,7 +231,7 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 Performance
 -----------
 
-`ISListViewAdapter` is designed for rendering very large data sets:
+`ISListViewAdapter` is designed for very large data sets:
 
 - Only the data required to determine the positions of items in the list and to calculate changes when the contents changes is fetched and maintained in memory: items themsevles are fetched asynchronously and only when required to render the item in the UI.
 - Change calculation is performed asynchronously, with each new `ISListViewAdapter` creating its own dispatch queue: updates may be slower to calculate with larger data sets, but doing so should never block the main run loop.
