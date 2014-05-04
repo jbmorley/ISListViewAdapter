@@ -1,7 +1,7 @@
 ISListViewAdapter
 =================
 
-`ISListViewAdapter` automatically determines additions, removals, updates and moves in an array of items, providing a delegate mechanim for observers wishing to act on these. Convenience bindings are provided for `UITableView` and `UICollectionView`.
+Determining the correct set of updates for `UITableView` and `UICollectionView` is hard.  `ISListViewAdapter` does all this work for you, mapping a simple array of identifiers to the internal structures required for list views.  When the array of identifiers changes, it can automatically determine the additions, removals, updates and moves, which can then be applied to  `UITableView` and `UICollectionView` using the various convenience methods provided.
 
 Installation
 ------------
@@ -82,6 +82,18 @@ titleForHeaderInSection:(NSInteger)section
 @end
 
 ```
+
+### Fetching Items
+
+`ISListViewAdapterItem` is returned by `ISListViewAdapter` and `ISListViewAdapterConnector` and provides a mechanism to fetch an item for a given `NSIndexPath`. Items themselves are of type `id`, allowing you to use any object internally: the example above makes use of `NSDictionary` instances as items, but this could just as well be your own custom object, `NSManagedObject`, `FCModel`, etc.
+
+Items can be fetched both synchronously and asynchronously.
+
+It provides both a synchronous and asynchronous mechanism for fetching items from the data source.
+
+`ISListViewAdapter` is agnostic to the type of items, so any object can be used. 
+
+
 
 ### Data Source
 
