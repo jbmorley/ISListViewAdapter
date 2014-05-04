@@ -85,15 +85,43 @@ titleForHeaderInSection:(NSInteger)section
 
 ### Fetching Items
 
-`ISListViewAdapterItem` is returned by `ISListViewAdapter` and `ISListViewAdapterConnector` and provides a mechanism to fetch an item for a given `NSIndexPath`. Items themselves are of type `id`, allowing you to use any object internally: the example above makes use of `NSDictionary` instances as items, but this could just as well be your own custom object, `NSManagedObject`, `FCModel`, etc.
+`ISListViewAdapterItem` is provides a mechanism to fetch an item for a given `NSIndexPath`. Items themselves are of type `id`, allowing you to use any object internally: the example above makes use of `NSDictionary` instances as items, but this could just as well be your own custom object, `NSManagedObject`, `FCModel`, etc.
 
-Items can be fetched both synchronously and asynchronously.
+Items can be fetched both synchronously and asynchronously. Typically it is safe to fetch items synchronously (if you are using a fast mechanism such as NSDictionary for item lookup), but you may wish to use an asynchronous fetch if you are performing a fetch from a database, or some slower data source. In an extreme case, asynchronous fetches might be used to fetch items directly from the network.
 
-It provides both a synchronous and asynchronous mechanism for fetching items from the data source.
+#### Synchronous Fetches
 
-`ISListViewAdapter` is agnostic to the type of items, so any object can be used. 
+```ojbc
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  UITableViewCell *cell = /* ... */
+  
+  ISListViewAdapterItem *item = [self.adapter itemForIndexPath:indexPath];
+  id myItem = [item fetchBlocking];
 
+  // Configure the cell...
+  
+  return cell;
+}
+```
 
+### Asynchronous Fetches
+
+```ojbc
+- (UITableViewCell *)tableView:(UITableView *)tableView
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  UITableViewCell *cell = /* ... */
+  
+  ISListViewAdapterItem *item = [self.adapter itemForIndexPath:indexPath];
+  id myItem = [item fetch:];
+
+  // Configure the cell...
+  
+  return cell;
+}
+```
 
 ### Data Source
 
