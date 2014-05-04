@@ -34,6 +34,8 @@ typedef enum {
   ISDBViewStateValid
 } ISDBViewState;
 
+NSString *const ISListViewAdapterInvalidSection = @"ISListViewAdapterInvalidSection";
+
 
 @interface ISListViewAdapter ()
 
@@ -160,6 +162,10 @@ NSInteger ISDBViewIndexUndefined = -1;
       description.section =
       [dataSource adapter:self
      sectionForIdentifier:identifier];
+      if (description.section == nil) {
+        @throw [NSException exceptionWithName:ISListViewAdapterInvalidSection reason:@"Sections must not be nil." userInfo:nil];
+      }
+      assert(description.section != nil);
     }
   }];
   description.dataSource = dataSource;

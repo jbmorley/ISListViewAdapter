@@ -35,6 +35,8 @@ typedef void(^ISDBTask)();
 
 extern NSInteger ISDBViewIndexUndefined;
 
+extern NSString *const ISListViewAdapterInvalidSection;
+
 
 @interface ISListViewAdapter : NSObject
 <ISListViewAdapterLogger>

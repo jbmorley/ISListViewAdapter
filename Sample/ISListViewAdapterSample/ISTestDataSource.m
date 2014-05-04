@@ -37,6 +37,8 @@
 
 static NSString *const kSectionTitle = @"title";
 static NSString *const kSectionItems = @"items";
+static NSString *const kItemIdentifier = @"identifier";
+static NSString *const kItemColor = @"color";
 
 @implementation ISTestDataSource
 
@@ -46,13 +48,24 @@ static NSString *const kSectionItems = @"items";
   if (self) {
     self.sections =
     @[@{kSectionTitle: @"Section One",
-        kSectionItems: @[@"A", @"B", @"C", @"D", @"E"]},
+        kSectionItems: @[@{kItemIdentifier:@"A"},
+                         @{kItemIdentifier:@"B"},
+                         @{kItemIdentifier:@"C"},
+                         @{kItemIdentifier:@"D"},
+                         @{kItemIdentifier:@"E"}]},
       @{kSectionTitle: @"Section Two",
-        kSectionItems: @[@"F", @"G", @"H"]},
+        kSectionItems: @[@{kItemIdentifier:@"F"},
+                         @{kItemIdentifier:@"G"},
+                         @{kItemIdentifier:@"H"}]},
       @{kSectionTitle: @"Section Three",
-        kSectionItems: @[@"I", @"J", @"K", @"L", @"M"]},
+        kSectionItems: @[@{kItemIdentifier:@"I"},
+                         @{kItemIdentifier:@"J"},
+                         @{kItemIdentifier:@"K"},
+                         @{kItemIdentifier:@"L"},
+                         @{kItemIdentifier:@"M"}]},
       @{kSectionTitle: @"Section Four",
-        kSectionItems: @[@"N", @"O"]}];
+        kSectionItems: @[@{kItemIdentifier:@"N"},
+                         @{kItemIdentifier:@"O"}]}];
   }
   return self;
 }
@@ -69,7 +82,16 @@ static NSString *const kSectionItems = @"items";
   // 'Shuffle' the items.
   NSMutableArray *items = [NSMutableArray arrayWithCapacity:3];
   for (NSDictionary *section in sections) {
-    NSArray *sectionItems = [self _randomSelection:section[kSectionItems] toggle:self.togglesItems move:self.movesItems];
+    NSArray *tempItems = [self _randomSelection:section[kSectionItems] toggle:self.togglesItems move:self.movesItems];
+    
+    // Set the colors:
+    NSMutableArray *sectionItems = [NSMutableArray arrayWithCapacity:tempItems.count];
+    for (NSDictionary *item in tempItems) {
+      NSMutableDictionary *mutableItem = [item mutableCopy];
+      mutableItem[kItemColor] = ((arc4random() % 2) == 0) ? @"Cyan" : @"Yellow";
+      [sectionItems addObject:mutableItem];
+    }
+    
     NSDictionary *newSection = @{kSectionTitle: section[kSectionTitle], kSectionItems: sectionItems};
     [items addObject:newSection];
   }
@@ -138,8 +160,8 @@ static NSString *const kSectionItems = @"items";
   [self _generateState];
   NSMutableArray *items = [NSMutableArray arrayWithCapacity:3];
   for (NSDictionary *section in self.current) {
-    for (NSString *item in section[kSectionItems]) {
-      [items addObject:item];
+    for (NSDictionary *item in section[kSectionItems]) {
+      [items addObject:item[kItemIdentifier]];
     }
   }
   
@@ -167,7 +189,7 @@ static NSString *const kSectionItems = @"items";
 itemForIdentifier:(id)identifier
 completionBlock:(ISListViewAdapterBlock)completionBlock
 {
-  completionBlock(identifier);
+  completionBlock([self itemForIdentifier:identifier]);
 }
 
 
@@ -180,9 +202,22 @@ completionBlock:(ISListViewAdapterBlock)completionBlock
 - (NSString *)adapter:(ISListViewAdapter *)adapter sectionForIdentifier:(id)identifier
 {
   for (NSDictionary *section in self.current) {
-    for (NSString *i in section[kSectionItems]) {
-      if ([i isEqual:identifier]) {
+    for (NSDictionary *i in section[kSectionItems]) {
+      if ([i[kItemIdentifier] isEqual:identifier]) {
         return section[kSectionTitle];
+      }
+    }
+  }
+  return nil;
+}
+
+
+- (NSDictionary *)itemForIdentifier:(NSString *)identifier
+{
+  for (NSDictionary *section in self.current) {
+    for (NSDictionary *i in section[kSectionItems]) {
+      if ([i[kItemIdentifier] isEqual:identifier]) {
+        return i;
       }
     }
   }

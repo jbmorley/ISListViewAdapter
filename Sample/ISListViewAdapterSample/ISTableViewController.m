@@ -91,8 +91,17 @@ static NSString *const kCellIdentifier = @"Cell";
 {
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
   
-  NSString *item = [[self.adapter itemForIndexPath:indexPath] fetchBlocking];
-  cell.textLabel.text = item;
+  id item = [[self.adapter itemForIndexPath:indexPath] fetchBlocking];
+  if ([item isKindOfClass:[NSString class]]) {
+    cell.textLabel.text = item;
+  } else {
+    cell.textLabel.text = item[@"identifier"];
+    if ([item[@"color"] isEqualToString:@"Cyan"]) {
+      cell.textLabel.textColor = [UIColor cyanColor];
+    } else {
+      cell.textLabel.textColor = [UIColor yellowColor];
+    }
+  }
   
   return cell;
 }

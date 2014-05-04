@@ -43,7 +43,8 @@ typedef enum {
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [self startTest:ISTestSetTableView];
+//  [self startTest:ISTestSetTableView];
+  [self startTest:ISTestSetCollectionView];
   return YES;
 }
 
