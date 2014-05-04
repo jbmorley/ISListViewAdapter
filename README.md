@@ -16,7 +16,7 @@ pod "ISListViewAdapter", "~> 1.0"
 Getting Started
 ---------------
 
-`ISListViewAdapter` requires clients to implement both a data source (`ISListViewAdaterDataSource`) and the glue to binds to the `UITableView` or `UICollectionView` instance.
+`ISListViewAdapter` requires clients to implement both a data source and the glue to binds to the `UITableView` or `UICollectionView` instance.
 
 ### Data Source
 
