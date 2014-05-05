@@ -211,16 +211,15 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 {
   UITableViewCell *cell = // ...
   
-  __weak UITableViewCell *weakCell = cell;
   ISListViewAdapterItem *item = [self.adapter itemForIndexPath:indexPath];
   [item fetch:^(id myItem) {
-    UITableViewCell *strongCell = weakCell;
-    if (cell) {
+    UITableViewCell *c = [tableView cellForRowAtIndexPath:indexPath];
+    if (c) {
     
       // Configure the cell...
 
       // Ensure the cell is redrawn.
-      [cell setNeedsLayout];
+      [c setNeedsLayout];
     }
   }];
 
