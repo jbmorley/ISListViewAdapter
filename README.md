@@ -1,7 +1,11 @@
 ISListViewAdapter
 =================
 
-Determining the correct set of updates for `UITableView` and `UICollectionView` is hard.  `ISListViewAdapter` does all this work for you, mapping a simple array of identifiers to the internal structures required for list views.  When the array of identifiers changes, it can automatically determine the additions, removals, updates and moves, which can then be applied to  `UITableView` and `UICollectionView` using the various convenience methods provided.
+Determining the correct set of updates for `UITableView` and `UICollectionView` is hard.  `ISListViewAdapter` does all the work for you, automatically determine the additions, removals, updates and moves, which can then be applied to  `UITableView` and `UICollectionView` using the various convenience methods provided:
+
+- Clients provide `ISListViewAdapter` with an ordered list of opaque item identifiers along with methods to fetch the data and meta-data associated with an item identifier by adopting the `ISListViewAdapterDataSource` protocol.
+- `ISListViewAdapter` maps these unique identifiers to `NSIndexPath` indexes as used by `UITableView` and `UICollectionView` and provides utility methods to count sections, items and fetch items by index path.
+- When invalidated, `ISListViewAdapter` will re-generate the mapping of items to index paths and notify observers of any index path changes.
 
 Installation
 ------------
@@ -16,9 +20,7 @@ pod "ISListViewAdapter", "~> 1.0"
 Getting Started
 ---------------
 
-`ISListViewAdapter` requires clients to implement both a data source and the glue to bind to the `UITableView` or `UICollectionView` instance.
-
-### Data Source
+### ISListViewDataSource
 
 Clients must provide a custom implementation of the `ISListViewAdapterDataSource` protocol which serves as the data model for `ISListViewAdapter`. `ISListViewAdapterDataSource` indexes items by opaque identifiers and `ISListViewAdapter` maintains a mapping between the index paths used by `UITableView` and `UICollectionView` and these identifiers.
 
@@ -98,9 +100,9 @@ Summary and section callbacks are optional:
 - `adapter:summaryForIdentifier:` returns an `id` conforming to `NSObject` (to be compared using `isEqual:`) that describes the current state of the item for a given identifier. It is used by `ISListViewAdapter` to identify updates to items. If no summary is provided, it is assumed that objects are immutable and items will not be updated or reloaded.
 - `adapter:sectionForIdentifier:` returns the title (assumed unique) for the section in which the item for a given identifier should be shown. Item ordering within sections corresponds to the ordering returned via. `identifiersForAdapter:completionBlock:`. Section ordering corresponds to the order in which items for a given section are seen as returned via. `identifiersForAdapter:completionBlock:`.
 
-### Binding ISListViewAdapter to a View
+### ISListViewAdapter and ISListViewAdapterConnector
 
-Once you have a data source, you must create an `ISListViewAdapter` instance and bind this to your list view instance.  `ISListViewAdapterConnector` provides an off-the-shelf connector between an `ISListViewAdapter` instance and table views and collection views:
+Once you have a data source, you must create an `ISListViewAdapter` instance and 'connect' this to your list view instance.  `ISListViewAdapterConnector` provides an off-the-shelf connector between an `ISListViewAdapter` instance and table views and collection views:
 
 ```objc
 #import <ISListViewAdapter/ISListViewAdapter.h>
