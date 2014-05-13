@@ -22,7 +22,6 @@
 
 #import <ISUtilities/ISUtilities.h>
 #import "ISListViewAdapter.h"
-#import "ISListViewAdapterItem.h"
 #import "ISListViewAdapterBlock.h"
 #import "ISListViewAdapterItemDescription.h"
 #import "ISListViewAdapterSection.h"
@@ -535,24 +534,55 @@ NSInteger ISDBViewIndexUndefined = -1;
 }
 
 
-- (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath
+- (void)_dispatchToMainThread:(void (^)(void))block
+{
+  if ([NSThread isMainThread]) {
+    block();
+  } else {
+    dispatch_async(dispatch_get_main_queue(), block);
+  }
+}
+
+
+- (void)itemForIndexPath:(NSIndexPath *)indexPath
+         completionBlock:(ISListViewAdapterBlock)completionBlock
 {
   // Check that we're asking for a valid index.
   // Sometimes it seems possible that UICollectionView and friends
   // will ask us for a cell we've already told it is disappearing.
   if ((indexPath.section >= self.sections.count) || (indexPath.row >= [self.sections[indexPath.section] items].count)) {
-    return nil;
+    [self _dispatchToMainThread:^{
+      completionBlock(nil);
+    }];
   }
   
   ISListViewAdapterSection *s =
   self.sections[indexPath.section];
   ISListViewAdapterItemDescription *description =
   s.items[indexPath.item];
-  ISListViewAdapterItem *item =
-  [ISListViewAdapterItem itemWithAdapter:self
-                              dataSource:description.dataSource
-                              identifier:description.identifier];
-  return item;
+  
+  [self _dispatchToMainThread:^{
+    [self.dataSource adapter:self
+           itemForIdentifier:description.identifier
+             completionBlock:^(id item) {
+               [self _dispatchToMainThread:^{
+                 completionBlock(item);
+               }];
+             }];
+  }];
+}
+
+
+- (id)itemForIndexPath:(NSIndexPath *)indexPath
+{
+  __block id result = nil;
+  dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+  [self itemForIndexPath:indexPath completionBlock:^(id item) {
+    result = item;
+    dispatch_semaphore_signal(sema);
+  }];
+  dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+  return result;
 }
 
 

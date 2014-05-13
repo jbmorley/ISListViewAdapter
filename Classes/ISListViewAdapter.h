@@ -25,7 +25,6 @@
 #import "ISListViewAdapterObserver.h"
 #import "ISListViewAdapterOperationType.h"
 #import "ISListViewAdapterOperation.h"
-#import "ISListViewAdapterItem.h"
 #import "ISListViewAdapterConnector.h"
 #import "ISListViewAdapterLogger.h"
 
@@ -60,7 +59,9 @@ extern NSString *const ISListViewAdapterInvalidSection;
 
 - (void)invalidate;
 
-- (ISListViewAdapterItem *)itemForIndexPath:(NSIndexPath *)indexPath;
+- (void)itemForIndexPath:(NSIndexPath *)indexPath
+         completionBlock:(ISListViewAdapterBlock)completionBlock;
+- (id)itemForIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)titleForSection:(NSInteger)section;
 
 - (void)addAdapterObserver:(id<ISListViewAdapterObserver>)observer;
