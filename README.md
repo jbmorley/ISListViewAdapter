@@ -157,7 +157,7 @@ titleForHeaderInSection:(NSInteger)section
   UITableViewCell *cell =
   [self.tableView dequeueReusableCellWithIdentifier:kCellIdentifier
                                        forIndexPath:indexPath];
-  NSDictionary *item = (NSDictionary *)[[self.adapter itemForIndexPath:indexPath] fetchBlocking];
+  NSDictionary *item = [self.adapter itemForIndexPath:indexPath];
 
   // Configure the cell using the details of the fetched item. e.g.
   cell.textLabel.text = item[@"title"];
@@ -194,8 +194,7 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 {
   UITableViewCell *cell = /* ... */
   
-  ISListViewAdapterItem *item = [self.adapter itemForIndexPath:indexPath];
-  id myItem = [item fetchBlocking];
+  id myItem = [self.adapter itemForIndexPath:indexPath];
 
   // Configure the cell...
   
@@ -213,8 +212,7 @@ Items can be fetched both synchronously and asynchronously. Typically it is safe
 {
   UITableViewCell *cell = // ...
   
-  ISListViewAdapterItem *item = [self.adapter itemForIndexPath:indexPath];
-  [item fetch:^(id myItem) {
+  [self.adapter itemForIndexPath:indexPath complectionBlock:^(id myItem) {
     UITableViewCell *c = [tableView cellForRowAtIndexPath:indexPath];
     if (c) {
     
