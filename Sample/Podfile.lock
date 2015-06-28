@@ -14,7 +14,7 @@ EXTERNAL SOURCES:
     :path: ..
 
 SPEC CHECKSUMS:
-  ISListViewAdapter: d566e57c41f80ec64983cac5ce4ae38a33c39070
+  ISListViewAdapter: 86dc50ab3db5ca4d429bd7497b57d9b74412eb36
   ISUtilities: c74e96ea536826bc8f4b38133d825c2a3b7dc1fa
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.37.2
