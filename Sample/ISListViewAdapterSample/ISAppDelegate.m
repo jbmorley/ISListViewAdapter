@@ -21,6 +21,7 @@
 //
 
 #import <ISUtilities/ISUtilities.h>
+#import <ISUtilities/UIKit+ISUtilities.h>
 #import "ISAppDelegate.h"
 #import "ISTableViewController.h"
 #import "ISCollectionViewController.h"
