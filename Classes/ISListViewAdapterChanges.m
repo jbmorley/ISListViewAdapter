@@ -21,7 +21,7 @@
 //
 
 #import "ISListViewAdapterChanges.h"
-#import "ISListViewAdapterOperation.m"
+#import "ISListViewAdapterOperation.h"
 
 @interface ISListViewAdapterChanges ()
 
