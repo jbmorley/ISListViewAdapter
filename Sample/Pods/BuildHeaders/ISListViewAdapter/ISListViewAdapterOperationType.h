@@ -1,1 +1,0 @@
-../../../../Classes/ISListViewAdapterOperationType.h

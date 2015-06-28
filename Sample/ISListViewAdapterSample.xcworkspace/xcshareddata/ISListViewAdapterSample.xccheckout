@@ -10,29 +10,29 @@
 	<string>ISListViewAdapterSample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>769C4C12-BBF9-400A-BBD3-B549392ED401</key>
+		<key>4D36535EF6953E923DD3F399C26ECD8999945564</key>
 		<string>ssh://github.com/jbmorley/ISListViewAdapter.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Sample/ISListViewAdapterSample.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>769C4C12-BBF9-400A-BBD3-B549392ED401</key>
+		<key>4D36535EF6953E923DD3F399C26ECD8999945564</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/jbmorley/ISListViewAdapter.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>769C4C12-BBF9-400A-BBD3-B549392ED401</string>
+	<string>4D36535EF6953E923DD3F399C26ECD8999945564</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>769C4C12-BBF9-400A-BBD3-B549392ED401</string>
+			<string>4D36535EF6953E923DD3F399C26ECD8999945564</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ISListViewAdapter</string>
 		</dict>
