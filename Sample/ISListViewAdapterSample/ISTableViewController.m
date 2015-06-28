@@ -91,7 +91,7 @@ static NSString *const kCellIdentifier = @"Cell";
 {
   UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:kCellIdentifier forIndexPath:indexPath];
   
-  id item = [[self.adapter itemForIndexPath:indexPath] fetchBlocking];
+  id item = [self.adapter itemForIndexPath:indexPath];
   if ([item isKindOfClass:[NSString class]]) {
     cell.textLabel.text = item;
   } else {

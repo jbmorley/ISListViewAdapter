@@ -121,7 +121,7 @@ static NSString *const kHeaderIdentifier = @"Header";
 {
   UICollectionViewCell *cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:kCellIdentifier forIndexPath:indexPath];
   
-  id item = [[self.adapter itemForIndexPath:indexPath] fetchBlocking];
+  id item = [self.adapter itemForIndexPath:indexPath];
   
   if ([item isKindOfClass:[NSString class]]) {
     cell.backgroundColor = [UIColor cyanColor];
